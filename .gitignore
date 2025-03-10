@@ -1,3 +1,7 @@
+# additional files to ignore
+.ruff_cache
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -169,3 +173,6 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+
+
