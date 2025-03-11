@@ -11,13 +11,15 @@ dependencies = [
     "beautifulsoup4>=4.13.3",
     "httpx>=0.28.1",
     "loguru>=0.7.3",
+    "omegaconf>=2.3.0",
     "polars>=1.24.0",
     "pydantic>=2.10.6",
     "pydantic-settings>=2.8.1",
+    "rich>=13.9.4",
 ]
 
 [project.scripts]
-footcrawl = "footcrawl:main"
+footcrawl = "footcrawl.cli:execute"
 
 [build-system]
 requires = ["hatchling"]
