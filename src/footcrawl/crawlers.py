@@ -6,21 +6,15 @@ import httpx
 import pydantic as pdt
 from bs4 import BeautifulSoup
 
-from footcrawl import constants, schemas, services
+from footcrawl import constants, schemas, services, client
 
 
 class Crawler(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid"):
-    ASSET: str
+    KIND: str
 
-    season: int = pdt.Field(..., ge=2000, le=2026)
-    leagues: T.Sequence[str] = pdt.Field(...)
-    headers: dict[str, str] = pdt.Field(default_factory=dict)
-    proxy: str | None = pdt.Field(default=None)
+    logger_service: services.LoggerService = services.LoggerService()
+    client_service: client.Client = pdt.Field(...)
 
-    logger_service: services.LoggerService = pdt.Field(
-        default_factory=services.LoggerService
-    )
-    
     result: list[dict] | None = pdt.Field(default=None)
 
     @abc.abstractmethod
@@ -35,22 +29,18 @@ class Crawler(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid")
     def make_request(self) -> T.Generator[httpx.Response, None, None]:
         pass
 
-    def configure(self, **kwargs) -> None:
-        for key, value in kwargs.items():
-            if hasattr(self, key):
-                object.__setattr__(self, key, value)
-                
     @property
     def output_result(self) -> list[dict]:
         if self.result is None:
-            raise ValueError('result is None')
+            raise ValueError("result is None")
         return self.result
 
 
 class SquadsCrawler(Crawler):
-    ASSET: T.Literal["Squads"] = "Squads"
-    url: str
+    KIND: T.Literal["Squads"] = "Squads"
     
+    url: str
+
     @T.override
     def crawl(self):
         pass
@@ -65,24 +55,28 @@ class SquadsCrawler(Crawler):
 
 
 class ClubsCrawler(Crawler):
-    ASSET: T.Literal["Clubs"] = "Clubs"
-    url: str = "https://transfermarkt.co.uk/{league}/startseite/wettbewerb/{league_id}/plus/?saison_id={year}"
+    KIND: T.Literal["Clubs"] = "Clubs"
+    
+    url: str
+    seasons: list[int]
+    leagues: list[str]
 
     @T.override
     def crawl(self):
         self.__logger = self.logger_service.logger()
-        
+
         data = []
         for resp in self.make_request():
             self.__logger.info(f"Response: {resp}. Response code: {resp.status_code}")
-        
+
             parsed = self.parse(resp)
             data_logger = self.__logger.bind(**parsed)
+            
             data_logger.info("Data parsed")
             data.append(parsed)
-        
+
         self.result = data
-    
+
     @T.override
     def parse(self, resp: httpx.Response) -> dict[str, T.Any]:
         soup = BeautifulSoup(resp.text, "html.parser")
@@ -106,10 +100,14 @@ class ClubsCrawler(Crawler):
 
     @T.override
     def make_request(self) -> T.Generator[httpx.Response, None, None]:
-        for league in self.leagues:
-            _url = self.url.format(
-                league=league,
-                league_id=constants.LEAGUE_MAP.get(league, ""),
-                year=self.season,
-            )
-            yield httpx.get(_url, headers=self.headers, proxy=self.proxy, follow_redirects=True)
+        for season in self.seasons:
+            for league in self.leagues:
+                _url = self.url.format(
+                    league=league,
+                    league_id=constants.LEAGUE_MAP.get(league, ""),
+                    year=season,
+                )
+                yield self.client_service.request(url=_url)
+            
+
+CrawlerKind = ClubsCrawler | SquadsCrawler
