@@ -3,13 +3,13 @@ import typing as T
 
 import pydantic as pdt
 
-from footcrawl import services, crawlers
+from footcrawl import crawlers, services
 from footcrawl.io import datasets
 
 
 class Source(abc.ABC, pdt.BaseModel, strict=True, frozen=True, extra="forbid"):
     KIND: str
-    
+
     logger_service: services.LoggerService = services.LoggerService()
 
     @abc.abstractmethod

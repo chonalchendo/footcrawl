@@ -6,7 +6,7 @@ import httpx
 import pydantic as pdt
 from bs4 import BeautifulSoup
 
-from footcrawl import constants, schemas, services, client
+from footcrawl import client, constants, schemas, services
 
 
 class Crawler(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid"):
@@ -38,7 +38,7 @@ class Crawler(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid")
 
 class SquadsCrawler(Crawler):
     KIND: T.Literal["Squads"] = "Squads"
-    
+
     url: str
 
     @T.override
@@ -56,7 +56,7 @@ class SquadsCrawler(Crawler):
 
 class ClubsCrawler(Crawler):
     KIND: T.Literal["Clubs"] = "Clubs"
-    
+
     url: str
     seasons: list[int]
     leagues: list[str]
@@ -71,7 +71,7 @@ class ClubsCrawler(Crawler):
 
             parsed = self.parse(resp)
             data_logger = self.__logger.bind(**parsed)
-            
+
             data_logger.info("Data parsed")
             data.append(parsed)
 
@@ -108,6 +108,6 @@ class ClubsCrawler(Crawler):
                     year=season,
                 )
                 yield self.client_service.request(url=_url)
-            
+
 
 CrawlerKind = ClubsCrawler | SquadsCrawler

@@ -1,6 +1,7 @@
+import time
+
 import httpx
 import pydantic as pdt
-import time
 
 
 class Client(pdt.BaseModel, frozen=True, strict=True, extra="forbid"):

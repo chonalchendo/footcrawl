@@ -1,4 +1,5 @@
 import typing as T
+
 import omegaconf as oc
 
 Config = oc.ListConfig | oc.DictConfig
