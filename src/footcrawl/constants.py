@@ -1,13 +1,15 @@
 import typing as T
 
-
-LeagueMap = T.TypedDict('LeagueMap', {
-    "premier-league": str,
-    "la-liga": str,
-    "serie-a": str,
-    "bundesliga": str,
-    "ligue-1": str,
-})
+LeagueMap = T.TypedDict(
+    "LeagueMap",
+    {
+        "premier-league": str,
+        "la-liga": str,
+        "serie-a": str,
+        "bundesliga": str,
+        "ligue-1": str,
+    },
+)
 
 
 LEAGUE_MAP: LeagueMap = {
