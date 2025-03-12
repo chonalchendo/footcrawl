@@ -1,6 +1,7 @@
 import argparse
 
 from rich import print
+import omegaconf as oc
 
 from footcrawl import settings
 from footcrawl.io import configs
@@ -19,6 +20,10 @@ def execute(argv: list[str] | None = None) -> int:
         raise RuntimeError("No configs provided.")
 
     config = configs.merge_configs(files)
+
+    if not isinstance(config, oc.DictConfig):
+        raise RuntimeError("Config is not a dictionary")
+
     config.pop("globals")  # remove global values
 
     object_ = configs.to_object(config)
