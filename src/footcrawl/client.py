@@ -8,7 +8,7 @@ class Client(pdt.BaseModel, frozen=True, strict=True, extra="forbid"):
     user_agent: str
     download_delay: int = pdt.Field(default=1)
     follow_redirects: bool = pdt.Field(default=True)
-    proxy: dict | None = pdt.Field(default=None)
+    proxy: str | None = pdt.Field(default=None)
 
     def request(self, url: str) -> httpx.Response:
         if self.download_delay > 0:
