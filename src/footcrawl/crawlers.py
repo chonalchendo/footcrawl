@@ -18,7 +18,7 @@ class Crawler(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid")
     result: list[dict] | None = pdt.Field(default=None)
 
     @abc.abstractmethod
-    def crawl(self):
+    def crawl(self, season: int, league: str):
         pass
 
     @abc.abstractmethod
@@ -60,24 +60,18 @@ class ClubsCrawler(Crawler):
     KIND: T.Literal["Clubs"] = "Clubs"
 
     url: str
-    seasons: list[int]
-    leagues: list[str]
 
     @T.override
-    def crawl(self):
-        self.__logger = self.logger_service.logger()
+    def crawl(self, season: int, league: str):
+        logger = self.logger_service.logger()
 
-        data = []
-        for resp in self.make_request():
-            self.__logger.info(f"Response: {resp}. Response code: {resp.status_code}")
+        resp = self.make_request(season=season, league=league)
+        logger.info(f"Response: {resp}. Response code: {resp.status_code}")
 
-            parsed = self.parse(resp)
-            data_logger = self.__logger.bind(**parsed)
+        parsed = self.parse(resp)
+        logger.info("Data parsed: {}", parsed)
 
-            data_logger.info("Data parsed")
-            data.append(parsed)
-
-        self.result = data
+        return parsed
 
     @T.override
     def parse(self, resp: httpx.Response) -> dict[str, T.Any]:
@@ -101,15 +95,20 @@ class ClubsCrawler(Crawler):
         ).model_dump()
 
     @T.override
-    def make_request(self) -> T.Generator[httpx.Response, None, None]:
-        for season in self.seasons:
-            for league in self.leagues:
-                _url = self.url.format(
-                    league=league,
-                    league_id=constants.LEAGUE_MAP.get(league, ""),
-                    year=season,
-                )
-                yield self.client_service.request(url=_url)
+    def make_request(self, league: str, season: int) -> httpx.Response:
+        _url = self.url.format(
+            league=league,
+            league_id=constants.LEAGUE_MAP.get(league, ""),
+            season=season,
+        )
+
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
+            # "Accept": "text/html,application/xhtml+xml,application/xml",
+            # "Accept-Language": "en-US,en;q=0.9",
+        }
+        # yield self.client_service.request(url=_url)
+        return httpx.get(url=_url, headers=headers, timeout=20, follow_redirects=True)
 
 
 CrawlerKind = ClubsCrawler | SquadsCrawler
