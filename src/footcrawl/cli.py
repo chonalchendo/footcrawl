@@ -1,6 +1,5 @@
 import argparse
 
-from rich import print
 import omegaconf as oc
 
 from footcrawl import settings
@@ -29,6 +28,7 @@ def execute(argv: list[str] | None = None) -> int:
     object_ = configs.to_object(config)
     setting = settings.MainSettings.model_validate(object_)
 
-    print(setting)
+    # start the crawler
+    setting.source.start()
 
     return 0
