@@ -1,8 +1,8 @@
 import abc
 import typing as T
 
-import pydantic as pdt
 import polars as pl
+import pydantic as pdt
 
 from footcrawl import crawlers, services
 from footcrawl.io import datasets
@@ -23,7 +23,7 @@ class Transfermarkt(Source):
 
     crawler: crawlers.CrawlerKind = pdt.Field(..., discriminator="KIND")
     output: datasets.WriterKind = pdt.Field(..., discriminator="KIND")
-    
+
     seasons: list[int]
     leagues: list[str]
 
@@ -41,17 +41,19 @@ class Transfermarkt(Source):
         for season in self.seasons:
             data = []
             for league in self.leagues:
-                logger.info('Starting Crawler...')
+                logger.info("Starting Crawler...")
                 parsed = self.crawler.crawl(season=season, league=league)
                 data.append(parsed)
-                
+
             # format path
             self.output.path = self.output.path.format(season=season)
-            
-            logger.info("Outputting data for season {} to path {}", season, self.output.path)
+
+            logger.info(
+                "Outputting data for season {} to path {}", season, self.output.path
+            )
             data = pl.DataFrame(data)
             self.output.write(data=data)
-                
+
         logger.info("Job complete.")
 
     @property
