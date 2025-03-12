@@ -4,8 +4,10 @@ import typing as T
 import polars as pl
 import pydantic as pdt
 
+from pathlib import Path
 
-class Writer(abc.ABC, pdt.BaseModel, strict=True, frozen=True, extra="forbid"):
+
+class Writer(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid"):
     KIND: str
 
     @abc.abstractmethod
@@ -30,6 +32,9 @@ class JsonWriter(Writer):
 
     @T.override
     def write(self, data: pl.DataFrame) -> None:
+        if not Path(self.path).parent.absolute().exists():
+            Path(self.path).parent.absolute().mkdir(parents=True, exist_ok=True)
+        
         data.write_json(self.path)
 
 
