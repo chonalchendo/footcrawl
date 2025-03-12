@@ -40,6 +40,8 @@ class SquadsCrawler(Crawler):
     KIND: T.Literal["Squads"] = "Squads"
 
     url: str
+    seasons: list[int]
+    leagues: list[str]
 
     @T.override
     def crawl(self):
