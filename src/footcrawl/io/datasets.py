@@ -21,6 +21,9 @@ class ParquetWriter(Writer):
 
     @T.override
     def write(self, data: pl.DataFrame) -> None:
+        if not Path(self.path).parent.absolute().exists():
+            Path(self.path).parent.absolute().mkdir(parents=True, exist_ok=True)
+        
         data.write_parquet(self.path)
 
 
@@ -34,7 +37,7 @@ class JsonWriter(Writer):
         if not Path(self.path).parent.absolute().exists():
             Path(self.path).parent.absolute().mkdir(parents=True, exist_ok=True)
 
-        data.write_json(self.path)
-
+        data.write_ndjson(self.path)
+        
 
 WriterKind = ParquetWriter | JsonWriter
