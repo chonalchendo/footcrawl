@@ -1,4 +1,5 @@
 import argparse
+import asyncio
 
 import omegaconf as oc
 
@@ -23,12 +24,9 @@ def execute(argv: list[str] | None = None) -> int:
     if not isinstance(config, oc.DictConfig):
         raise RuntimeError("Config is not a dictionary")
 
-    config.pop("globals")  # remove global values
-
     object_ = configs.to_object(config)
     setting = settings.MainSettings.model_validate(object_)
 
     # start the crawler
-    setting.source.start()
-
+    asyncio.run(setting.crawler.crawl())
     return 0
