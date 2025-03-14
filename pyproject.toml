@@ -47,6 +47,9 @@ doc = [
 
 # TOOLS
 
+[tool.uv]
+default-groups = ["checks", "commit", "dev", "doc"]
+
 [tool.commitizen]
 name = "cz_conventional_commits"
 tag_format = "v$version"
