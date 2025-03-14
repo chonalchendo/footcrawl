@@ -1,43 +1,38 @@
 import abc
+import json
 import typing as T
 from pathlib import Path
 
-import polars as pl
 import pydantic as pdt
+
+StreamingOutput = dict[str, T.Any]
 
 
 class Writer(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid"):
     KIND: str
 
+    path: str
+
     @abc.abstractmethod
-    def write(self, data: pl.DataFrame) -> None:
+    async def write(self, data: StreamingOutput) -> None:
         pass
 
+    def _ensure_parent_dir(self) -> None:
+        if not Path(self.path).parent.absolute().exists():
+            Path(self.path).parent.mkdir(parents=True, exist_ok=True)
 
-class ParquetWriter(Writer):
-    KIND: T.Literal["ParquetWriter"] = "ParquetWriter"
 
-    path: str
+class AsyncJsonWriter(Writer):
+    KIND: T.Literal["AsyncJsonWriter"] = "AsyncJsonWriter"
+
+    mode: T.Literal["write", "update"] = "write"
 
     @T.override
-    def write(self, data: pl.DataFrame) -> None:
-        if not Path(self.path).parent.absolute().exists():
-            Path(self.path).parent.absolute().mkdir(parents=True, exist_ok=True)
-        
-        data.write_parquet(self.path)
+    async def write(self, data: StreamingOutput) -> None:
+        self._ensure_parent_dir()
+
+        with open(self.path, "a") as file:
+            file.write(json.dumps(data) + "\n")
 
 
-class JsonWriter(Writer):
-    KIND: T.Literal["JsonWriter"] = "JsonWriter"
-
-    path: str
-
-    @T.override
-    def write(self, data: pl.DataFrame) -> None:
-        if not Path(self.path).parent.absolute().exists():
-            Path(self.path).parent.absolute().mkdir(parents=True, exist_ok=True)
-
-        data.write_ndjson(self.path)
-        
-
-WriterKind = ParquetWriter | JsonWriter
+WriterKind = AsyncJsonWriter
