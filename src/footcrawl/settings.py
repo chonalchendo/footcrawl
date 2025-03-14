@@ -1,7 +1,7 @@
 import pydantic as pdt
 import pydantic_settings as pdts
 
-from footcrawl import sources
+from footcrawl import crawlers
 
 
 class Settings(pdts.BaseSettings, strict=True, frozen=True, extra="forbid"):
@@ -9,4 +9,4 @@ class Settings(pdts.BaseSettings, strict=True, frozen=True, extra="forbid"):
 
 
 class MainSettings(Settings):
-    source: sources.SourceKind = pdt.Field(..., discriminator="KIND")
+    crawler: crawlers.CrawlerKind = pdt.Field(..., discriminator="KIND")
