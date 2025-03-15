@@ -25,7 +25,7 @@ class Writer(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid"):
 class AsyncJsonWriter(Writer):
     KIND: T.Literal["AsyncJsonWriter"] = "AsyncJsonWriter"
 
-    mode: T.Literal["write", "update"] = "write"
+    overwrite: bool = pdt.Field(default=True)
 
     @T.override
     async def write(self, data: StreamingOutput) -> None:
