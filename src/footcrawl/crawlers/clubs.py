@@ -1,5 +1,4 @@
 import asyncio
-import time
 import typing as T
 from pathlib import Path
 
@@ -7,7 +6,7 @@ import aiohttp
 import pydantic as pdt
 from bs4 import BeautifulSoup
 
-from footcrawl import parsers
+from footcrawl import parsers, metrics
 from footcrawl.crawlers import base
 from footcrawl.io import datasets
 
@@ -27,11 +26,13 @@ class AsyncClubsCrawler(base.Crawler):
     # io parameter
     output: datasets.WriterKind = pdt.Field(..., discriminator="KIND")
 
+    # metrics
+    crawler_metrics: metrics.CrawlerMetrics = metrics.CrawlerMetrics()
+
     @T.override
     async def crawl(self) -> None:
         logger = self.logger_service.logger()
-        start_time = time.time()
-
+        
         self.__orig_output_path = self.output.path
 
         if self.output.overwrite:
@@ -52,8 +53,8 @@ class AsyncClubsCrawler(base.Crawler):
 
         await asyncio.gather(*tasks)
 
-        time_difference = time.time() - start_time
-        logger.info("Scraping time: %.2f seconds." % time_difference)
+        metrics_output = self.crawler_metrics.summary()
+        logger.info("Crawler metrics: {}", metrics_output)
 
     async def __parse(self, url: str, season: int) -> None:
         logger = self.logger_service.logger()
@@ -63,11 +64,17 @@ class AsyncClubsCrawler(base.Crawler):
                     logger.error(f"Failed to fetch {url}, status: {resp.status}")
                     return None
 
+                # record request metrics
+                self.crawler_metrics.record_request(resp=resp)
+
                 body = await resp.text()
                 soup = BeautifulSoup(body, "html.parser")
 
                 data = self.parser.parse(url=resp.url, soup=soup)
                 logger.info("Parsed data: {}", data)
+
+                # Record items parsed
+                self.crawler_metrics.record_parser(metrics=self.parser.get_metrics)
 
                 # format output path
                 formatted_path = self.__orig_output_path.format(season=season)
