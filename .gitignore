@@ -1,5 +1,6 @@
 # additional files to ignore
 .ruff_cache
+data/
 
 
 # Byte-compiled / optimized / DLL files
