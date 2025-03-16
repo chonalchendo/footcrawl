@@ -21,6 +21,7 @@ class CrawlerMetrics(Metrics):
     failed_requests: int = pdt.Field(default=0)
     parser_metrics: Counter = pdt.Field(default_factory=Counter)
 
+    @T.override
     def summary(self) -> dict[str, T.Any]:
         return {
             "scraping_time": round(time.time() - self.start_time, 2),
