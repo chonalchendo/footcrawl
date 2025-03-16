@@ -3,20 +3,17 @@ import typing as T
 from pathlib import Path
 
 import aiohttp
+import aiohttp.http_exceptions
 import pydantic as pdt
 from bs4 import BeautifulSoup
 
-from footcrawl import parsers, metrics
+from footcrawl import parsers
 from footcrawl.crawlers import base
 from footcrawl.io import datasets
 
 
 class AsyncClubsCrawler(base.Crawler):
     KIND: T.Literal["AsyncClubsCrawler"] = "AsyncClubsCrawler"
-
-    # network parameters
-    url: str
-    headers: dict[str, str]
 
     # crawler parameters
     seasons: list[int]
@@ -26,15 +23,11 @@ class AsyncClubsCrawler(base.Crawler):
     # io parameter
     output: datasets.WriterKind = pdt.Field(..., discriminator="KIND")
 
-    # metrics
-    crawler_metrics: metrics.CrawlerMetrics = metrics.CrawlerMetrics()
-
     @T.override
     async def crawl(self) -> None:
         logger = self.logger_service.logger()
-        
-        self.__orig_output_path = self.output.path
 
+        self.__orig_output_path = self.output.path
         if self.output.overwrite:
             logger.info("Overwrite is: {}", self.output.overwrite)
             self.__check_filepaths()
@@ -42,11 +35,8 @@ class AsyncClubsCrawler(base.Crawler):
         tasks = []
         for season in self.seasons:
             for league in self.leagues:
-                _url = self.url.format(
-                    league=league.get("name"),
-                    league_id=league.get("id"),
-                    season=season,
-                )
+                _url = self.__format_url(league=league, season=season)
+                
                 logger.info(f"QUEUED: {_url}")
                 task = asyncio.create_task(self.__parse(url=_url, season=season))
                 tasks.append(task)
@@ -82,6 +72,13 @@ class AsyncClubsCrawler(base.Crawler):
 
                 logger.info("Writing to path: {}", self.output.path)
                 await self.output.write(data=data)
+
+    def __format_url(self, league: dict[str, str], season: int) -> str:
+        return self.url.format(
+            league=league.get("name"),
+            league_id=league.get("id"),
+            season=season,
+        )
 
     def __check_filepaths(self) -> None:
         logger = self.logger_service.logger()
