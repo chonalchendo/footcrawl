@@ -32,6 +32,7 @@ checks = [
     "pytest>=8.3.5",
     "pytest-cov>=6.0.0",
     "pytest-mock>=3.14.0",
+    "pytest-xdist>=3.6.1",
     "ruff>=0.9.10",
 ]
 commit = [
@@ -44,11 +45,14 @@ dev = [
 doc = [
     "pdoc>=15.0.1",
 ]
+notebooks = [
+    "ipykernel>=6.29.5",
+]
 
 # TOOLS
 
 [tool.uv]
-default-groups = ["checks", "commit", "dev", "doc"]
+default-groups = ["checks", "commit", "dev", "doc", "notebooks"]
 
 [tool.commitizen]
 name = "cz_conventional_commits"
@@ -65,6 +69,9 @@ check_untyped_defs = true
 ignore_missing_imports = true
 plugins = ["pydantic.mypy"]
 
+[tool.pytest.ini_options]
+addopts = "--verbosity=2"
+pythonpath = ["src"]
 
 [tool.ruff]
 fix = true
