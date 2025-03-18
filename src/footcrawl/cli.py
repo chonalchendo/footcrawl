@@ -34,10 +34,10 @@ def execute(argv: list[str] | None = None) -> int:
 
     # parse user agent
     user_agent = os.getenv("USER_AGENT")
-    object_["crawler"]["headers"]["User-Agent"] = user_agent
+    object_["crawler"]['http_client']["headers"]["User-Agent"] = user_agent
 
     setting = settings.MainSettings.model_validate(object_)
-
-    # # start the crawler
+    
+    # start the crawler
     asyncio.run(setting.crawler.crawl())
     return 0
