@@ -1,3 +1,6 @@
+import os
+from dotenv import load_dotenv
+
 import argparse
 import asyncio
 
@@ -5,6 +8,10 @@ import omegaconf as oc
 
 from footcrawl import settings
 from footcrawl.io import configs
+
+# load env variables
+load_dotenv()
+
 
 parser = argparse.ArgumentParser(
     description="Run a crawler job from YAML/JSON configuration files."
@@ -23,10 +30,15 @@ def execute(argv: list[str] | None = None) -> int:
 
     if not isinstance(config, oc.DictConfig):
         raise RuntimeError("Config is not a dictionary")
-
+    
     object_ = configs.to_object(config)
+    
+    # parse user agent
+    user_agent = os.getenv('USER_AGENT')
+    object_['crawler']['headers']['User-Agent'] = user_agent
+
     setting = settings.MainSettings.model_validate(object_)
 
-    # start the crawler
+    # # start the crawler
     asyncio.run(setting.crawler.crawl())
     return 0
