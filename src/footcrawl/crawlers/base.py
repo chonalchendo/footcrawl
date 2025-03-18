@@ -7,7 +7,7 @@ from footcrawl import metrics
 
 
 class Crawler(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid"):
-    KIND: str\
+    KIND: str
     
     url: str
     headers: dict[str, str]
