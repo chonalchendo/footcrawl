@@ -3,12 +3,11 @@
 import os
 import typing as T
 
-import pytest
 import _pytest.logging as pl
+import pytest
 
-
-from footcrawl.io import services
 from footcrawl import metrics
+from footcrawl.io import services
 
 # %% FIXTURES
 
@@ -31,8 +30,8 @@ def logger_service() -> T.Generator[services.LoggerService, None, None]:
     service.start()
     yield service
     service.stop()
-    
-    
+
+
 @pytest.fixture
 def logger_caplog(
     caplog: pl.LogCaptureFixture, logger_service: services.LoggerService
@@ -49,11 +48,11 @@ def logger_caplog(
     )
     yield caplog
     logger.remove(handler_id)
-    
+
 
 # %% - Metrics
 
-@pytest.fixture(scope='session')
+
+@pytest.fixture(scope="session")
 def crawler_metrics() -> metrics.CrawlerMetrics:
     return metrics.CrawlerMetrics()
-    

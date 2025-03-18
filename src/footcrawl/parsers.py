@@ -10,7 +10,6 @@ from footcrawl import schemas
 
 
 class Parser(abc.ABC, pdt.BaseModel, strict=True, frozen=True, extra="forbid"):
-    
     @abc.abstractmethod
     def parse(self, soup: BeautifulSoup, url: URL | None = None) -> dict[str, T.Any]:
         pass
@@ -25,7 +24,7 @@ class ClubsParser(Parser):
         team_name = [td.find("a").get("title") for td in team_info]
 
         self.__total_items = len(tm_team_id)
-        
+
         # get league and season from the url
         self.__league_name = urlparse(str(url)).path.split("/")[1]
         self.__season = parse_qs(urlparse(str(url)).query)["saison_id"][0]
@@ -39,9 +38,9 @@ class ClubsParser(Parser):
         )
 
         return data.model_dump()
-    
+
     @property
     def get_metrics(self):
         return {
-            'items_parsed': self.__total_items,
+            "items_parsed": self.__total_items,
         }

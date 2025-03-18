@@ -1,10 +1,9 @@
-import os
-from dotenv import load_dotenv
-
 import argparse
 import asyncio
+import os
 
 import omegaconf as oc
+from dotenv import load_dotenv
 
 from footcrawl import settings
 from footcrawl.io import configs
@@ -30,12 +29,12 @@ def execute(argv: list[str] | None = None) -> int:
 
     if not isinstance(config, oc.DictConfig):
         raise RuntimeError("Config is not a dictionary")
-    
+
     object_ = configs.to_object(config)
-    
+
     # parse user agent
-    user_agent = os.getenv('USER_AGENT')
-    object_['crawler']['headers']['User-Agent'] = user_agent
+    user_agent = os.getenv("USER_AGENT")
+    object_["crawler"]["headers"]["User-Agent"] = user_agent
 
     setting = settings.MainSettings.model_validate(object_)
 

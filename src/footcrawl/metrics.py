@@ -1,9 +1,9 @@
 import abc
-import pydantic as pdt
-import typing as T
 import time
+import typing as T
 from collections import Counter
 
+import pydantic as pdt
 from aiohttp import ClientResponse
 
 

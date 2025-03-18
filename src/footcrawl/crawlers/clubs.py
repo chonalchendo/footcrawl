@@ -36,7 +36,7 @@ class AsyncClubsCrawler(base.Crawler):
         for season in self.seasons:
             for league in self.leagues:
                 _url = self.__format_url(league=league, season=season)
-                
+
                 logger.info(f"QUEUED: {_url}")
                 task = asyncio.create_task(self.__parse(url=_url, season=season))
                 tasks.append(task)
