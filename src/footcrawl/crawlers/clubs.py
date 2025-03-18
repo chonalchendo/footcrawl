@@ -7,7 +7,7 @@ import aiohttp.http_exceptions
 import pydantic as pdt
 from bs4 import BeautifulSoup
 
-from footcrawl import parsers
+from footcrawl import parsers, client
 from footcrawl.crawlers import base
 from footcrawl.io import datasets
 
@@ -23,6 +23,9 @@ class AsyncClubsCrawler(base.Crawler):
     # io parameter
     output: datasets.WriterKind = pdt.Field(..., discriminator="KIND")
 
+    # client
+    http_client: client.AsyncClient = pdt.Field(default_factory=client.AsyncClient)
+
     @T.override
     async def crawl(self) -> None:
         logger = self.logger_service.logger()
@@ -32,46 +35,55 @@ class AsyncClubsCrawler(base.Crawler):
             logger.info("Overwrite is: {}", self.output.overwrite)
             self.__check_filepaths()
 
-        tasks = []
-        for season in self.seasons:
-            for league in self.leagues:
-                _url = self.__format_url(league=league, season=season)
+        async with self.http_client as client:
+            session = client.get_session
+            tasks = []
 
-                logger.info(f"QUEUED: {_url}")
-                task = asyncio.create_task(self.__parse(url=_url, season=season))
-                tasks.append(task)
+            for season in self.seasons:
+                for league in self.leagues:
+                    _url = self.__format_url(league=league, season=season)
 
-        await asyncio.gather(*tasks)
+                    logger.info(f"QUEUED: {_url}")
+                    task = asyncio.create_task(
+                        self.__write_out(session=session, url=_url, season=season)
+                    )
+                    tasks.append(task)
+
+            await asyncio.gather(*tasks)
 
         metrics_output = self.crawler_metrics.summary()
         logger.info("Crawler metrics: {}", metrics_output)
 
-    async def __parse(self, url: str, season: int) -> None:
+    async def __write_out(self, session: aiohttp.ClientSession, url: str, season: int):
         logger = self.logger_service.logger()
-        async with aiohttp.ClientSession(headers=self.headers) as session:
-            async with session.get(url) as resp:
-                if resp.status != 200:
-                    logger.error(f"Failed to fetch {url}, status: {resp.status}")
-                    return None
+        data = await self.__parse(session=session, url=url)
 
-                # record request metrics
-                self.crawler_metrics.record_request(resp=resp)
+        # format output path
+        formatted_path = self.__orig_output_path.format(season=season)
+        self.output.path = formatted_path
 
-                body = await resp.text()
-                soup = BeautifulSoup(body, "html.parser")
+        logger.info("Writing to path: {}", self.output.path)
+        await self.output.write(data=data)
 
-                data = self.parser.parse(url=resp.url, soup=soup)
-                logger.info("Parsed data: {}", data)
+    async def __parse(self, session: aiohttp.ClientSession, url: str) -> None:
+        logger = self.logger_service.logger()
 
-                # Record items parsed
-                self.crawler_metrics.record_parser(metrics=self.parser.get_metrics)
+        body, resp = await self.__fetch_content(session=session, url=url)
+        soup = BeautifulSoup(body, "html.parser")
 
-                # format output path
-                formatted_path = self.__orig_output_path.format(season=season)
-                self.output.path = formatted_path
+        data = self.parser.parse(url=resp.url, soup=soup)
+        logger.info("Parsed data: {}", data)
 
-                logger.info("Writing to path: {}", self.output.path)
-                await self.output.write(data=data)
+        # Record items parsed
+        self.crawler_metrics.record_parser(metrics=self.parser.get_metrics)
+
+        return data
+
+    async def __fetch_content(self, session: aiohttp.ClientSession, url: str):
+        resp = await session.get(url)
+        resp.raise_for_status()
+        body = await resp.text()
+        return body, resp
 
     def __format_url(self, league: dict[str, str], season: int) -> str:
         return self.url.format(
