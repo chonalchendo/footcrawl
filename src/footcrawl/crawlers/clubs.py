@@ -54,7 +54,7 @@ class AsyncClubsCrawler(base.Crawler):
         metrics_output = self.crawler_metrics.summary()
         logger.info("Crawler metrics: {}", metrics_output)
 
-    async def __write_out(self, session: aiohttp.ClientSession, url: str, season: int):
+    async def __write_out(self, session: aiohttp.ClientSession, url: str, season: int) -> None:
         logger = self.logger_service.logger()
         data = await self.__parse(session=session, url=url)
 
@@ -65,7 +65,7 @@ class AsyncClubsCrawler(base.Crawler):
         logger.info("Writing to path: {}", self.output.path)
         await self.output.write(data=data)
 
-    async def __parse(self, session: aiohttp.ClientSession, url: str) -> None:
+    async def __parse(self, session: aiohttp.ClientSession, url: str) -> dict[str, T.Any]:
         logger = self.logger_service.logger()
 
         body, resp = await self.__fetch_content(session=session, url=url)
@@ -79,7 +79,9 @@ class AsyncClubsCrawler(base.Crawler):
 
         return data
 
-    async def __fetch_content(self, session: aiohttp.ClientSession, url: str):
+    async def __fetch_content(
+        self, session: aiohttp.ClientSession, url: str
+    ) -> tuple[str, aiohttp.ClientResponse]:
         resp = await session.get(url)
         resp.raise_for_status()
         body = await resp.text()
