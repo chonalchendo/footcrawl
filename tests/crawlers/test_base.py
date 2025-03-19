@@ -16,13 +16,6 @@ async def test_crawler(
     # given
     url = "https://transfermarkt.co.uk/{league}/startseite/wettbewerb/{league_id}/plus/?saison_id={season}"
 
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-        "Accept-Language": "en-US,en;q=0.9",
-        "Accept-Encoding": "gzip, deflate, br",
-    }
-
     class MyCrawler(base.Crawler):
         KIND: str = "MyCrawler"
 
@@ -31,7 +24,6 @@ async def test_crawler(
 
     crawler = MyCrawler(
         url=url,
-        headers=headers,
         logger_service=logger_service,
         crawler_metrics=crawler_metrics,
     )
