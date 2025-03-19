@@ -24,7 +24,7 @@ class AsyncClubsCrawler(base.Crawler):
     output: datasets.WriterKind = pdt.Field(..., discriminator="KIND")
 
     # client
-    http_client: client.AsyncClient = pdt.Field(default_factory=client.AsyncClient)
+    http_client: client.AsyncClient = pdt.Field(...)
 
     @T.override
     async def crawl(self) -> None:
