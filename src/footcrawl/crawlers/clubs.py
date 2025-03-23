@@ -27,7 +27,7 @@ class AsyncClubsCrawler(base.Crawler):
     http_client: client.AsyncClient = pdt.Field(...)
 
     @T.override
-    async def crawl(self) -> None:
+    async def crawl(self) -> base.Locals:
         logger = self.logger_service.logger()
 
         self.__orig_output_path = self.output.path
@@ -41,11 +41,13 @@ class AsyncClubsCrawler(base.Crawler):
 
             for season in self.seasons:
                 for league in self.leagues:
-                    _url = self.__format_url(league=league, season=season)
+                    formatted_url = self.__format_url(league=league, season=season)
 
-                    logger.info(f"QUEUED: {_url}")
+                    logger.info(f"QUEUED: {formatted_url}")
                     task = asyncio.create_task(
-                        self.__write_out(session=session, url=_url, season=season)
+                        self.__write_out(
+                            session=session, url=formatted_url, season=season
+                        )
                     )
                     tasks.append(task)
 
@@ -53,8 +55,12 @@ class AsyncClubsCrawler(base.Crawler):
 
         metrics_output = self.crawler_metrics.summary()
         logger.info("Crawler metrics: {}", metrics_output)
+        
+        return locals()   # returned for testing
 
-    async def __write_out(self, session: aiohttp.ClientSession, url: str, season: int) -> None:
+    async def __write_out(
+        self, session: aiohttp.ClientSession, url: str, season: int
+    ) -> None:
         logger = self.logger_service.logger()
         data = await self.__parse(session=session, url=url)
 
@@ -65,7 +71,9 @@ class AsyncClubsCrawler(base.Crawler):
         logger.info("Writing to path: {}", self.output.path)
         await self.output.write(data=data)
 
-    async def __parse(self, session: aiohttp.ClientSession, url: str) -> dict[str, T.Any]:
+    async def __parse(
+        self, session: aiohttp.ClientSession, url: str
+    ) -> dict[str, T.Any]:
         logger = self.logger_service.logger()
 
         body, resp = await self.__fetch_content(session=session, url=url)
