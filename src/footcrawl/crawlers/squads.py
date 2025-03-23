@@ -9,5 +9,5 @@ class SquadsCrawler(base.Crawler):
     url: str
 
     @T.override
-    async def crawl(self) -> None:
-        pass
+    async def crawl(self) -> base.Locals:
+        return {}
