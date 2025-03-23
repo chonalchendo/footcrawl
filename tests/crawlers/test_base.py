@@ -19,8 +19,9 @@ async def test_crawler(
     class MyCrawler(base.Crawler):
         KIND: str = "MyCrawler"
 
-        async def crawl(self) -> None:
-            pass
+        async def crawl(self) -> base.Locals:
+            a, b = 1, "test"
+            return locals()
 
     crawler = MyCrawler(
         url=url,
@@ -29,9 +30,12 @@ async def test_crawler(
     )
 
     # when
-    await crawler.crawl()
+    results = await crawler.crawl()
 
     # then
     assert hasattr(crawler, "logger_service"), "Crawler should have an Logger service!"
     assert hasattr(crawler, "crawler_metrics"), "Crawler should have a metrics class!"
     assert hasattr(crawler, "url"), "Crawler should have a URL!"
+    
+    # - outputs
+    assert set(results) == {"self", "a", "b"}, "Run should return local variables!"
