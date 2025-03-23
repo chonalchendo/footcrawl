@@ -8,8 +8,8 @@ import pytest
 import omegaconf
 from dotenv import load_dotenv
 
-from footcrawl import metrics
-from footcrawl.io import services
+from footcrawl import client, metrics, parsers
+from footcrawl.io import services, datasets
 
 load_dotenv()
 
@@ -38,15 +38,36 @@ def confs_path(tests_path: str) -> str:
     return os.path.join(tests_path, "confs")
 
 
+# %% - Client
+
+
+@pytest.fixture(scope="session")
+def user_agent() -> str:
+    default_user_agent = "Mozilla/5.0 Generic Browser Chrome/128.0.0.0"
+    return os.getenv("USER_AGENT", default_user_agent)
+
+
+@pytest.fixture(scope="session")
+def headers(user_agent: str) -> dict[str, str]:
+    return {
+        "User-Agent": f"{user_agent}",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Accept-Encoding": "gzip, deflate, br",
+    }
+
+
+@pytest.fixture(scope="function")
+def async_client(headers: dict[str, str]) -> client.AsyncClient:
+    return client.AsyncClient(headers=headers)
+
+
 # %% - Configs
 
 
 @pytest.fixture(scope="session")
-def extra_config() -> str:
+def extra_config(user_agent: str) -> str:
     """Extra config for cli script."""
-
-    default_user_agent = "Mozilla/5.0 Generic Browser Chrome/128.0.0.0"
-    user_agent = os.getenv("USER_AGENT", default_user_agent)
 
     config = f"""
     {{
@@ -64,6 +85,45 @@ def extra_config() -> str:
     }}
     """
     return config
+
+
+# %% - Datasets
+
+
+@pytest.fixture(scope="function")
+def tmp_outputs_writer(tmp_outputs_path: str) -> datasets.AsyncJsonWriter:
+    """Return a writer for the tmp outputs dataset."""
+    return datasets.AsyncJsonWriter(path=tmp_outputs_path)
+
+
+# %% - Parsers
+
+
+@pytest.fixture(scope="function")
+def clubs_parser() -> parsers.ClubsParser:
+    return parsers.ClubsParser()
+
+
+# %% - Crawlers
+
+
+@pytest.fixture(scope="function")
+def clubs_url() -> str:
+    return "https://transfermarkt.co.uk/{league}/startseite/wettbewerb/{league_id}/plus/?saison_id={season}"
+
+
+@pytest.fixture(scope="function")
+def tmp_seasons() -> list[int]:
+    return [2023, 2024]
+
+
+@pytest.fixture(scope="function")
+def tmp_leagues() -> list[dict[str, str]]:
+    return [
+        {"name": "premier-league", "id": "GB1"},
+        {"name": "bundesliga", "id": "L1"},
+        {"name": "la-liga", "id": "ES1"},
+    ]
 
 
 # %% - Services
@@ -99,7 +159,7 @@ def logger_caplog(
 # %% - Metrics
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def crawler_metrics() -> metrics.CrawlerMetrics:
     return metrics.CrawlerMetrics()
 
