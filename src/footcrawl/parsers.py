@@ -6,18 +6,25 @@ import pydantic as pdt
 from bs4 import BeautifulSoup
 from yarl import URL
 
-from footcrawl import schemas
+from footcrawl import schemas, metrics
+
+Items = dict[str, T.Any]
 
 
 class Parser(abc.ABC, pdt.BaseModel, strict=True, frozen=True, extra="forbid"):
     @abc.abstractmethod
-    def parse(self, soup: BeautifulSoup, url: URL | None = None) -> dict[str, T.Any]:
+    def parse(self, soup: BeautifulSoup, url: URL | None = None) -> Items:
+        pass
+
+    @property
+    @abc.abstractmethod
+    def get_metrics(self) -> metrics.MetricsDict:
         pass
 
 
 class ClubsParser(Parser):
     @T.override
-    def parse(self, soup: BeautifulSoup, url: URL | None = None) -> dict[str, T.Any]:
+    def parse(self, soup: BeautifulSoup, url: URL | None = None) -> Items:
         team_info = soup.find_all("td", {"class": "hauptlink no-border-links"})
         tm_team_name = [td.find("a").get("href").split("/")[1] for td in team_info]
         tm_team_id = [td.find("a").get("href").split("/")[4] for td in team_info]
@@ -40,7 +47,6 @@ class ClubsParser(Parser):
         return data.model_dump()
 
     @property
-    def get_metrics(self):
-        return {
-            "items_parsed": self.__total_items,
-        }
+    def get_metrics(self) -> metrics.MetricsDict:
+        metrics_ = metrics.ParserMetrics(items_parsed=self.__total_items)
+        return metrics_.summary()
