@@ -39,10 +39,10 @@ class CrawlerMetrics(Metrics):
     def record_request(self, resp: ClientResponse) -> None:
         self.total_requests += 1
 
-        content_length = int(resp.headers.get("content-length", 0))
+        # content_length = resp.headers.get("content-length", 0)
         if resp.status == 200:
             self.successful_requests += 1
-            self.total_bytes_received += content_length
+            # self.total_bytes_received += content_length
         else:
             self.failed_requests += 1
 
@@ -55,9 +55,9 @@ class CrawlerMetrics(Metrics):
     def __calculate_request_success_rate(self) -> float:
         if self.successful_requests > 0 and self.failed_requests == 0:
             return 100.0
-
+        
         try:
-            return round(self.total_requests / self.successful_requests, 2)
+            return round(self.successful_requests / self.total_requests, 2) * 100
         except ValueError as e:
             return e
 
