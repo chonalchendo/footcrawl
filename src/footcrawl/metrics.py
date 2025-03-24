@@ -31,7 +31,7 @@ class CrawlerMetrics(Metrics):
             "total_requests": self.total_requests,
             "successful_requests": self.successful_requests,
             "failed_requests": self.failed_requests,
-            # "success_rate": self.__calculate_request_success_rate(),
+            "success_rate": self.__calculate_request_success_rate(),
             "total_bytes_received": self.total_bytes_received,
             "parser_metrics": dict(self.parser_metrics),
         }
@@ -39,7 +39,7 @@ class CrawlerMetrics(Metrics):
     def record_request(self, resp: ClientResponse) -> None:
         self.total_requests += 1
 
-        content_length = int(resp.headers.get("Content-Length", 0))
+        content_length = int(resp.headers.get("content-length", 0))
         if resp.status == 200:
             self.successful_requests += 1
             self.total_bytes_received += content_length
@@ -52,14 +52,14 @@ class CrawlerMetrics(Metrics):
 
         self.parser_metrics.update(metrics)
 
-    # def __calculate_request_success_rate(self) -> float:
-    #     if self.successful_requests > 0 and self.failed_requests == 0:
-    #         return 100.0
+    def __calculate_request_success_rate(self) -> float:
+        if self.successful_requests > 0 and self.failed_requests == 0:
+            return 100.0
 
-    #     try:
-    #         return round(self.total_requests / self.successful_requests, 2)
-    #     except ValueError as e:
-    #         return e
+        try:
+            return round(self.total_requests / self.successful_requests, 2)
+        except ValueError as e:
+            return e
 
 
 class ParserMetrics(Metrics):
