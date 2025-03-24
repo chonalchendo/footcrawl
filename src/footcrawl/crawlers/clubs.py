@@ -83,7 +83,8 @@ class AsyncClubsCrawler(base.Crawler):
         logger.info("Parsed data: {}", data)
 
         # Record items parsed
-        self.crawler_metrics.record_parser(metrics=self.parser.get_metrics)
+        parser_metrics = self.parser.get_metrics
+        self.crawler_metrics.record_parser(metrics=parser_metrics)
 
         return data
 
@@ -93,6 +94,10 @@ class AsyncClubsCrawler(base.Crawler):
         resp = await session.get(url)
         resp.raise_for_status()
         body = await resp.text()
+        
+        # collecting metrics
+        self.crawler_metrics.record_request(resp=resp)
+        
         return body, resp
 
     def __format_url(self, league: dict[str, str], season: int) -> str:
