@@ -7,9 +7,12 @@ import pydantic as pdt
 from aiohttp import ClientResponse
 
 
+MetricsDict = dict[str, T.Any]
+
+
 class Metrics(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid"):
     @abc.abstractmethod
-    def summary(self) -> dict[str, T.Any]:
+    def summary(self) -> MetricsDict:
         pass
 
 
@@ -22,7 +25,7 @@ class CrawlerMetrics(Metrics):
     parser_metrics: Counter = pdt.Field(default_factory=Counter)
 
     @T.override
-    def summary(self) -> dict[str, T.Any]:
+    def summary(self) -> MetricsDict:
         return {
             "scraping_time": round(time.time() - self.start_time, 2),
             "total_requests": self.total_requests,
@@ -43,9 +46,9 @@ class CrawlerMetrics(Metrics):
         else:
             self.failed_requests += 1
 
-    def record_parser(self, metrics: dict) -> None:
+    def record_parser(self, metrics: MetricsDict) -> None:
         if not isinstance(metrics, dict):
-            raise ValueError("Metrics must be a dictionary class instance")
+            raise ValueError("Metrics must be a dict class instance")
 
         self.parser_metrics.update(metrics)
 
@@ -61,3 +64,7 @@ class CrawlerMetrics(Metrics):
 
 class ParserMetrics(Metrics):
     items_parsed: int
+
+    @T.override
+    def summary(self) -> MetricsDict:
+        return {"items_parsed": self.items_parsed}
