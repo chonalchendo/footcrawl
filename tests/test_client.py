@@ -1,9 +1,9 @@
 # %% - IMPORTS
 
 import pytest
+
 from footcrawl import client as client_
 from footcrawl.io import services
-
 
 # %% - CLIENTS
 
@@ -18,12 +18,12 @@ async def test_async_client(
     async with http_client as client:
         session = client.get_session
     # then
-    assert (
-        session is not None
-    ), "Async session should have been created with context manager!"
-    assert hasattr(
-        http_client, "logger_service"
-    ), "HTTP client should have an Logger service!"
+    assert session is not None, (
+        "Async session should have been created with context manager!"
+    )
+    assert hasattr(http_client, "logger_service"), (
+        "HTTP client should have an Logger service!"
+    )
     assert hasattr(http_client, "headers"), "HTTP client should have headers!"
 
 
@@ -34,6 +34,6 @@ async def test_session_runtime_error(async_client: client_.AsyncClient) -> None:
         async_client.get_session
 
     # then
-    assert error.match(
-        "Session not initialised. Use 'async with' context manager."
-    ), "RuntimeError should be raised!"
+    assert error.match("Session not initialised. Use 'async with' context manager."), (
+        "RuntimeError should be raised!"
+    )

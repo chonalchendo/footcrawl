@@ -1,9 +1,11 @@
 # %% IMPORTS
 import json
 import os
-import pytest
+
 import pydantic as pdt
+import pytest
 from _pytest import capture as pc
+
 from footcrawl import cli
 
 # %% CLI SCRIPTS
@@ -58,7 +60,7 @@ def test_execute(scenario: str, confs_path: str, extra_config: str) -> None:
         status = cli.execute(argv=argv)
         # then
         assert status == 0, f"Job should succeed for config: {config}"
-        
+
 
 def test_execute__no_configs() -> None:
     """Test that execute function returns RunTimeError when no configs

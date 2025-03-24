@@ -6,7 +6,7 @@ import pydantic as pdt
 from bs4 import BeautifulSoup
 from yarl import URL
 
-from footcrawl import schemas, metrics
+from footcrawl import metrics, schemas
 
 Items = dict[str, T.Any]
 

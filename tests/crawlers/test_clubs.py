@@ -2,9 +2,8 @@
 
 import pytest
 
-from footcrawl import crawlers, client, metrics, parsers
-from footcrawl.io import services, datasets
-
+from footcrawl import client, crawlers, metrics, parsers
+from footcrawl.io import datasets, services
 
 # %% CRAWLER
 
@@ -51,19 +50,19 @@ async def test_clubs_crawler(
     # check number of tasks
     assert len(results["tasks"]) == 6, "Did not get expected number of tasks"
     # check number of items parsed,
-    assert (
-        results["metrics_output"]["parser_metrics"]["items_parsed"] == 116
-    ), "Did not parse the expected number items"
+    assert results["metrics_output"]["parser_metrics"]["items_parsed"] == 116, (
+        "Did not parse the expected number items"
+    )
     # check season
     assert results["season"] == 2024, "Expected the most recent season in season list"
     # check league
     assert len(results["league"]) == 2, "Expected two keys: league name and ID"
-    assert (
-        results["league"]["name"] == "la-liga"
-    ), "Expected la-liga as it's the last league passed in league test fixture"
-    assert (
-        results["league"]["id"] == "ES1"
-    ), "Expected la-liga ID as it's the last league passed in league test fixture"
+    assert results["league"]["name"] == "la-liga", (
+        "Expected la-liga as it's the last league passed in league test fixture"
+    )
+    assert results["league"]["id"] == "ES1", (
+        "Expected la-liga ID as it's the last league passed in league test fixture"
+    )
     # check formatted url
     assert (
         results["formatted_url"]

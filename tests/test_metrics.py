@@ -1,10 +1,11 @@
 # %% - IMPORTS
-import aiohttp
-import pytest
 from collections import Counter
-from footcrawl import metrics as metrics_
 from unittest.mock import MagicMock
 
+import aiohttp
+import pytest
+
+from footcrawl import metrics as metrics_
 
 # %% - METRICS
 
@@ -68,9 +69,9 @@ def test_crawler_metrics_record_parser_value_error(
         crawler_metrics.record_parser(metrics=wrong_metric)
 
     # then
-    assert error.match(
-        "Metrics must be a dict class instance"
-    ), "ValueError is not raised!"
+    assert error.match("Metrics must be a dict class instance"), (
+        "ValueError is not raised!"
+    )
 
 
 def test_parser_metrics() -> None:
@@ -82,6 +83,6 @@ def test_parser_metrics() -> None:
     results = metrics.summary()
 
     # then
-    assert results == {
-        "items_parsed": 60
-    }, "Items parsed has not been counted properly."
+    assert results == {"items_parsed": 60}, (
+        "Items parsed has not been counted properly."
+    )

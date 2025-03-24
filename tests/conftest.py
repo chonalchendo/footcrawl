@@ -4,12 +4,12 @@ import os
 import typing as T
 
 import _pytest.logging as pl
-import pytest
 import omegaconf
+import pytest
 from dotenv import load_dotenv
 
 from footcrawl import client, metrics, parsers
-from footcrawl.io import services, datasets
+from footcrawl.io import datasets, services
 
 load_dotenv()
 

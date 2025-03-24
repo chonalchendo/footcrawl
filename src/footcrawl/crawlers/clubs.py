@@ -7,7 +7,7 @@ import aiohttp.http_exceptions
 import pydantic as pdt
 from bs4 import BeautifulSoup
 
-from footcrawl import parsers, client
+from footcrawl import client, parsers
 from footcrawl.crawlers import base
 from footcrawl.io import datasets
 
@@ -55,8 +55,8 @@ class AsyncClubsCrawler(base.Crawler):
 
         metrics_output = self.crawler_metrics.summary()
         logger.info("Crawler metrics: {}", metrics_output)
-        
-        return locals()   # returned for testing
+
+        return locals()  # returned for testing
 
     async def __write_out(
         self, session: aiohttp.ClientSession, url: str, season: int
@@ -94,10 +94,10 @@ class AsyncClubsCrawler(base.Crawler):
         resp = await session.get(url)
         resp.raise_for_status()
         body = await resp.text()
-        
+
         # collecting metrics
         self.crawler_metrics.record_request(resp=resp)
-        
+
         return body, resp
 
     def __format_url(self, league: dict[str, str], season: int) -> str:

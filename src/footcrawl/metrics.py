@@ -6,7 +6,6 @@ from collections import Counter
 import pydantic as pdt
 from aiohttp import ClientResponse
 
-
 MetricsDict = dict[str, T.Any]
 
 
@@ -55,7 +54,7 @@ class CrawlerMetrics(Metrics):
     def __calculate_request_success_rate(self) -> float:
         if self.successful_requests > 0 and self.failed_requests == 0:
             return 100.0
-        
+
         try:
             return round(self.successful_requests / self.total_requests, 2) * 100
         except ValueError as e:
