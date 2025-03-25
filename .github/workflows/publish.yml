@@ -7,6 +7,7 @@ on:
 env: 
   DOCKER_IMAGE: chonalchendo/footcrawl
   TAG: latest
+  USER_AGENT: ${{ secrets.USER_AGENT }}
 concurrency:
   cancel-in-progress: true
   group: publish-workflow
