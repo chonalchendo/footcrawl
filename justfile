@@ -12,5 +12,9 @@ default:
   @just --list
 
 import "tasks/check.just"
+import "tasks/clean.just"
+import "tasks/docker.just"
 import "tasks/format.just"
+import "tasks/package.just"
+
 
