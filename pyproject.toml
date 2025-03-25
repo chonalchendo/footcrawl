@@ -11,6 +11,7 @@ dependencies = [
     "aiohttp>=3.11.13",
     "asyncio>=3.4.3",
     "beautifulsoup4>=4.13.3",
+    "hatchling>=1.27.0",
     "loguru>=0.7.3",
     "omegaconf>=2.3.0",
     "polars>=1.24.0",
@@ -18,6 +19,7 @@ dependencies = [
     "pydantic-settings>=2.8.1",
     "python-dotenv>=1.0.1",
     "rich>=13.9.4",
+    "setuptools>=78.0.2",
 ]
 
 [project.scripts]
