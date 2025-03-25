@@ -14,6 +14,11 @@ concurrency:
 jobs:
   packages:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+      attestations: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
