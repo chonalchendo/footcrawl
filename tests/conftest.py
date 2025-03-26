@@ -43,12 +43,14 @@ def confs_path(tests_path: str) -> str:
 
 @pytest.fixture(scope="session")
 def user_agent() -> str:
+    """Return the user agent for the client."""
     default_user_agent = "Mozilla/5.0 Generic Browser Chrome/128.0.0.0"
     return os.getenv("USER_AGENT", default_user_agent)
 
 
 @pytest.fixture(scope="session")
 def headers(user_agent: str) -> dict[str, str]:
+    """Return the headers for the client."""
     return {
         "User-Agent": f"{user_agent}",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
@@ -59,6 +61,7 @@ def headers(user_agent: str) -> dict[str, str]:
 
 @pytest.fixture(scope="function")
 def async_client(headers: dict[str, str]) -> client.AsyncClient:
+    """Return an async client."""
     return client.AsyncClient(headers=headers)
 
 
@@ -101,6 +104,7 @@ def tmp_outputs_writer(tmp_outputs_path: str) -> datasets.AsyncJsonWriter:
 
 @pytest.fixture(scope="function")
 def clubs_parser() -> parsers.ClubsParser:
+    """Return a clubs parser."""
     return parsers.ClubsParser()
 
 
@@ -109,16 +113,19 @@ def clubs_parser() -> parsers.ClubsParser:
 
 @pytest.fixture(scope="function")
 def clubs_url() -> str:
+    """Return a clubs url."""
     return "https://transfermarkt.co.uk/{league}/startseite/wettbewerb/{league_id}/plus/?saison_id={season}"
 
 
 @pytest.fixture(scope="function")
 def tmp_seasons() -> list[int]:
+    """Return a list of seasons."""
     return [2023, 2024]
 
 
 @pytest.fixture(scope="function")
 def tmp_leagues() -> list[dict[str, str]]:
+    """Return a list of leagues."""
     return [
         {"name": "premier-league", "id": "GB1"},
         {"name": "bundesliga", "id": "L1"},
@@ -161,6 +168,7 @@ def logger_caplog(
 
 @pytest.fixture(scope="function")
 def crawler_metrics() -> metrics.CrawlerMetrics:
+    """Return a metrics object."""
     return metrics.CrawlerMetrics()
 
 
