@@ -1,4 +1,9 @@
 # ⚽💥 footcrawl
+
+
+[![publish.yml](https://github.com/chonalchendo/footcrawl/actions/workflows/publish.yml/badge.svg)](https://github.com/chonalchendo/footcrawl/actions/workflows/publish.yml)
+[![License](https://img.shields.io/github/license/chonalchendo/footcrawl)](https://github.com/chonalchendo/footcrawl/mlops-python-package/blob/main/LICENCE.txt)
+
 **Asynchronous Python package to crawl football data from Transfermarkt.**
 
 This project's main focus is to build a `Python` package similar to the one shown in the excellent `GitHub` repository [mlops-python-package](https://github.com/fmind/mlops-python-package/tree/main) by [Médéric Hurier (Fmind)](https://github.com/fmind).
@@ -109,7 +114,7 @@ The above command will run the `Transfermarkt` `clubs` crawler.
 Results from the crawler are then output to the `data` directory where the data is organised by year and stored as `JSON` files.
 
 ```bash
-.
+data
 └── transfermarkt
     ├── 2018
     │   └── clubs.json
