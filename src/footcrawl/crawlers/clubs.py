@@ -89,7 +89,7 @@ class AsyncClubsCrawler(base.Crawler):
 
         return data
 
-    @retry(stop=stop_after_attempt(client.AsyncClient.max_retries))
+    @retry(stop=stop_after_attempt(3))
     async def __fetch_content(
         self, session: aiohttp.ClientSession, url: str
     ) -> tuple[str, aiohttp.ClientResponse]:
