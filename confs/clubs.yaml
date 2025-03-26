@@ -1,7 +1,7 @@
 crawler:
   KIND: AsyncClubsCrawler
   url: "https://transfermarkt.co.uk/{league}/startseite/wettbewerb/{league_id}/plus/?saison_id={season}"
-  seasons: [2018]
+  seasons: [2024]
   leagues: 
     - name: "premier-league"
       id: "GB1"
