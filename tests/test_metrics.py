@@ -12,7 +12,6 @@ from footcrawl import metrics as metrics_
 
 def test_crawler_metrics() -> None:
     # given
-    total_bytes = 10
     total_requests = 40
     successful_requests = 30
     failed_requests = 10
@@ -20,7 +19,6 @@ def test_crawler_metrics() -> None:
 
     # when
     metrics = metrics_.CrawlerMetrics(
-        total_bytes_received=total_bytes,
         total_requests=total_requests,
         successful_requests=successful_requests,
         failed_requests=failed_requests,
@@ -31,7 +29,6 @@ def test_crawler_metrics() -> None:
     # then
     results.pop("scraping_time")
     assert results == {
-        "total_bytes_received": 10,
         "total_requests": 40,
         "failed_requests": 10,
         "successful_requests": 30,
