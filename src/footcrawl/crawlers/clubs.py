@@ -6,6 +6,7 @@ import aiohttp
 import aiohttp.http_exceptions
 import pydantic as pdt
 from bs4 import BeautifulSoup
+from tenacity import retry, stop_after_attempt
 
 from footcrawl import client, parsers
 from footcrawl.crawlers import base
@@ -88,6 +89,7 @@ class AsyncClubsCrawler(base.Crawler):
 
         return data
 
+    @retry(stop=stop_after_attempt(client.AsyncClient.max_retries))
     async def __fetch_content(
         self, session: aiohttp.ClientSession, url: str
     ) -> tuple[str, aiohttp.ClientResponse]:
