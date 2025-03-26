@@ -10,14 +10,30 @@ MetricsDict = dict[str, T.Any]
 
 
 class Metrics(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid"):
+    """A base class for metrics."""
+
     @abc.abstractmethod
     def summary(self) -> MetricsDict:
+        """Return a summary of the metrics.
+
+        Returns:
+            MetricsDict: A dictionary of metrics.
+        """
         pass
 
 
 class CrawlerMetrics(Metrics):
+    """A class for crawler metrics.
+
+    Args:
+        start_time (float): The start time of the crawler.
+        total_requests (int): The total number of requests.
+        successful_requests (int): The total number of successful requests.
+        failed_requests (int): The total number of failed requests.
+        parser_metrics (Counter): A counter for parser metrics.
+    """
+
     start_time: float = time.time()
-    total_bytes_received: int = pdt.Field(default=0)
     total_requests: int = pdt.Field(default=0)
     successful_requests: int = pdt.Field(default=0)
     failed_requests: int = pdt.Field(default=0)
@@ -31,27 +47,35 @@ class CrawlerMetrics(Metrics):
             "successful_requests": self.successful_requests,
             "failed_requests": self.failed_requests,
             "success_rate": self.__calculate_request_success_rate(),
-            "total_bytes_received": self.total_bytes_received,
             "parser_metrics": dict(self.parser_metrics),
         }
 
     def record_request(self, resp: ClientResponse) -> None:
+        """Record a request.
+
+        Args:
+            resp (ClientResponse): The response object.
+        """
         self.total_requests += 1
 
-        # content_length = resp.headers.get("content-length", 0)
         if resp.status == 200:
             self.successful_requests += 1
-            # self.total_bytes_received += content_length
         else:
             self.failed_requests += 1
 
     def record_parser(self, metrics: MetricsDict) -> None:
+        """Record parser metrics.
+
+        Args:
+            metrics (MetricsDict): The parser metrics.
+        """
         if not isinstance(metrics, dict):
             raise ValueError("Metrics must be a dict class instance")
 
         self.parser_metrics.update(metrics)
 
     def __calculate_request_success_rate(self) -> float:
+        """Calculate the request success rate."""
         if self.successful_requests > 0 and self.failed_requests == 0:
             return 100.0
 
@@ -62,6 +86,12 @@ class CrawlerMetrics(Metrics):
 
 
 class ParserMetrics(Metrics):
+    """A class for parser metrics.
+
+    Args:
+        items_parsed (int): The total number of items parsed.
+    """
+
     items_parsed: int
 
     @T.override

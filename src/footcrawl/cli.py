@@ -27,6 +27,7 @@ parser.add_argument(
 
 
 def execute(argv: list[str] | None = None) -> int:
+    """Execute the CLI with the given arguments."""
     args = parser.parse_args(argv)
 
     if args.schema:

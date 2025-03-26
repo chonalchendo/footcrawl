@@ -12,13 +12,29 @@ Items = dict[str, T.Any]
 
 
 class Parser(abc.ABC, pdt.BaseModel, strict=True, frozen=True, extra="forbid"):
+    """A base class for parsers."""
+
     @abc.abstractmethod
     def parse(self, soup: BeautifulSoup, url: URL | None = None) -> Items:
+        """Parse the data from the soup object returned by the client.
+
+        Args:
+            soup (BeautifulSoup): The soup object.
+            url (URL | None, optional): url. Defaults to None.
+
+        Returns:
+            Items: The parsed data.
+        """
         pass
 
     @property
     @abc.abstractmethod
     def get_metrics(self) -> metrics.MetricsDict:
+        """Return the metrics.
+
+        Returns:
+            metrics.MetricsDict: The metrics.
+        """
         pass
 
 

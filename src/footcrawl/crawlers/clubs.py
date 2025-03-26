@@ -14,6 +14,16 @@ from footcrawl.io import datasets
 
 
 class AsyncClubsCrawler(base.Crawler):
+    """Asynchronously crawl clubs data from a given URL.
+
+    Args:
+        seasons (list[int]): List of seasons to crawl.
+        leagues (list[dict[str, str]]): List of leagues to crawl.
+        parser (parsers.ClubsParser): Parser to parse the data.
+        output (datasets.WriterKind): Output writer.
+        http_client (client.AsyncClient): HTTP client.
+    """
+
     KIND: T.Literal["AsyncClubsCrawler"] = "AsyncClubsCrawler"
 
     # crawler parameters
