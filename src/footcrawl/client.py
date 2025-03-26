@@ -8,7 +8,6 @@ class AsyncClient(pdt.BaseModel, frozen=False, strict=True, extra="forbid"):
     model_config = pdt.ConfigDict(arbitrary_types_allowed=True)
 
     headers: dict[str, str]
-    # timeout: float = pdt.Field(default=60.0)
     rate_limit: float = pdt.Field(default=1.0)
 
     logger_service: services.LoggerService = services.LoggerService()
@@ -20,7 +19,6 @@ class AsyncClient(pdt.BaseModel, frozen=False, strict=True, extra="forbid"):
             logger.info("Initialising client...")
             self.session = aiohttp.ClientSession(
                 headers=self.headers,
-                # timeout=self.timeout,
             )
         return self
 
