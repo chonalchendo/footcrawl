@@ -1,6 +1,6 @@
 from footcrawl.crawlers.clubs import AsyncClubsCrawler
-from footcrawl.crawlers.squads import SquadsCrawler
+from footcrawl.crawlers.squads import AsyncSquadsCrawler
 
-CrawlerKind = SquadsCrawler | AsyncClubsCrawler
+CrawlerKind = AsyncClubsCrawler | AsyncSquadsCrawler
 
-__all__ = ["ClubsCrawler", "SquadsCrawler"]
+__all__ = ["AsyncClubsCrawler", "AsyncSquadsCrawler"]
