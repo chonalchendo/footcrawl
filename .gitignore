@@ -1,7 +1,7 @@
 # additional files to ignore
 .ruff_cache
 data/
-
+stderr
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
