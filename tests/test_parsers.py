@@ -1,8 +1,9 @@
 # %% IMPORTS
 
-from yarl import URL
-from footcrawl import parsers
 from bs4 import BeautifulSoup
+from yarl import URL
+
+from footcrawl import parsers
 
 # %% PARSERS
 
