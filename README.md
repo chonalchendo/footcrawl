@@ -28,20 +28,20 @@ Although amazing for scraping projects, `scrapy` is not used here as I wanted to
 1. **Clone the repository**
 
 ```bash
-$ git clone https://github.com/chonalchendo/footcrawl.git
+git clone https://github.com/chonalchendo/footcrawl.git
 ```
 
 2. **Install uv**
 
 ```bash
-$ pip install uv
+pip install uv
 ```
 
 3. **Install the project**
 
 ```bash
-$ cd footcrawl/
-$ uv sync
+cd footcrawl/
+uv sync
 ```
 
 # 🕹️ Usage
@@ -105,7 +105,7 @@ The above is the `confs/clubs.yaml` file which specifies the following:
 All information related to each crawler is contained in each configuration file in the `confs` directory. Each of these configs are parsed from the command line during runtime.
 
 ```bash
-$ uv run footcrawl confs/clubs.yaml
+uv run footcrawl confs/clubs.yaml
 ```
 The above command will run the `Transfermarkt` `clubs` crawler. 
 
@@ -148,7 +148,7 @@ data
 - Used to house all frequently used CLI commands.
 
 ```bash
-$ just default
+just default
 ```
 - Run the above to see all project commands.
 - Alternatives include `pyinvoke` and `MakeFile`.
