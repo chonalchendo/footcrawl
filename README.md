@@ -161,7 +161,7 @@ just default
 - Used in my `GitHub Actions` continous integration (CI) pipeline to build, test, and publish the project to `Docker Hub` and `GitHub Container Registry (GHCR)`.
 - Alteratives include `Podman`.
 
-### Asynchronous Client: aiohttp
+### Asynchronous Client: AIOHTTP
 - Asynchronous client used to make concurrent requests to fetch website content.
 - Used to build my own scraping framework rather than using an out of the box scraping package like `scrapy`.
 - Alternatives include `httpx` and `scrapy`.
