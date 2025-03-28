@@ -14,6 +14,6 @@ class ClubsSchema(pdt.BaseModel):
     team_link: str = pdt.Field(...)
     tm_name: str = pdt.Field(...)
     tm_id: str = pdt.Field(...)
-    
+
 
 SchemaKind = ClubsSchema
