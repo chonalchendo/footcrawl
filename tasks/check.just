@@ -16,4 +16,4 @@ check-type:
 # check unit tests
 [group('check')]
 check-test numprocesses="auto":
-    uv run pytest --numprocesses={{numprocesses}} {{TESTS}}
+    uv run pytest -v -s --numprocesses={{numprocesses}} {{TESTS}}
