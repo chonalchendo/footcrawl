@@ -1,6 +1,8 @@
-from footcrawl import schemas, metrics
 import typing as T
+
 import bs4
+
+from footcrawl import metrics, schemas
 from footcrawl.parsers import base
 
 if T.TYPE_CHECKING:
@@ -8,7 +10,6 @@ if T.TYPE_CHECKING:
 
 
 class ClubsParser(base.Parser):
-
     @T.override
     async def parse(
         self, response: "aiohttp.ClientResponse"
@@ -34,7 +35,7 @@ class ClubsParser(base.Parser):
             **self._get_club_values(row),
         }
 
-    def _get_club_name(self, row: bs4.Tag) -> str:
+    def _get_club_name(self, row: bs4.Tag) -> dict[str, str]:
         name = row.find("td", class_="hauptlink").text.strip()
         return {"club": name}
 

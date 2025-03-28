@@ -1,14 +1,16 @@
 import abc
-import pydantic as pdt
 import typing as T
+
+import pydantic as pdt
+
 from footcrawl import schemas
 from footcrawl.io import services
 
-
 if T.TYPE_CHECKING:
     import aiohttp
-    from footcrawl import metrics
     import bs4
+
+    from footcrawl import metrics
 
 
 Item = dict[str, T.Any]
