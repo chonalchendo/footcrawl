@@ -1,5 +1,5 @@
-from footcrawl.crawlers.clubs import AsyncClubsCrawler
-from footcrawl.crawlers.squads import AsyncSquadsCrawler
+from .clubs import AsyncClubsCrawler
+from .squads import AsyncSquadsCrawler
 
 CrawlerKind = AsyncClubsCrawler | AsyncSquadsCrawler
 
