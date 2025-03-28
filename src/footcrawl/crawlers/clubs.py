@@ -5,7 +5,6 @@ from pathlib import Path
 import aiohttp
 import aiohttp.http_exceptions
 import pydantic as pdt
-from bs4 import BeautifulSoup
 from tenacity import retry, stop_after_attempt
 
 from footcrawl import client, parsers
@@ -29,13 +28,13 @@ class AsyncClubsCrawler(base.Crawler):
     # crawler parameters
     seasons: list[int]
     leagues: list[dict[str, str]]
-    parser: parsers.ClubsParser = parsers.ClubsParser()
+    parser: parsers.ClubsParser = pdt.Field(default_factory=parsers.ClubsParser)
 
     # io parameter
     output: datasets.WriterKind = pdt.Field(..., discriminator="KIND")
 
     # client
-    http_client: client.AsyncClient = pdt.Field(...)
+    http_client: client.AsyncClient
 
     @T.override
     async def crawl(self) -> base.Locals:
@@ -54,7 +53,7 @@ class AsyncClubsCrawler(base.Crawler):
                 for league in self.leagues:
                     formatted_url = self.__format_url(league=league, season=season)
 
-                    logger.info(f"QUEUED: {formatted_url}")
+                    logger.debug(f"QUEUED: {formatted_url}")
                     task = asyncio.create_task(
                         self.__write_out(
                             session=session, url=formatted_url, season=season
@@ -73,44 +72,41 @@ class AsyncClubsCrawler(base.Crawler):
         self, session: aiohttp.ClientSession, url: str, season: int
     ) -> None:
         logger = self.logger_service.logger()
-        data = await self.__parse(session=session, url=url)
 
-        # format output path
-        formatted_path = self.__orig_output_path.format(season=season)
-        self.output.path = formatted_path
+        async for row in self.__parse(session=session, url=url):
+            # format output path
+            formatted_path = self.__orig_output_path.format(season=season)
+            self.output.path = formatted_path
 
-        logger.info("Writing to path: {}", self.output.path)
-        await self.output.write(data=data)
+            logger.info("Writing to path: {}", self.output.path)
+            await self.output.write(data=row)
 
     async def __parse(
         self, session: aiohttp.ClientSession, url: str
-    ) -> dict[str, T.Any]:
+    ) -> T.AsyncGenerator[parsers.Item, None]:
         logger = self.logger_service.logger()
 
-        body, resp = await self.__fetch_content(session=session, url=url)
-        soup = BeautifulSoup(body, "html.parser")
+        resp = await self.__fetch_content(session=session, url=url)
 
-        data = self.parser.parse(url=resp.url, soup=soup)
-        logger.info("Parsed data: {}", data)
+        async for item in self.parser.parse(response=resp):
+            # Record items parsed
+            parser_metrics = self.parser.get_metrics
+            self.crawler_metrics.record_parser(metrics=parser_metrics)
 
-        # Record items parsed
-        parser_metrics = self.parser.get_metrics
-        self.crawler_metrics.record_parser(metrics=parser_metrics)
-
-        return data
+            logger.debug("Parsed item: {}", item)
+            yield item
 
     @retry(stop=stop_after_attempt(3))
     async def __fetch_content(
         self, session: aiohttp.ClientSession, url: str
-    ) -> tuple[str, aiohttp.ClientResponse]:
+    ) -> aiohttp.ClientResponse:
         resp = await session.get(url)
         resp.raise_for_status()
-        body = await resp.text()
 
         # collecting metrics
         self.crawler_metrics.record_request(resp=resp)
 
-        return body, resp
+        return resp
 
     def __format_url(self, league: dict[str, str], season: int) -> str:
         return self.url.format(
