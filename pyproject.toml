@@ -12,6 +12,7 @@ dependencies = [
     "asyncio>=3.4.3",
     "beautifulsoup4>=4.13.3",
     "hatchling>=1.27.0",
+    "httpx>=0.28.1",
     "loguru>=0.7.3",
     "omegaconf>=2.3.0",
     "polars>=1.24.0",
