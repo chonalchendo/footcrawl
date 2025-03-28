@@ -90,8 +90,8 @@ class AsyncClubsCrawler(base.Crawler):
 
         async for item in self.parser.parse(response=resp):
             # Record items parsed
-            parser_metrics = self.parser.get_metrics
-            self.crawler_metrics.record_parser(metrics=parser_metrics)
+            
+            self.crawler_metrics.record_parser(metrics={'items_parsed': 1})
 
             logger.debug("Parsed item: {}", item)
             yield item
