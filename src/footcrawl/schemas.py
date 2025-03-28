@@ -1,11 +1,19 @@
 import pydantic as pdt
 
 
-class Clubs(pdt.BaseModel):
+class ClubsSchema(pdt.BaseModel):
     """A Pydantic class to validate parsed clubs data."""
 
-    league: str = pdt.Field(...)
-    season: int = pdt.Field(...)
-    tm_team_name: list[str] = pdt.Field(...)
-    tm_team_id: list[int] = pdt.Field(...)
-    team_name: list[str] = pdt.Field(...)
+    club: str = pdt.Field(...)
+    squad_size: str = pdt.Field(...)
+    average_age: str = pdt.Field(...)
+    foreign_players: str = pdt.Field(...)
+    season: str = pdt.Field(...)
+    average_player_value: str = pdt.Field(...)
+    total_player_value: str = pdt.Field(...)
+    team_link: str = pdt.Field(...)
+    tm_name: str = pdt.Field(...)
+    tm_id: str = pdt.Field(...)
+    
+
+SchemaKind = ClubsSchema
