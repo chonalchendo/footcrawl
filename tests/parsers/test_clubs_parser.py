@@ -1,8 +1,9 @@
 # %% IMPORTS
 
-import pytest
 from unittest.mock import AsyncMock
+
 import aiohttp
+import pytest
 
 from footcrawl import parsers
 
@@ -54,9 +55,9 @@ async def test_clubs_parser():
         "tm_name",
         "tm_id",
     }
-    assert (
-        set(result.keys()) == expected_keys
-    ), f"Missing keys: {expected_keys - set(result.keys())}"
+    assert set(result.keys()) == expected_keys, (
+        f"Missing keys: {expected_keys - set(result.keys())}"
+    )
 
     # Specific assertions
     assert result["club"] == "Arsenal FC"
