@@ -4,6 +4,7 @@ import typing as T
 import pydantic as pdt
 
 from footcrawl import client, parsers
+from footcrawl import engine as engine_
 from footcrawl.crawlers import base
 from footcrawl.io import datasets
 
@@ -38,7 +39,7 @@ class AsyncClubsCrawler(base.Crawler):
 
         logger.info("Initialising crawler engine")
 
-        engine = base.Engine(
+        engine = engine_.Engine(
             parser=self.parser, metrics=self.metrics, output=self.output
         )
 
