@@ -37,6 +37,7 @@ async def test_clubs_crawler(
     assert set(results) == {
         "self",
         "client",
+        "engine",
         "task",
         "tasks",
         "logger",
