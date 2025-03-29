@@ -26,7 +26,7 @@ async def test_crawler(
     crawler = MyCrawler(
         url=url,
         logger_service=logger_service,
-        crawler_metrics=crawler_metrics,
+        metrics=crawler_metrics,
     )
 
     # when
@@ -34,7 +34,7 @@ async def test_crawler(
 
     # then
     assert hasattr(crawler, "logger_service"), "Crawler should have an Logger service!"
-    assert hasattr(crawler, "crawler_metrics"), "Crawler should have a metrics class!"
+    assert hasattr(crawler, "metrics"), "Crawler should have a metrics class!"
     assert hasattr(crawler, "url"), "Crawler should have a URL!"
 
     # - outputs

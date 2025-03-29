@@ -24,7 +24,7 @@ async def test_clubs_crawler(
     crawler = crawlers.AsyncClubsCrawler(
         url=clubs_url,
         logger_service=logger_service,
-        crawler_metrics=crawler_metrics,
+        metrics=crawler_metrics,
         seasons=tmp_seasons,
         leagues=tmp_leagues,
         parser=clubs_parser,
