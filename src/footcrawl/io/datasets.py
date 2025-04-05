@@ -66,10 +66,10 @@ class Writer(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid"):
 
     KIND: str
 
-    path: str
+    base_path: str
 
     @abc.abstractmethod
-    async def write(self, data: StreamingOutput) -> None:
+    async def write(self, output_path: str, data: StreamingOutput) -> None:
         """Write the data to the path.
 
         Args:
@@ -77,10 +77,10 @@ class Writer(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid"):
         """
         pass
 
-    def _ensure_parent_dir(self) -> None:
+    def _ensure_parent_dir(self, output_path: str) -> None:
         """Ensure parent directory exists."""
-        if not Path(self.path).parent.absolute().exists():
-            Path(self.path).parent.mkdir(parents=True, exist_ok=True)
+        if not Path(output_path).parent.absolute().exists():
+            Path(output_path).parent.mkdir(parents=True, exist_ok=True)
 
 
 class AsyncJsonWriter(Writer):
@@ -90,15 +90,15 @@ class AsyncJsonWriter(Writer):
         overwrite (bool): Overwrite the file. Defaults to True.
     """
 
-    KIND: T.Literal["AsyncJsonWriter"] = "AsyncJsonWriter"
+    KIND: T.Literal["JsonND"] = "JsonND"
 
     overwrite: bool = pdt.Field(default=True)  # checked if true in crawler files
 
     @T.override
-    async def write(self, data: StreamingOutput) -> None:
-        self._ensure_parent_dir()
+    async def write(self, output_path: str, data: StreamingOutput) -> None:
+        self._ensure_parent_dir(output_path=output_path)
 
-        with open(self.path, "a") as file:
+        with open(output_path, "a") as file:
             file.write(json.dumps(data) + "\n")
 
 
