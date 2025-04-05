@@ -76,6 +76,7 @@ class ClubsParser(base.Parser):
             "total_player_value": total_player_value,
         }
 
+    @T.override
     @property
     def get_metrics(self) -> metrics.MetricsDict:
         metrics_ = metrics.ParserMetrics(items_parsed=self.__total_items)
