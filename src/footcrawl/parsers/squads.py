@@ -1,7 +1,10 @@
 import typing as T
 
 import bs4
+from urllib.parse import urlparse
 
+from footcrawl import schemas
+from footcrawl import metrics as metrics_
 from footcrawl.parsers import base
 
 if T.TYPE_CHECKING:
@@ -9,60 +12,76 @@ if T.TYPE_CHECKING:
 
 
 class SquadsParser(base.Parser):
-    def parse(self, response: "aiohttp.ClientResponse"):
-        content = response.text()
+    @T.override
+    async def parse(self, response: "aiohttp.ClientResponse"):
+        content = await response.text()
         soup = bs4.BeautifulSoup(content, "html.parser")
-        return squads_parser(body=soup, season=self.__season)
+
+        url = response.url
+        season = urlparse(str(url)).path.split("/")[6]
+        team = urlparse(str(url)).path.split("/")[1]
+
+        metadata = {
+            "team": team,
+            "season": season,
+            "url": str(url),
+        }
+
+        rows = self._parse_table(soup)
+
+        for row in rows:
+            data = self._parsers(row, season)
+            data.update(metadata)
+            valid_data = self._validate(data=data, validator=schemas.SquadsSchema)
+            yield valid_data
+
+    @T.override
+    def _parsers(self, row: bs4.Tag, season: int) -> base.Item:
+        return {
+            **get_player_profile_link(row),
+            **get_player_name(row),
+            **get_player_position(row),
+            **get_player_injury_note(row, season=season),
+            **get_player_stats(row, season=season),
+            **get_market_value(row),
+        }
+
+    @T.override
+    @property
+    def get_metrics(self) -> metrics_.MetricsDict:
+        metrics = metrics_.ParserMetrics(items_parsed=self.__total_items)
+        return metrics.summary()
+
+    def _parse_table(self, soup: bs4.BeautifulSoup) -> T.Sequence[str]:
+        table = soup.find_all(class_="items")
+        rows = table[0].find_all("tr", class_=["odd", "even"])
+        return rows
 
 
-def squads_parser(body: str, season: int) -> T.Generator[dict[str, T.Any], None, None]:
-    soup = bs4.BeautifulSoup(body, "html.parser")
-    rows = parse_table(soup)
-    for row in rows:
-        yield parse_player_data(row, season)
-
-
-def parse_table(soup: bs4.BeautifulSoup) -> T.Sequence[str]:
-    table = soup.find_all(class_="items")
-    rows = table[0].find_all("tr", class_=["odd", "even"])
-    return rows
-
-
-def parse_player_data(row: str, season: int) -> T.Mapping[str, T.Any]:
-    return {
-        **get_player_profile_link(row),
-        **get_player_name(row),
-        **get_player_position(row),
-        **get_player_injury_note(row, season=season),
-        **get_player_stats(row, season=season),
-        **get_market_value(row),
-    }
-
-
-def get_player_profile_link(row: str) -> dict[str, T.Any]:
+def get_player_profile_link(row: bs4.Tag) -> dict[str, T.Any]:
     link = row.find("td", {"class": "hauptlink"}).find("a")["href"]
     tm_id = link.split("/")[4]
     tm_name = link.split("/")[1]
     return {"link": link, "tm_id": tm_id, "tm_name": tm_name}
 
 
-def get_player_name(row: str) -> dict[str, T.Any]:
+def get_player_name(row: bs4.Tag) -> dict[str, T.Any]:
     name = row.find("td", {"class": "hauptlink"}).find("a").text.strip()
     return {"player": name}
 
 
-def get_player_position(row: str) -> dict[str, T.Any]:
+def get_player_position(row: bs4.Tag) -> dict[str, T.Any]:
     position = row.find_all("td")[1].text.strip().split("  ")[-1]
     return {"position": position}
 
 
-def get_player_injury_note(row: str, season: int) -> dict[str, T.Any]:
+def get_player_injury_note(row: bs4.Tag, season: int) -> dict[str, T.Any]:
     injury_note_ = row.find("td", {"class": "hauptlink"}).find("a").find("span")
     injury_note = injury_note_["title"] if injury_note_ and season == 2024 else None
     return {"injury_note": injury_note}
 
 
-def get_market_value(row: str) -> dict[str, T.Any]:
+def get_market_value(row: bs4.Tag) -> dict[str, T.Any]:
     value_object = row.find("td", class_="rechts hauptlink")
     # market value
     market_value = value_object.text.strip()
@@ -76,7 +95,7 @@ def get_market_value(row: str) -> dict[str, T.Any]:
     return {"market_value": market_value, "previous_value": previous_value}
 
 
-def get_player_stats(row: str, season: int) -> dict[str, T.Any]:
+def get_player_stats(row: bs4.Tag, season: int) -> dict[str, T.Any]:
     stats = row.find_all("td", class_="zentriert")
 
     number = _get_player_number(stats)
@@ -152,7 +171,7 @@ def _get_contract_expiry(stats: list) -> str | None:
     return stats[7].text.strip()
 
 
-def _get_transfer_data(stats: list):
+def _get_transfer_data(stats: list) -> tuple[str | None, str | None]:
     if stats[7].find("a") is None and stats[6].find("a") is None:
         return None, None
 
