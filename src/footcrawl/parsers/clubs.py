@@ -35,11 +35,11 @@ class ClubsParser(base.Parser):
             **self._get_club_values(row),
         }
 
-    def _get_club_name(self, row: bs4.Tag) -> dict[str, str]:
+    def _get_club_name(self, row: bs4.Tag) -> base.SubItem:
         name = row.find("td", class_="hauptlink").text.strip()
         return {"club": name}
 
-    def _get_club_stats(self, row: bs4.Tag) -> dict[str, str]:
+    def _get_club_stats(self, row: bs4.Tag) -> base.SubItem:
         stats = row.find_all("td", class_="zentriert")
         squad_size = stats[1].text
         # team link
@@ -65,7 +65,7 @@ class ClubsParser(base.Parser):
             "season": season,
         }
 
-    def _get_club_values(self, row: bs4.Tag) -> dict[str, str]:
+    def _get_club_values(self, row: bs4.Tag) -> base.SubItem:
         values = row.find_all("td", class_="rechts")
 
         avg_player_value = values[0].text.strip()
