@@ -2,7 +2,8 @@ import typing as T
 
 import omegaconf as oc
 
-Config = oc.ListConfig | oc.DictConfig
+type Config = oc.ListConfig | oc.DictConfig
+type Configs = T.Sequence[Config]
 
 
 def parse_file(path: str) -> Config:
@@ -29,7 +30,7 @@ def parse_string(string: str) -> Config:
     return oc.OmegaConf.create(string)
 
 
-def merge_configs(configs: T.Sequence[Config]) -> Config:
+def merge_configs(configs: Configs) -> Config:
     """Merge a list of config into a single config.
 
     Args:
