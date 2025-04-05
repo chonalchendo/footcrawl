@@ -1,13 +1,11 @@
-import bs4
 import typing as T
+
+import bs4
 
 from footcrawl.parsers import base
 
-
 if T.TYPE_CHECKING:
     import aiohttp
-
-    from footcrawl import metrics
 
 
 class SquadsParser(base.Parser):
