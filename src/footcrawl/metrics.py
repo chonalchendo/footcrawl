@@ -4,9 +4,12 @@ import typing as T
 from collections import Counter
 
 import pydantic as pdt
-from aiohttp import ClientResponse
 
-MetricsDict = dict[str, T.Any]
+if T.TYPE_CHECKING:
+    import aiohttp
+
+
+type MetricsDict = dict[str, T.Any]
 
 
 class Metrics(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid"):
@@ -50,7 +53,7 @@ class CrawlerMetrics(Metrics):
             "parser_metrics": dict(self.parser_metrics),
         }
 
-    def record_request(self, resp: ClientResponse) -> None:
+    def record_request(self, resp: "aiohttp.ClientResponse") -> None:
         """Record a request.
 
         Args:
