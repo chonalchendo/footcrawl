@@ -16,4 +16,28 @@ class ClubsSchema(pdt.BaseModel):
     tm_id: str = pdt.Field(...)
 
 
-type SchemaKind = ClubsSchema
+class SquadsSchema(pdt.BaseModel):
+    player: str = pdt.Field(...)
+    team: str = pdt.Field(...)
+    season: str = pdt.Field(...)
+    url: str = pdt.Field(...)
+    position: str = pdt.Field(...)
+    link: str = pdt.Field(...)
+    tm_id: str = pdt.Field(...)
+    tm_name: str = pdt.Field(...)
+    injury_note: str | None = pdt.Field(...)
+    market_value: str = pdt.Field(...)
+    previous_value: str | None = pdt.Field(...)
+    number: str = pdt.Field(...)
+    dob: str = pdt.Field(...)
+    age: str = pdt.Field(...)
+    nationalities: list[str] = pdt.Field(...)
+    height: str | None = pdt.Field(...)
+    foot: str = pdt.Field(...)
+    signed_date: str | None = pdt.Field(...)
+    transfer_fee: str | None = pdt.Field(...)
+    signed_from: str | None = pdt.Field(...)
+    contract_expiry: str | None = pdt.Field(...)
+
+
+SchemaKind = ClubsSchema | SquadsSchema
