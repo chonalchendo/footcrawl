@@ -1,6 +1,8 @@
 import aiohttp
 import pydantic as pdt
+from tenacity import retry, stop_after_attempt
 
+from footcrawl import metrics as metrics_
 from footcrawl.io import services
 
 
@@ -53,3 +55,30 @@ class AsyncClient(pdt.BaseModel, frozen=False, strict=True, extra="forbid"):
             )
         logger.info("Returning session")
         return self.session
+
+
+class Response:
+    def __init__(
+        self, url: str, session: aiohttp.ClientSession, metrics: metrics_.CrawlerMetrics
+    ) -> None:
+        self.url = url
+        self.session = session
+        self.metrics = metrics
+
+    async def __call__(self, *args, **kwds):
+        return await self._fetch_response()
+
+    @retry(stop=stop_after_attempt(3))
+    async def _fetch_response(self) -> aiohttp.ClientResponse:
+        try:
+            resp = await self.session.get(self.url)
+            resp.raise_for_status()
+            return resp
+        except aiohttp.ClientError as e:
+            raise aiohttp.ClientError(f"Failed to fetch {self.url}: {e}")
+        except aiohttp.ClientResponseError as e:
+            raise aiohttp.ClientResponseError(
+                f"HTTP error {e.status} for {self.url}: {e.message}"
+            )
+        finally:
+            self.metrics.record_request(resp=resp)
