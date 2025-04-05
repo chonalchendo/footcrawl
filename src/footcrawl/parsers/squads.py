@@ -13,7 +13,9 @@ if T.TYPE_CHECKING:
 
 class SquadsParser(base.Parser):
     @T.override
-    async def parse(self, response: "aiohttp.ClientResponse"):
+    async def parse(
+        self, response: "aiohttp.ClientResponse"
+    ) -> T.AsyncGenerator[base.Item, None]:
         content = await response.text()
         soup = bs4.BeautifulSoup(content, "html.parser")
 
