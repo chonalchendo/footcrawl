@@ -102,4 +102,4 @@ class AsyncJsonWriter(Writer):
             file.write(json.dumps(data) + "\n")
 
 
-type WriterKind = AsyncJsonWriter
+WriterKind = AsyncJsonWriter
