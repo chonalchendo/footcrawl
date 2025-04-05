@@ -5,8 +5,8 @@ from pathlib import Path
 
 import pydantic as pdt
 
-StreamingOutput = dict[str, T.Any]
-LoadedInput = list[dict[str, T.Any]]
+type StreamingOutput = dict[str, T.Any]
+type LoadedInput = list[dict[str, T.Any]]
 
 # %% - LOADERS
 
@@ -23,7 +23,7 @@ class Loader(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid"):
     path: str
 
     @abc.abstractmethod
-    def load(self, season: int) -> list[dict[str, T.Any]]:
+    def load(self, season: int) -> LoadedInput:
         """Load the data from the path.
 
         Returns:
@@ -36,7 +36,7 @@ class JsonLoader(Loader):
     KIND: T.Literal["JsonLoader"] = "JsonLoader"
 
     @T.override
-    def load(self, season: int) -> list[dict[str, T.Any]]:
+    def load(self, season: int) -> LoadedInput:
         if season < 2010 and season > 2024:
             raise ValueError("Season must be between 2010 and 2024.")
 
@@ -102,4 +102,4 @@ class AsyncJsonWriter(Writer):
             file.write(json.dumps(data) + "\n")
 
 
-WriterKind = AsyncJsonWriter
+type WriterKind = AsyncJsonWriter
