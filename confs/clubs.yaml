@@ -1,7 +1,7 @@
 crawler:
-  KIND: AsyncClubsCrawler
+  KIND: Clubs
   url: "https://transfermarkt.co.uk/{league}/startseite/wettbewerb/{league_id}/plus/?saison_id={season}"
-  seasons: [2024]
+  seasons: [2023, 2024]
   leagues: 
     - name: "premier-league"
       id: "GB1"
@@ -14,8 +14,8 @@ crawler:
     - name: "ligue-1"
       id: "FR1"
   output:
-    KIND: AsyncJsonWriter
-    path: data/transfermarkt/{season}/clubs.json
+    KIND: JsonND
+    base_path: data/transfermarkt/{season}/clubs.json
     overwrite: true
   http_client:
     headers: {
