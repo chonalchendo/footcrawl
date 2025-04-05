@@ -1,10 +1,12 @@
 import abc
 import typing as T
 
+import aiohttp
 import pydantic as pdt
 
+from footcrawl import client, parsers, tasks
 from footcrawl import metrics as metrics_
-from footcrawl.io import services
+from footcrawl.io import datasets, files, services
 
 type Locals = dict[str, T.Any]
 
@@ -12,10 +14,15 @@ type Locals = dict[str, T.Any]
 class Crawler(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid"):
     """Base class for all crawlers.
 
-    Args:
+    Attributes:
         url (str): URL to crawl.
         logger_service (services.LoggerService): Logger service.
-        crawler_metrics (metrics.CrawlerMetrics): Metrics service.
+        metrics (metrics.CrawlerMetrics): Metrics service.
+        parser (parsers.ParserKind): Parser to use.
+        output (datasets.WriterKind): Output writer to use.
+        task_handler (tasks.TaskHandler): Task handler.
+        file_handler (files.FileHandler): File handler.
+        
     """
 
     KIND: str
@@ -23,7 +30,13 @@ class Crawler(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid")
     url: str
 
     logger_service: services.LoggerService = services.LoggerService()
+
     metrics: metrics_.CrawlerMetrics = metrics_.CrawlerMetrics()
+    parser: parsers.ParserKind = pdt.Field(...)
+    output: datasets.WriterKind = pdt.Field(..., discriminator="KIND")
+
+    task_handler: tasks.TaskHandler = pdt.Field(..., default_factory=tasks.TaskHandler)
+    file_handler: files.FileHandler = pdt.Field(..., default_factory=files.FileHandler)
 
     @abc.abstractmethod
     async def crawl(self) -> Locals:
@@ -33,3 +46,35 @@ class Crawler(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid")
             Locals: Local crawler variables.
         """
         pass
+
+    async def _write_out(
+        self,
+        session: aiohttp.ClientSession,
+        url: str,
+        season: int,
+        file_handler: files.FileHandler,
+    ) -> None:
+        logger = self.logger_service.logger()
+
+        async for item in self._parse(session=session, url=url):
+            formatted_path = file_handler.format_original_path(season=season)
+
+            logger.info("Writing to path: {}", formatted_path)
+            await self.output.write(output_path=formatted_path, data=item)
+
+    async def _parse(
+        self, session: aiohttp.ClientSession, url: str
+    ) -> T.AsyncGenerator[parsers.Item, None]:
+        logger = self.logger_service.logger()
+
+        resp = await client.Response(url=url, session=session, metrics=self.metrics)()
+
+        async for item in self.parser.parse(response=resp):
+            # Record items parsed
+            self.metrics.record_parser(metrics={"items_parsed": 1})
+
+            logger.debug("Parsed item: {}", item)
+            yield item
+
+    def _format_url(self) -> str:
+        raise NotImplementedError("Subclasses must implement _format_url method")
