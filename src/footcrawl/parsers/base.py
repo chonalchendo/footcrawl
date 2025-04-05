@@ -53,5 +53,5 @@ class Parser(abc.ABC, pdt.BaseModel, strict=True, frozen=True, extra="forbid"):
         try:
             valid_data = validator.model_validate(data)
         except pdt.ValidationError as e:
-            logger.error(f"Validation error: {e}")
+            logger.error("Validation error: {}", e)
         return valid_data.model_dump()
