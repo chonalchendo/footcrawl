@@ -13,7 +13,8 @@ if T.TYPE_CHECKING:
     from footcrawl import metrics
 
 
-Item = dict[str, T.Any]
+type Item = dict[str, T.Any]
+type SubItem = dict[str, T.Any]
 
 
 class Parser(abc.ABC, pdt.BaseModel, strict=True, frozen=True, extra="forbid"):
@@ -37,14 +38,6 @@ class Parser(abc.ABC, pdt.BaseModel, strict=True, frozen=True, extra="forbid"):
     def _parsers(self, row: "bs4.Tag") -> Item:
         pass
 
-    def _validate(self, data: dict[str, str], validator: schemas.SchemaKind) -> Item:
-        logger = self.logger_service.logger()
-        try:
-            valid_data = validator.model_validate(data)
-        except pdt.ValidationError as e:
-            logger.error(f"Validation error: {e}")
-        return valid_data.model_dump()
-
     @property
     @abc.abstractmethod
     def get_metrics(self) -> "metrics.MetricsDict":
@@ -54,3 +47,11 @@ class Parser(abc.ABC, pdt.BaseModel, strict=True, frozen=True, extra="forbid"):
             metrics.MetricsDict: The metrics.
         """
         pass
+
+    def _validate(self, data: dict[str, str], validator: schemas.SchemaKind) -> Item:
+        logger = self.logger_service.logger()
+        try:
+            valid_data = validator.model_validate(data)
+        except pdt.ValidationError as e:
+            logger.error(f"Validation error: {e}")
+        return valid_data.model_dump()

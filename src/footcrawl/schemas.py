@@ -16,4 +16,4 @@ class ClubsSchema(pdt.BaseModel):
     tm_id: str = pdt.Field(...)
 
 
-SchemaKind = ClubsSchema
+type SchemaKind = ClubsSchema

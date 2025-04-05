@@ -6,7 +6,7 @@ import pydantic as pdt
 from footcrawl import metrics as metrics_
 from footcrawl.io import services
 
-Locals = dict[str, T.Any]
+type Locals = dict[str, T.Any]
 
 
 class Crawler(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid"):
