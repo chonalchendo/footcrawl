@@ -30,10 +30,10 @@ class AsyncClubsCrawler(base.Crawler):
     async def crawl(self) -> base.Locals:
         logger = self.logger_service.logger()
 
-        logger.info("Initialising crawler engine")
-
         self.file_handler.set_original_path(path=self.output.base_path)
-        self.file_handler.check_filepaths(seasons=self.seasons)
+        
+        if self.output.overwrite:
+            self.file_handler.check_filepaths(seasons=self.seasons)
 
         async with self.http_client as client:
             session = client.get_session
