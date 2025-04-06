@@ -33,7 +33,7 @@ class SquadsSchema(pdt.BaseModel):
     age: str = pdt.Field(...)
     nationalities: list[str] = pdt.Field(...)
     height: str | None = pdt.Field(...)
-    foot: str = pdt.Field(...)
+    foot: str | None = pdt.Field(...)
     signed_date: str | None = pdt.Field(...)
     transfer_fee: str | None = pdt.Field(...)
     signed_from: str | None = pdt.Field(...)
