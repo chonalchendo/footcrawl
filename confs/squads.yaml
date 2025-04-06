@@ -1,7 +1,7 @@
 crawler:
   KIND: squads
   url: https://transfermarkt.co.uk/{club}/kader/verein/{id}/saison_id/{season}/plus/1
-  seasons: [2018]
+  seasons: [2019]
   input:
     KIND: JsonLoader
     path: data/transfermarkt/{season}/clubs.json   # take clubs data as an input
@@ -11,7 +11,7 @@ crawler:
     overwrite: true
   http_client:
     headers: {
-      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
+      "User-Agent": "",
       "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
       "Accept-Language": "en-US,en;q=0.9",
       "Accept-Encoding": "gzip, deflate, br" 
