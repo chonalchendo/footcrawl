@@ -1,12 +1,12 @@
 crawler:
-  KIND: Squads
+  KIND: squads
   url: https://transfermarkt.co.uk/{club}/kader/verein/{id}/saison_id/{season}/plus/1
   seasons: [2018]
   input:
     KIND: JsonLoader
     path: data/transfermarkt/{season}/clubs.json   # take clubs data as an input
   output:
-    KIND: JsonND
+    KIND: ndjson
     base_path: data/transfermarkt/{season}/squads.json
     overwrite: true
   http_client:
