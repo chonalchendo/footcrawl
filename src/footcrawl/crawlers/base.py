@@ -22,7 +22,7 @@ class Crawler(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid")
         output (datasets.WriterKind): Output writer to use.
         task_handler (tasks.TaskHandler): Task handler.
         file_handler (files.FileHandler): File handler.
-        
+
     """
 
     KIND: str

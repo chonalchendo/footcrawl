@@ -16,7 +16,7 @@ class AsyncClubsCrawler(base.Crawler):
         http_client (client.AsyncClient): HTTP client.
     """
 
-    KIND: T.Literal["Clubs"] = "Clubs"
+    KIND: T.Literal["clubs"] = "clubs"
 
     # crawler parameters
     seasons: list[int]
@@ -31,7 +31,7 @@ class AsyncClubsCrawler(base.Crawler):
         logger = self.logger_service.logger()
 
         self.file_handler.set_original_path(path=self.output.base_path)
-        
+
         if self.output.overwrite:
             self.file_handler.check_filepaths(seasons=self.seasons)
 

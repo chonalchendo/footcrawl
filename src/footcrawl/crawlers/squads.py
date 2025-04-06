@@ -8,7 +8,7 @@ from footcrawl.io import datasets
 
 
 class AsyncSquadsCrawler(base.Crawler):
-    KIND: T.Literal["Squads"] = "Squads"
+    KIND: T.Literal["squads"] = "squads"
 
     # crawler parameters
     seasons: list[int]
@@ -23,9 +23,9 @@ class AsyncSquadsCrawler(base.Crawler):
     @T.override
     async def crawl(self) -> base.Locals:
         logger = self.logger_service.logger()
-        
+
         self.file_handler.set_original_path(path=self.output.base_path)
-        
+
         if self.output.overwrite:
             self.file_handler.check_filepaths(seasons=self.seasons)
 
@@ -34,7 +34,7 @@ class AsyncSquadsCrawler(base.Crawler):
             for season in self.seasons:
                 clubs = self.input.load(season=season)
                 for club in clubs[:50]:
-                    name, id = club['tm_name'], club['tm_id']
+                    name, id = club["tm_name"], club["tm_id"]
                     self.task_handler.create_task(
                         self._write_out(
                             session=session,
