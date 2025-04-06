@@ -63,7 +63,7 @@ Project crawlers are managed using `YAML` files located in the `confs` directory
 
 ```yaml
 crawler:
-  KIND: AsyncClubsCrawler
+  KIND: clubs
   url: "https://transfermarkt.co.uk/{league}/startseite/wettbewerb/{league_id}/plus/?saison_id={season}"
   seasons: [2022, 2023, 2024]
   leagues: 
@@ -78,7 +78,7 @@ crawler:
     - name: "ligue-1"
       id: "FR1"
   output:
-    KIND: AsyncJsonWriter
+    KIND: ndjson 
     path: data/transfermarkt/{season}/clubs.json
     overwrite: true
   http_client:
