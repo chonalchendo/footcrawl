@@ -3,14 +3,13 @@ import typing as T
 
 import pydantic as pdt
 
-from footcrawl import schemas
 from footcrawl.io import services
 
 if T.TYPE_CHECKING:
     import aiohttp
     import bs4
 
-    from footcrawl import metrics
+    from footcrawl import metrics, schemas
 
 
 type Item = dict[str, T.Any]
@@ -48,7 +47,7 @@ class Parser(abc.ABC, pdt.BaseModel, strict=True, frozen=True, extra="forbid"):
         """
         pass
 
-    def _validate(self, data: dict[str, str], validator: schemas.SchemaKind) -> Item:
+    def _validate(self, data: dict[str, str], validator: "schemas.SchemaKind") -> Item:
         logger = self.logger_service.logger()
         try:
             valid_data = validator.model_validate(data)
