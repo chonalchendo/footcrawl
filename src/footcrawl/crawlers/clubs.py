@@ -45,7 +45,6 @@ class AsyncClubsCrawler(base.Crawler):
                             session=session,
                             season=season,
                             url=self._format_url(league=league, season=season),
-                            file_handler=self.file_handler,
                         )
                     )
 

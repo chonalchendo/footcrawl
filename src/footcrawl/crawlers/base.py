@@ -27,14 +27,18 @@ class Crawler(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid")
 
     KIND: str
 
+    # base url
     url: str
 
+    # services 
     logger_service: services.LoggerService = services.LoggerService()
 
+    # crawler parameters
     metrics: metrics_.CrawlerMetrics = metrics_.CrawlerMetrics()
     parser: parsers.ParserKind = pdt.Field(...)
     output: datasets.WriterKind = pdt.Field(..., discriminator="KIND")
 
+    # handler parameters
     task_handler: tasks.TaskHandler = pdt.Field(..., default_factory=tasks.TaskHandler)
     file_handler: files.FileHandler = pdt.Field(..., default_factory=files.FileHandler)
 
@@ -52,12 +56,11 @@ class Crawler(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid")
         session: aiohttp.ClientSession,
         url: str,
         season: int,
-        file_handler: files.FileHandler,
     ) -> None:
         logger = self.logger_service.logger()
 
         async for item in self._parse(session=session, url=url):
-            formatted_path = file_handler.format_original_path(season=season)
+            formatted_path = self.file_handler.format_original_path(season=season)
 
             logger.info("Writing to path: {}", formatted_path)
             await self.output.write(output_path=formatted_path, data=item)
