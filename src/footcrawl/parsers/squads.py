@@ -130,23 +130,21 @@ class SquadsParser(base.Parser):
         return [stat["title"] for stat in stats[2].find_all("img")]
 
     def _get_height(self, stats: list, season: int) -> str | None:
-        if stats[3].text.strip() == "":
-            return None
-        if season == 2024:
+        if int(season) == 2024:
             return stats[3].text.strip()
         return stats[4].text.strip()
 
     def _get_foot(self, stats: list, season: int) -> str | None:
         if stats[4].text.strip() == "":
             return None
-        if season == 2024:
+        if int(season) == 2024:
             return stats[4].text.strip()
         return stats[5].text.strip()
 
     def _get_signed_date(self, stats: list, season: int) -> str | None:
         if stats[5].text.strip() == "":
             return None
-        if season == 2024:
+        if int(season) == 2024:
             return stats[5].text.strip()
         return stats[6].text.strip()
 
