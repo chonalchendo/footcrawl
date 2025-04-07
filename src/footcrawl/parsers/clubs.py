@@ -1,4 +1,5 @@
 import typing as T
+from urllib.parse import urlparse
 
 import bs4
 
@@ -22,8 +23,17 @@ class ClubsParser(base.Parser):
 
         self.__total_items = len(rows)
 
+        url = response.url
+        split_url = urlparse(str(url)).path.split("/")
+        league = split_url[1]
+        league_id = split_url[4]
+
+        metadata = {"league": league, "league_id": league_id}
+
         for row in rows:
             data = self._parsers(row)
+            data.update(metadata)
+
             valid_data = self._validate(data, validator=schemas.ClubsSchema)
             yield valid_data
 
