@@ -14,6 +14,8 @@ class ClubsSchema(pdt.BaseModel):
     team_link: str = pdt.Field(...)
     tm_name: str = pdt.Field(...)
     tm_id: str = pdt.Field(...)
+    league: str = pdt.Field(...)
+    league_id: str = pdt.Field(...)
 
 
 class SquadsSchema(pdt.BaseModel):
@@ -40,4 +42,20 @@ class SquadsSchema(pdt.BaseModel):
     contract_expiry: str | None = pdt.Field(...)
 
 
-SchemaKind = ClubsSchema | SquadsSchema
+class FixturesSchema(pdt.BaseModel):
+    match_date: str = pdt.Field(...)
+    match_time: str = pdt.Field(...)
+    home_team: str = pdt.Field(...)
+    away_team: str = pdt.Field(...)
+    formation: str = pdt.Field(...)
+    match_report_url: str = pdt.Field(...)
+    match_result: str = pdt.Field(...)
+    home_team_league_position: str | None = pdt.Field(...)
+    away_team_league_position: str | None = pdt.Field(...)
+    attendance: str = pdt.Field(...)
+    manager: str = pdt.Field(...)
+    competition: str = pdt.Field(...)
+    team: str = pdt.Field(...)
+
+
+SchemaKind = ClubsSchema | SquadsSchema | FixturesSchema
