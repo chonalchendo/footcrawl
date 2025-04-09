@@ -27,6 +27,11 @@ def tests_path() -> str:
 
 
 @pytest.fixture(scope="function")
+def tmp_base_path(tmp_path: str) -> str:
+    return os.path.join(tmp_path, "base_path.json")
+
+
+@pytest.fixture(scope="function")
 def tmp_outputs_path(tmp_path: str) -> str:
     """Return a tmp path for the outputs dataset."""
     return os.path.join(tmp_path, "outputs.json")
@@ -94,9 +99,9 @@ def extra_config(user_agent: str) -> str:
 
 
 @pytest.fixture(scope="function")
-def tmp_outputs_writer(tmp_outputs_path: str) -> datasets.AsyncJsonWriter:
+def tmp_outputs_writer(tmp_outputs_path: str) -> datasets.AsyncNdJsonWriter:
     """Return a writer for the tmp outputs dataset."""
-    return datasets.AsyncJsonWriter(path=tmp_outputs_path)
+    return datasets.AsyncNdJsonWriter(base_path=tmp_outputs_path)
 
 
 # %% - Parsers
