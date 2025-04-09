@@ -16,7 +16,7 @@ async def test_clubs_crawler(
     tmp_seasons: list[int],
     tmp_leagues: list[dict[str, str]],
     clubs_parser: parsers.ClubsParser,
-    tmp_outputs_writer: datasets.AsyncJsonWriter,
+    tmp_outputs_writer: datasets.AsyncNdJsonWriter,
     async_client: client.AsyncClient,
 ) -> None:
     # given
@@ -36,20 +36,14 @@ async def test_clubs_crawler(
     # then
     assert set(results) == {
         "self",
-        "client",
-        "engine",
-        "task",
-        "tasks",
         "logger",
-        "formatted_url",
         "session",
         "league",
         "season",
         "metrics_output",
+        "client"
     }
 
-    # check number of tasks
-    assert len(results["tasks"]) == 6, "Did not get expected number of tasks"
     # check number of items parsed,
     assert results["metrics_output"]["parser_metrics"]["items_parsed"] == 116, (
         "Did not parse the expected number items"
@@ -64,8 +58,3 @@ async def test_clubs_crawler(
     assert results["league"]["id"] == "ES1", (
         "Expected la-liga ID as it's the last league passed in league test fixture"
     )
-    # check formatted url
-    assert (
-        results["formatted_url"]
-        == "https://transfermarkt.co.uk/la-liga/startseite/wettbewerb/ES1/plus/?saison_id=2024"
-    ), "Expected URL with la-liga formatting"
