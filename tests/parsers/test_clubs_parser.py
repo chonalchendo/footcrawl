@@ -28,10 +28,12 @@ async def test_clubs_parser():
         </table>
     </html>
     """
+    mock_url = "https://transfermarkt.co.uk/premier-league/startseite/wettbewerb/GB1/plus/?saison_id=2023"
 
     # Mock response object
     mock_response = AsyncMock(spec=aiohttp.ClientResponse)
     mock_response.text.return_value = mock_html
+    mock_response.url = mock_url
 
     # When: Parsing the mock response
     parser = parsers.ClubsParser()
@@ -54,6 +56,8 @@ async def test_clubs_parser():
         "team_link",
         "tm_name",
         "tm_id",
+        "league",
+        "league_id"
     }
     assert set(result.keys()) == expected_keys, (
         f"Missing keys: {expected_keys - set(result.keys())}"
@@ -70,6 +74,8 @@ async def test_clubs_parser():
     assert result["average_player_value"] == "€30.08m"
     assert result["total_player_value"] == "€1.20bn"
     assert result["team_link"] == "/arsenal-fc/kader/verein/11/saison_id/2023"
+    assert result['league'] == 'premier-league'
+    assert result['league_id'] == "GB1"
 
     # Verify metrics
     metrics = parser.get_metrics
