@@ -83,14 +83,14 @@ class Writer(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid"):
             Path(output_path).parent.mkdir(parents=True, exist_ok=True)
 
 
-class AsyncJsonWriter(Writer):
-    """Asynchronously write data to a JSON file.
+class AsyncNdJsonWriter(Writer):
+    """Asynchronously write data to a new line delimited JSON file.
 
     Args:
         overwrite (bool): Overwrite the file. Defaults to True.
     """
 
-    KIND: T.Literal["JsonND"] = "JsonND"
+    KIND: T.Literal["ndjson"] = "ndjson"
 
     overwrite: bool = pdt.Field(default=True)  # checked if true in crawler files
 
@@ -101,5 +101,3 @@ class AsyncJsonWriter(Writer):
         with open(output_path, "a") as file:
             file.write(json.dumps(data) + "\n")
 
-
-WriterKind = AsyncJsonWriter
