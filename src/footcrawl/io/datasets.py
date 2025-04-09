@@ -101,3 +101,5 @@ class AsyncNdJsonWriter(Writer):
         with open(output_path, "a") as file:
             file.write(json.dumps(data) + "\n")
 
+
+WriterKind = AsyncNdJsonWriter
