@@ -1,5 +1,5 @@
-import typing as T
 import re
+import typing as T
 from urllib.parse import urlparse
 
 import bs4

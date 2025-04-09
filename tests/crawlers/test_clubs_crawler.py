@@ -41,7 +41,7 @@ async def test_clubs_crawler(
         "league",
         "season",
         "metrics_output",
-        "client"
+        "client",
     }
 
     # check number of items parsed,

@@ -4,7 +4,7 @@ import pytest
 
 from footcrawl import metrics, parsers
 from footcrawl.crawlers import base
-from footcrawl.io import services, datasets
+from footcrawl.io import datasets, services
 
 # %% CRAWLERS
 

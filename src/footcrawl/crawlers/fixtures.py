@@ -1,4 +1,5 @@
 import typing as T
+
 import pydantic as pdt
 
 from footcrawl import client, parsers
@@ -33,7 +34,7 @@ class AsyncFixturesCrawler(base.Crawler):
 
             for season in self.seasons:
                 clubs = self.input.load(season=season)
-                
+
                 for club in clubs:
                     name, club_id, league_id = (
                         club["tm_name"],

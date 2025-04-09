@@ -31,10 +31,10 @@ class AsyncSquadsCrawler(base.Crawler):
 
         async with self.http_client as client:
             session = client.get_session
-            
+
             for season in self.seasons:
                 clubs = self.input.load(season=season)
-                
+
                 for club in clubs:
                     name, id = club["tm_name"], club["tm_id"]
                     self.task_handler.create_task(

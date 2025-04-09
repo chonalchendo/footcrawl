@@ -1,6 +1,6 @@
 from .clubs import AsyncClubsCrawler
-from .squads import AsyncSquadsCrawler
 from .fixtures import AsyncFixturesCrawler
+from .squads import AsyncSquadsCrawler
 
 CrawlerKind = AsyncClubsCrawler | AsyncSquadsCrawler | AsyncFixturesCrawler
 

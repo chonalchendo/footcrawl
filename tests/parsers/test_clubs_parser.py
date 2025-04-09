@@ -57,7 +57,7 @@ async def test_clubs_parser():
         "tm_name",
         "tm_id",
         "league",
-        "league_id"
+        "league_id",
     }
     assert set(result.keys()) == expected_keys, (
         f"Missing keys: {expected_keys - set(result.keys())}"
@@ -74,8 +74,8 @@ async def test_clubs_parser():
     assert result["average_player_value"] == "€30.08m"
     assert result["total_player_value"] == "€1.20bn"
     assert result["team_link"] == "/arsenal-fc/kader/verein/11/saison_id/2023"
-    assert result['league'] == 'premier-league'
-    assert result['league_id'] == "GB1"
+    assert result["league"] == "premier-league"
+    assert result["league_id"] == "GB1"
 
     # Verify metrics
     metrics = parser.get_metrics

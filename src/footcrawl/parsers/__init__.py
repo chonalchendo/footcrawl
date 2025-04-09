@@ -1,7 +1,7 @@
 from .base import Item
 from .clubs import ClubsParser
-from .squads import SquadsParser
 from .fixtures import FixturesParser
+from .squads import SquadsParser
 
 ParserKind = ClubsParser | SquadsParser | FixturesParser
 

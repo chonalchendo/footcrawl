@@ -30,7 +30,7 @@ class Crawler(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid")
     # base url
     url: str
 
-    # services 
+    # services
     logger_service: services.LoggerService = services.LoggerService()
 
     # crawler parameters
