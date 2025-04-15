@@ -43,6 +43,7 @@ class SquadsSchema(pdt.BaseModel):
 
 
 class FixturesSchema(pdt.BaseModel):
+    match_id: str
     match_date: str = pdt.Field(...)
     match_time: str = pdt.Field(...)
     home_team: str = pdt.Field(...)
@@ -58,4 +59,21 @@ class FixturesSchema(pdt.BaseModel):
     team: str = pdt.Field(...)
 
 
-SchemaKind = ClubsSchema | SquadsSchema | FixturesSchema
+class MatchLineupsSchema(pdt.BaseModel):
+    match_id: str = pdt.Field(...)
+    team_id: str = pdt.Field(...)
+    team: str = pdt.Field(...)
+    player_id: str = pdt.Field(...)
+    player_tm: str = pdt.Field(...)
+    player: str = pdt.Field(...)
+    number: str = pdt.Field(...)
+    position: str = pdt.Field(...)
+    current_value: str = pdt.Field(...)
+    country: str = pdt.Field(...)
+    misc: str = pdt.Field(...)
+    profile_link: str = pdt.Field(...)
+    season_stats_link: str = pdt.Field(...)
+    starter: bool = pdt.Field(...)
+
+
+SchemaKind = ClubsSchema | SquadsSchema | FixturesSchema | MatchLineupsSchema
