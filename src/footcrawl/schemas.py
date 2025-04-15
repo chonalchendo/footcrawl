@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pydantic as pdt
 
 
@@ -74,6 +76,51 @@ class MatchLineupsSchema(pdt.BaseModel):
     profile_link: str = pdt.Field(...)
     season_stats_link: str = pdt.Field(...)
     starter: bool = pdt.Field(...)
+
+
+class MatchActionsSchema(pdt.BaseModel):
+    match_id: str
+    season: str
+    goals: list[_GoalAction]
+    substitutions: list[_SubAction]
+    cards: list[_CardAction]
+
+
+class _GoalAction(pdt.BaseModel):
+    team_id: str = pdt.Field(...)
+    team_tm: str = pdt.Field(...)
+    team: str = pdt.Field(...)
+    score: str = pdt.Field(...)
+    scorer: str = pdt.Field(...)
+    scorer_id: str = pdt.Field(...)
+    shot_type: str = pdt.Field(...)
+    scorer_goal_season_total: str = pdt.Field(...)
+    assister: str = pdt.Field(...)
+    assister_id: str = pdt.Field(...)
+    assist_type: str = pdt.Field(...)
+    assister_assist_season_total: str = pdt.Field(...)
+
+
+class _SubAction(pdt.BaseModel):
+    team_id: str = pdt.Field(...)
+    team_tm: str = pdt.Field(...)
+    team: str = pdt.Field(...)
+    reason: str = pdt.Field(...)
+    player_off_id: str = pdt.Field(...)
+    player_off: str = pdt.Field(...)
+    player_on_id: str = pdt.Field(...)
+    player_off_id: str = pdt.Field(...)
+
+
+class _CardAction(pdt.BaseModel):
+    team_id: str
+    team_tm: str
+    team_name: str
+    player_id: str
+    player_name: str
+    card_type: str
+    reason: str
+    player_card_type_season_total: str
 
 
 SchemaKind = ClubsSchema | SquadsSchema | FixturesSchema | MatchLineupsSchema
