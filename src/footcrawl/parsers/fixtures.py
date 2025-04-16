@@ -21,20 +21,26 @@ class FixturesParser(base.Parser):
         soup = bs4.BeautifulSoup(content, "html.parser")
 
         url = response.url
-        split_url = urlparse(str(url)).path.split("/")
-        season = split_url[6]
+        season = urlparse(str(url)).path.split("/")[6]
+        league_id = urlparse(str(url)).path.split('#')[-1]
 
-        index = 3 if str(season) == 2024 else 2
+        index = self._get_table_index(season=season, league_id=league_id)
 
         boxes = soup.find_all("div", class_="box")[index:]
 
         for box in boxes:
-            comp = self._get_competition_name(box)
-            team = self._get_team_name(box)
+            comp_id = self._get_competition_id(box)
+            comp_tm_name = self._get_competition_tm_name(box)
+            comp_name = self._get_competition_name(box)
+            club_tm_name = self._get_club_name(box)
+            club_id = self._get_club_id(box)
 
             metadata = {
-                "competition": comp,
-                "team": team,
+                "comp_id": comp_id,
+                "comp_tm_name": comp_tm_name,
+                "comp_name": comp_name,
+                "club_tm_name": club_tm_name,
+                "club_id": club_id,
             }
 
             table = self._get_table(box)
@@ -59,12 +65,27 @@ class FixturesParser(base.Parser):
         responsive_tab = box.find("div", class_="responsive-table")
         table = responsive_tab.find_all("tr")[1:]
         return table
+    
+    def _get_table_index(self, season: str, league_id: str) -> int:
+        if int(season) == 2024 or league_id == 'FR1':
+            return 3
+        return 2
+        
 
     def _get_competition_name(self, box: bs4.Tag) -> str:
         return box.find("img")["alt"]
 
-    def _get_team_name(self, box: bs4.Tag) -> str:
+    def _get_competition_tm_name(self, box: bs4.Tag) -> str:
+        return box.find("a")["href"].split("/")[1]
+
+    def _get_competition_id(self, box: bs4.Tag) -> str:
+        return box.find("a")["href"].split("/")[4]
+
+    def _get_club_name(self, box: bs4.Tag) -> str:
         return box.find("a", class_="tm-tab")["href"].split("/")[1]
+
+    def _get_club_id(self, box: bs4.Tag) -> str:
+        return box.find("a", class_="tm-tab")["href"].split("/")[4]
 
     def _get_team_manager(self, row: bs4.Tag) -> base.SubItem:
         manager = row.find_all("a")[-2]["title"]
@@ -102,17 +123,23 @@ class FixturesParser(base.Parser):
 
         match_date = self._get_match_date(stats)
         match_time = self._get_match_time(stats)
-        home_team = self._get_home_team(stats)
-        away_team = self._get_away_team(stats)
+        home_club = self._get_home_club(stats)
+        home_club_tm = self._get_home_club_tm_name(stats)
+        away_club_tm = self._get_away_club_tm_name(stats)
+        away_club = self._get_away_club(stats)
         formation = self._get_formation(stats)
         match_report_url = self._get_match_report_url(stats)
         match_result = self._get_match_result(stats)
+        match_id = self._get_match_id(stats)
 
         return {
+            "match_id": match_id,
             "match_date": match_date,
             "match_time": match_time,
-            "home_team": home_team,
-            "away_team": away_team,
+            "home_club_tm": home_club_tm,
+            "home_club": home_club,
+            "away_club_tm": away_club_tm,
+            "away_club": away_club,
             "formation": formation,
             "match_report_url": match_report_url,
             "match_result": match_result,
@@ -124,10 +151,16 @@ class FixturesParser(base.Parser):
     def _get_match_time(self, stats: list[bs4.Tag]) -> str:
         return stats[2].text.strip()
 
-    def _get_home_team(self, stats: list[bs4.Tag]) -> str:
+    def _get_home_club(self, stats: list[bs4.Tag]) -> str:
         return stats[3].find("img")["alt"]
 
-    def _get_away_team(self, stats: list[bs4.Tag]) -> str:
+    def _get_home_club_tm_name(self, stats: list[bs4.Tag]) -> str:
+        return stats[3].find("a")["href"].split("/")[1]
+
+    def _get_away_club_tm_name(self, stats: list[bs4.Tag]) -> str:
+        return stats[4].find("a")["href"].split("/")[1]
+
+    def _get_away_club(self, stats: list[bs4.Tag]) -> str:
         return stats[4].find("img")["alt"]
 
     def _get_formation(self, stats: list[bs4.Tag]) -> str:
@@ -138,6 +171,13 @@ class FixturesParser(base.Parser):
 
     def _get_match_result(self, stats: list[bs4.Tag]) -> str:
         return stats[6].text.strip()
+
+    def _get_match_id(self, stats: list[bs4.Tag]) -> str:
+        match_report_url = self._get_match_report_url(stats)
+        return match_report_url.split("/")[4]
+
+    def _get_matchday_number(self) -> str:
+        return None
 
     @T.override
     @property
