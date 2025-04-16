@@ -6,29 +6,29 @@ import pydantic as pdt
 class ClubsSchema(pdt.BaseModel):
     """A Pydantic class to validate parsed clubs data."""
 
+    club_id: str = pdt.Field(...)
+    club_tm_name: str = pdt.Field(...)
     club: str = pdt.Field(...)
+    club_link: str = pdt.Field(...)
+    season: str = pdt.Field(...)
+    comp_id: str = pdt.Field(...)
+    comp_name: str = pdt.Field(...)
     squad_size: str = pdt.Field(...)
     average_age: str = pdt.Field(...)
     foreign_players: str = pdt.Field(...)
-    season: str = pdt.Field(...)
     average_player_value: str = pdt.Field(...)
     total_player_value: str = pdt.Field(...)
-    team_link: str = pdt.Field(...)
-    tm_name: str = pdt.Field(...)
-    tm_id: str = pdt.Field(...)
-    league: str = pdt.Field(...)
-    league_id: str = pdt.Field(...)
 
 
 class SquadsSchema(pdt.BaseModel):
-    player: str = pdt.Field(...)
-    team: str = pdt.Field(...)
+    player_id: str = pdt.Field(...)
+    player_tm_name: str = pdt.Field(...)
+    player_name: str = pdt.Field(...)
+    club_name: str = pdt.Field(...)
     season: str = pdt.Field(...)
     url: str = pdt.Field(...)
     position: str = pdt.Field(...)
     link: str = pdt.Field(...)
-    tm_id: str = pdt.Field(...)
-    tm_name: str = pdt.Field(...)
     injury_note: str | None = pdt.Field(...)
     market_value: str = pdt.Field(...)
     previous_value: str | None = pdt.Field(...)
@@ -48,8 +48,15 @@ class FixturesSchema(pdt.BaseModel):
     match_id: str
     match_date: str = pdt.Field(...)
     match_time: str = pdt.Field(...)
-    home_team: str = pdt.Field(...)
-    away_team: str = pdt.Field(...)
+    comp_id: str = pdt.Field(...)
+    comp_tm_name: str = pdt.Field(...)
+    comp_name: str = pdt.Field(...)
+    club_id: str = pdt.Field(...)
+    club_tm_name: str = pdt.Field(...)
+    home_club_tm: str = pdt.Field(...)
+    home_club: str = pdt.Field(...)
+    away_club_tm: str = pdt.Field(...)
+    away_club: str = pdt.Field(...)
     formation: str = pdt.Field(...)
     match_report_url: str = pdt.Field(...)
     match_result: str = pdt.Field(...)
@@ -57,17 +64,16 @@ class FixturesSchema(pdt.BaseModel):
     away_team_league_position: str | None = pdt.Field(...)
     attendance: str = pdt.Field(...)
     manager: str = pdt.Field(...)
-    competition: str = pdt.Field(...)
-    team: str = pdt.Field(...)
 
 
 class MatchLineupsSchema(pdt.BaseModel):
     match_id: str = pdt.Field(...)
-    team_id: str = pdt.Field(...)
-    team: str = pdt.Field(...)
+    matchday: str = pdt.Field(...)
+    club_id: str = pdt.Field(...)
+    club_name: str = pdt.Field(...)
     player_id: str = pdt.Field(...)
-    player_tm: str = pdt.Field(...)
-    player: str = pdt.Field(...)
+    player_tm_name: str = pdt.Field(...)
+    player_name: str = pdt.Field(...)
     number: str = pdt.Field(...)
     position: str = pdt.Field(...)
     current_value: str = pdt.Field(...)
@@ -80,6 +86,9 @@ class MatchLineupsSchema(pdt.BaseModel):
 
 class MatchActionsSchema(pdt.BaseModel):
     match_id: str
+    matchday: str
+    comp_id: str
+    comp_name: str
     season: str
     goals: list[_GoalAction]
     substitutions: list[_SubAction]
@@ -87,9 +96,9 @@ class MatchActionsSchema(pdt.BaseModel):
 
 
 class _GoalAction(pdt.BaseModel):
-    team_id: str = pdt.Field(...)
-    team_tm: str = pdt.Field(...)
-    team: str = pdt.Field(...)
+    club_id: str = pdt.Field(...)
+    club_tm_name: str = pdt.Field(...)
+    club_name: str = pdt.Field(...)
     score: str = pdt.Field(...)
     scorer: str = pdt.Field(...)
     scorer_id: str = pdt.Field(...)
@@ -102,9 +111,9 @@ class _GoalAction(pdt.BaseModel):
 
 
 class _SubAction(pdt.BaseModel):
-    team_id: str = pdt.Field(...)
-    team_tm: str = pdt.Field(...)
-    team: str = pdt.Field(...)
+    club_id: str = pdt.Field(...)
+    club_tm_name: str = pdt.Field(...)
+    club_name: str = pdt.Field(...)
     reason: str = pdt.Field(...)
     player_off_id: str = pdt.Field(...)
     player_off: str = pdt.Field(...)
@@ -113,14 +122,39 @@ class _SubAction(pdt.BaseModel):
 
 
 class _CardAction(pdt.BaseModel):
-    team_id: str
-    team_tm: str
-    team_name: str
-    player_id: str
-    player_name: str
-    card_type: str
-    reason: str
-    player_card_type_season_total: str
+    club_id: str = pdt.Field(...)
+    club_tm_name: str = pdt.Field(...)
+    club_name: str = pdt.Field(...)
+    player_id: str = pdt.Field(...)
+    player_name: str = pdt.Field(...)
+    card_type: str = pdt.Field(...)
+    reason: str = pdt.Field(...)
+    player_card_type_season_total: str = pdt.Field(...)
 
 
-SchemaKind = ClubsSchema | SquadsSchema | FixturesSchema | MatchLineupsSchema
+class MatchStatsSchema(pdt.BaseModel):
+    match_id: str = pdt.Field(...)
+    matchday: str = pdt.Field(...)
+    club_id: str = pdt.Field(...)
+    club_tm_name: str = pdt.Field(...)
+    club_name: str = pdt.Field(...)
+    comp_id: str = pdt.Field(...)
+    comp_name: str = pdt.Field(...)
+    season: str = pdt.Field(...)
+    total_shots: str = pdt.Field(...)
+    shots_off_target: str = pdt.Field(...)
+    shots_saved: str = pdt.Field(...)
+    corners: str = pdt.Field(...)
+    free_kicks: str = pdt.Field(...)
+    fouls: str = pdt.Field(...)
+    offsides: str = pdt.Field(...)
+
+
+SchemaKind = (
+    ClubsSchema
+    | SquadsSchema
+    | FixturesSchema
+    | MatchLineupsSchema
+    | MatchActionsSchema
+    | MatchStatsSchema
+)
