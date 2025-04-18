@@ -69,8 +69,11 @@ class FixturesSchema(pdt.BaseModel):
 class MatchLineupsSchema(pdt.BaseModel):
     match_id: str = pdt.Field(...)
     matchday: str = pdt.Field(...)
+    comp_id: str = pdt.Field(...)
+    comp_name: str = pdt.Field(...)
     club_id: str = pdt.Field(...)
     club_name: str = pdt.Field(...)
+    club_tm_name: str = pdt.Field(...)
     player_id: str = pdt.Field(...)
     player_tm_name: str = pdt.Field(...)
     player_name: str = pdt.Field(...)
@@ -89,6 +92,7 @@ class MatchActionsSchema(pdt.BaseModel):
     matchday: str
     comp_id: str
     comp_name: str
+    comp_tm_name: str
     season: str
     goals: list[_GoalAction]
     substitutions: list[_SubAction]
@@ -127,6 +131,7 @@ class _CardAction(pdt.BaseModel):
     club_name: str = pdt.Field(...)
     player_id: str = pdt.Field(...)
     player_name: str = pdt.Field(...)
+    player_tm_name: str = pdt.Field(...)
     card_type: str = pdt.Field(...)
     reason: str = pdt.Field(...)
     player_card_type_season_total: str = pdt.Field(...)
@@ -135,12 +140,16 @@ class _CardAction(pdt.BaseModel):
 class MatchStatsSchema(pdt.BaseModel):
     match_id: str = pdt.Field(...)
     matchday: str = pdt.Field(...)
-    club_id: str = pdt.Field(...)
-    club_tm_name: str = pdt.Field(...)
-    club_name: str = pdt.Field(...)
     comp_id: str = pdt.Field(...)
-    comp_name: str = pdt.Field(...)
+    comp_tm_name: str = pdt.Field(...)
     season: str = pdt.Field(...)
+    home_team_stats: _StatsSchema
+    away_team_stats: _StatsSchema
+
+
+class _StatsSchema(pdt.BaseModel):
+    club_id: str
+    club_tm_name: str
     total_shots: str = pdt.Field(...)
     shots_off_target: str = pdt.Field(...)
     shots_saved: str = pdt.Field(...)
