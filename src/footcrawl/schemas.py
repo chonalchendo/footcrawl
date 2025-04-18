@@ -80,12 +80,12 @@ class MatchLineupsSchema(pdt.BaseModel):
     player_name: str
     number: int
     position: str
-    current_value: str
+    current_value: str | None
     country: str
-    misc: str
+    misc: str | None
     profile_link: str
     season_stats_link: str
-    starter: bool
+    is_starter: bool
 
 
 class MatchActionsSchema(pdt.BaseModel):
