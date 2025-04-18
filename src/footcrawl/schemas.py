@@ -32,7 +32,7 @@ class SquadsSchema(pdt.BaseModel):
     injury_note: str | None
     market_value: str
     previous_value: str | None
-    number: int
+    number: int | str
     dob: str
     age: int
     nationalities: list[str]
