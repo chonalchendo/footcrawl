@@ -22,7 +22,7 @@ class FixturesParser(base.Parser):
 
         url = response.url
         season = urlparse(str(url)).path.split("/")[6]
-        league_id = urlparse(str(url)).path.split('#')[-1]
+        league_id = urlparse(str(url)).path.split("#")[-1]
 
         index = self._get_table_index(season=season, league_id=league_id)
 
@@ -65,12 +65,11 @@ class FixturesParser(base.Parser):
         responsive_tab = box.find("div", class_="responsive-table")
         table = responsive_tab.find_all("tr")[1:]
         return table
-    
+
     def _get_table_index(self, season: str, league_id: str) -> int:
-        if int(season) == 2024 or league_id == 'FR1':
+        if int(season) == 2024 or league_id == "FR1":
             return 3
         return 2
-        
 
     def _get_competition_name(self, box: bs4.Tag) -> str:
         return box.find("img")["alt"]
@@ -131,9 +130,11 @@ class FixturesParser(base.Parser):
         match_report_url = self._get_match_report_url(stats)
         match_result = self._get_match_result(stats)
         match_id = self._get_match_id(stats)
+        matchday = self._get_matchday(stats)
 
         return {
             "match_id": match_id,
+            "matchday": matchday,
             "match_date": match_date,
             "match_time": match_time,
             "home_club_tm": home_club_tm,
@@ -144,6 +145,9 @@ class FixturesParser(base.Parser):
             "match_report_url": match_report_url,
             "match_result": match_result,
         }
+        
+    def _get_matchday(self, stats: list[bs4.Tag]):
+        return stats[0].text.strip()
 
     def _get_match_date(self, stats: list[bs4.Tag]) -> str:
         return stats[1].text.strip()
