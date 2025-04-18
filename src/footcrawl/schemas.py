@@ -6,35 +6,35 @@ import pydantic as pdt
 class ClubsSchema(pdt.BaseModel):
     """A Pydantic class to validate parsed clubs data."""
 
-    club_id: str
+    club_id: int
     club_tm_name: str
     club: str
     club_link: str
-    season: str
-    comp_id: str
+    season: int
+    comp_id: int
     comp_name: str
-    squad_size: str
-    average_age: str
-    foreign_players: str
+    squad_size: int
+    average_age: float
+    foreign_players: int
     average_player_value: str
     total_player_value: str
 
 
 class SquadsSchema(pdt.BaseModel):
-    player_id: str
+    player_id: int
     player_tm_name: str
     player_name: str
     club_name: str
-    season: str
+    season: int
     url: str
     position: str
     link: str
     injury_note: str | None
     market_value: str
     previous_value: str | None
-    number: str
+    number: int
     dob: str
-    age: str
+    age: int
     nationalities: list[str]
     height: str | None
     foot: str | None
@@ -45,13 +45,14 @@ class SquadsSchema(pdt.BaseModel):
 
 
 class FixturesSchema(pdt.BaseModel):
-    match_id: str
+    match_id: int
+    matchday: int  # added in matchday
     match_date: str
     match_time: str
-    comp_id: str
+    comp_id: int
     comp_tm_name: str
     comp_name: str
-    club_id: str
+    club_id: int
     club_tm_name: str
     home_club_tm: str
     home_club: str
@@ -67,17 +68,17 @@ class FixturesSchema(pdt.BaseModel):
 
 
 class MatchLineupsSchema(pdt.BaseModel):
-    match_id: str
-    matchday: str
-    comp_id: str
+    match_id: int
+    matchday: int
+    comp_id: int
     comp_name: str
-    club_id: str
+    club_id: int
     club_name: str
     club_tm_name: str
-    player_id: str
+    player_id: int
     player_tm_name: str
     player_name: str
-    number: str
+    number: int
     position: str
     current_value: str
     country: str
@@ -88,75 +89,75 @@ class MatchLineupsSchema(pdt.BaseModel):
 
 
 class MatchActionsSchema(pdt.BaseModel):
-    match_id: str
-    matchday: str
-    comp_id: str
+    match_id: int
+    matchday: int
+    comp_id: int
     comp_name: str
     comp_tm_name: str
-    season: str
+    season: int
     goals: list[_GoalAction]
     substitutions: list[_SubAction]
     cards: list[_CardAction]
 
 
 class _GoalAction(pdt.BaseModel):
-    club_id: str
+    club_id: int
     club_tm_name: str
     club_name: str
     score: str
     scorer: str
-    scorer_id: str
+    scorer_id: int
     shot_type: str
-    scorer_goal_season_total: str
+    scorer_goal_season_total: int
     assister: str
-    assister_id: str
+    assister_id: int
     assist_type: str
-    assister_assist_season_total: str
+    assister_assist_season_total: int | None
 
 
 class _SubAction(pdt.BaseModel):
-    club_id: str
+    club_id: int
     club_tm_name: str
     club_name: str
     reason: str
-    player_off_id: str
+    player_off_id: int
     player_off: str
     player_on_id: str
-    player_off_id: str
+    player_off_id: int
 
 
 class _CardAction(pdt.BaseModel):
-    club_id: str
+    club_id: int
     club_tm_name: str
     club_name: str
-    player_id: str
+    player_id: int
     player_name: str
     player_tm_name: str
     card_type: str
     reason: str
-    player_card_type_season_total: str
+    player_card_type_season_total: int
 
 
 class MatchStatsSchema(pdt.BaseModel):
-    match_id: str
-    matchday: str
-    comp_id: str
+    match_id: int
+    matchday: int
+    comp_id: int
     comp_tm_name: str
-    season: str
+    season: int
     home_team_stats: _StatsSchema
     away_team_stats: _StatsSchema
 
 
 class _StatsSchema(pdt.BaseModel):
-    club_id: str
+    club_id: int
     club_tm_name: str
-    total_shots: str
-    shots_off_target: str
-    shots_saved: str
-    corners: str
-    free_kicks: str
-    fouls: str
-    offsides: str
+    total_shots: int
+    shots_off_target: int
+    shots_saved: int
+    corners: int
+    free_kicks: int
+    fouls: int
+    offsides: int
 
 
 SchemaKind = (
