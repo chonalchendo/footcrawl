@@ -25,7 +25,7 @@ class SquadsParser(base.Parser):
         team = split_url[1]
 
         metadata = {
-            "team": team,
+            "club_name": team,
             "season": season,
             "url": str(url),
         }
@@ -59,11 +59,11 @@ class SquadsParser(base.Parser):
         link = row.find("td", {"class": "hauptlink"}).find("a")["href"]
         tm_id = link.split("/")[4]
         tm_name = link.split("/")[1]
-        return {"link": link, "tm_id": tm_id, "tm_name": tm_name}
+        return {"link": link, "player_id": tm_id, "player_tm_name": tm_name}
 
     def _get_player_name(self, row: bs4.Tag) -> base.SubItem:
         name = row.find("td", {"class": "hauptlink"}).find("a").text.strip()
-        return {"player": name}
+        return {"player_name": name}
 
     def _get_player_position(self, row: bs4.Tag) -> base.SubItem:
         position = row.find_all("td")[1].text.strip().split("  ")[-1]
