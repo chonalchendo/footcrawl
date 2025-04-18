@@ -37,9 +37,9 @@ class AsyncFixturesCrawler(base.Crawler):
 
                 for club in clubs:
                     name, club_id, league_id = (
-                        club["tm_name"],
-                        club["tm_id"],
-                        club["league_id"],
+                        club["club_tm_name"],
+                        club["club_id"],
+                        club["comp_id"],
                     )
                     self.task_handler.create_task(
                         self._write_out(
