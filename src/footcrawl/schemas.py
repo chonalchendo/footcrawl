@@ -11,8 +11,8 @@ class ClubsSchema(pdt.BaseModel):
     club: str
     club_link: str
     season: int
-    comp_id: int
-    comp_name: str
+    comp_id: str
+    comp_tm_name: str
     squad_size: int
     average_age: float
     foreign_players: int
@@ -49,7 +49,7 @@ class FixturesSchema(pdt.BaseModel):
     matchday: int  # added in matchday
     match_date: str
     match_time: str
-    comp_id: int
+    comp_id: str
     comp_tm_name: str
     comp_name: str
     club_id: int
@@ -70,7 +70,7 @@ class FixturesSchema(pdt.BaseModel):
 class MatchLineupsSchema(pdt.BaseModel):
     match_id: int
     matchday: int
-    comp_id: int
+    comp_id: str
     comp_name: str
     club_id: int
     club_name: str
@@ -91,7 +91,7 @@ class MatchLineupsSchema(pdt.BaseModel):
 class MatchActionsSchema(pdt.BaseModel):
     match_id: int
     matchday: int
-    comp_id: int
+    comp_id: str
     comp_name: str
     comp_tm_name: str
     season: int
@@ -141,7 +141,7 @@ class _CardAction(pdt.BaseModel):
 class MatchStatsSchema(pdt.BaseModel):
     match_id: int
     matchday: int
-    comp_id: int
+    comp_id: str
     comp_tm_name: str
     season: int
     home_team_stats: _StatsSchema
