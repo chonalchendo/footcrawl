@@ -46,7 +46,7 @@ class SquadsSchema(pdt.BaseModel):
 
 class FixturesSchema(pdt.BaseModel):
     match_id: int
-    matchday: int  # added in matchday
+    matchday: int | str
     match_date: str
     match_time: str
     comp_id: str
@@ -63,7 +63,7 @@ class FixturesSchema(pdt.BaseModel):
     match_result: str
     home_team_league_position: str | None
     away_team_league_position: str | None
-    attendance: str
+    attendance: float | str
     manager: str
 
 
