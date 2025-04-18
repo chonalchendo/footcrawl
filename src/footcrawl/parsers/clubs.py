@@ -24,11 +24,11 @@ class ClubsParser(base.Parser):
         self.__total_items = len(rows)
 
         url = response.url
-        split_url = urlparse(str(url)).path.split("/")
-        league = split_url[1]
-        league_id = split_url[4]
+        split_comp_url = urlparse(str(url)).path.split("/")
+        comp_name = split_comp_url[1]
+        comp_id = split_comp_url[4]
 
-        metadata = {"league": league, "league_id": league_id}
+        metadata = {"comp_tm_name": comp_id, "comp_id": comp_name}
 
         for row in rows:
             data = self._parsers(row)
@@ -69,9 +69,9 @@ class ClubsParser(base.Parser):
             "squad_size": squad_size,
             "average_age": avg_age,
             "foreign_players": foreign_players,
-            "team_link": link,
-            "tm_name": tm_name,
-            "tm_id": tm_id,
+            "club_link": link,
+            "club_tm_name": tm_name,
+            "club_id": tm_id,
             "season": season,
         }
 
