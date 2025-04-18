@@ -180,9 +180,6 @@ class FixturesParser(base.Parser):
         match_report_url = self._get_match_report_url(stats)
         return match_report_url.split("/")[4]
 
-    def _get_matchday_number(self) -> str:
-        return None
-
     @T.override
     @property
     def get_metrics(self) -> metrics_.MetricsDict:
