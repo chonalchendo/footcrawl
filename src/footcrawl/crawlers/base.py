@@ -4,8 +4,9 @@ import typing as T
 import aiohttp
 import pydantic as pdt
 
-from footcrawl import client, parsers, tasks
+from footcrawl import client
 from footcrawl import metrics as metrics_
+from footcrawl import parsers, tasks
 from footcrawl.io import datasets, files, services
 
 type Locals = dict[str, T.Any]
@@ -71,12 +72,14 @@ class Crawler(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid")
         logger = self.logger_service.logger()
 
         resp = await client.Response(url=url, session=session, metrics=self.metrics)()
+        logger.debug("Parsing url: {}", resp.url)
 
         async for item in self.parser.parse(response=resp):
+            logger.debug("Parsed item: {}", item)
+
             # Record items parsed
             self.metrics.record_parser(metrics={"items_parsed": 1})
 
-            logger.debug("Parsed item: {}", item)
             yield item
 
     def _format_url(self) -> str:
