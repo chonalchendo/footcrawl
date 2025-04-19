@@ -1,10 +1,9 @@
 import aiohttp
 import pydantic as pdt
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 from footcrawl import metrics as metrics_
 from footcrawl.io import services
-
-# from tenacity import retry, stop_after_attempt
 
 
 class AsyncClient(pdt.BaseModel, frozen=False, strict=True, extra="forbid"):
@@ -76,7 +75,9 @@ class Response:
     async def __call__(self, *args, **kwds):
         return await self._fetch_response()
 
-    # @retry(stop=stop_after_attempt(3))
+    @retry(
+        stop=stop_after_attempt(6), wait=wait_exponential(multiplier=1, min=4, max=10)
+    )
     async def _fetch_response(self) -> aiohttp.ClientResponse:
         logger = self.logger_service.logger()
         try:
