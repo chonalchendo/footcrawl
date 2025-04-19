@@ -39,7 +39,6 @@ class AsyncMatchLineupsCrawler(base.Crawler):
                 if self.matchday != "all":
                     fixtures = fixtures.filter(pl.col("matchday") == self.matchday)
 
-                fixtures = fixtures[:2]
                 for fixture in fixtures.iter_rows(named=True):
                     self.task_handler.create_task(
                         self._write_out(
