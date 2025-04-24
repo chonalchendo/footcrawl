@@ -1,5 +1,6 @@
 from .clubs import AsyncClubsCrawler
 from .fixtures import AsyncFixturesCrawler
+from .match_actions import AsyncMatchActionsCrawler
 from .match_lineups import AsyncMatchLineupsCrawler
 from .squads import AsyncSquadsCrawler
 
@@ -8,6 +9,7 @@ CrawlerKind = (
     | AsyncSquadsCrawler
     | AsyncFixturesCrawler
     | AsyncMatchLineupsCrawler
+    | AsyncMatchActionsCrawler
 )
 
 __all__ = [
@@ -15,4 +17,5 @@ __all__ = [
     "AsyncSquadsCrawler",
     "AsyncFixturesCrawler",
     "AsyncMatchLineupsCrawler",
+    "AsyncMatchActionsCrawler",
 ]
