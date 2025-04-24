@@ -33,10 +33,10 @@ class Parser(abc.ABC, pdt.BaseModel, strict=True, frozen=True, extra="forbid"):
         """
         pass
 
-    @abc.abstractmethod
-    def _parsers(self, row: "bs4.Tag") -> Item:
-        pass
-
+    # @abc.abstractmethod
+    # def _parsers(self, row: "bs4.Tag") -> Item:
+    #     pass
+    #
     @property
     @abc.abstractmethod
     def get_metrics(self) -> "metrics.MetricsDict":
