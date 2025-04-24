@@ -1,8 +1,8 @@
+from enum import Enum
 import typing as T
 from collections import defaultdict
 
 import bs4
-import pydantic as pdt
 
 from footcrawl import metrics as metrics_
 from footcrawl import schemas
@@ -12,13 +12,10 @@ if T.TYPE_CHECKING:
     import aiohttp
 
 
-class Actions(pdt.BaseModel):
-    GOALS: str = pdt.Field(default="Goals")
-    SUBS: str = pdt.Field(default="Substitutions")
-    CARDS: str = pdt.Field(default="Cards")
-
-
-Actions = Actions()
+class Actions(Enum):
+    GOALS = "Goals"
+    SUBS = "Substitutions"
+    CARDS = "Cards"
 
 
 class MatchActionsParser(base.Parser):
@@ -40,19 +37,19 @@ class MatchActionsParser(base.Parser):
 
             title = box.find("h2", class_="content-box-headline").text.strip()
 
-            if title == Actions.GOALS:
+            if title == Actions.GOALS.value:
                 goal_actions = self._get_actions(box)
                 for action in goal_actions:
                     goal_handler = GoalAction(action)
                     data["goals"].append(goal_handler.get_goal_action)
 
-            if title == Actions.SUBS:
+            if title == Actions.SUBS.value:
                 sub_actions = self._get_actions(box)
                 for action in sub_actions:
                     sub_handler = SubAction(action)
                     data["substitutions"].append(sub_handler.get_sub_action)
 
-            if title == Actions.CARDS:
+            if title == Actions.CARDS.value:
                 card_actions = self._get_actions(box)
                 for action in card_actions:
                     card_handler = CardAction(action)
@@ -248,7 +245,7 @@ class SubAction:
         return {"club_id": club_id, "club_tm_name": club_tm_name, "club_name": club}
 
     def _get_sub_reason(self, box: bs4.Tag) -> dict[str, str]:
-        reason = box.find("div", class_="sb-aktion-spielstand").find("span")["title"]
+        reason = box.find('span', class_='hide-for-small').text.strip()
         return {"reason": reason}
 
     def _get_player_on_content(self, box: bs4.Tag) -> bs4.Tag:
