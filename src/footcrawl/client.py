@@ -75,9 +75,9 @@ class Response:
     async def __call__(self, *args, **kwds):
         return await self._fetch_response()
 
-    @retry(
-        stop=stop_after_attempt(6), wait=wait_exponential(multiplier=1, min=4, max=10)
-    )
+    # @retry(
+    #     stop=stop_after_attempt(6), wait=wait_exponential(multiplier=1, min=4, max=10)
+    # )
     async def _fetch_response(self) -> aiohttp.ClientResponse:
         logger = self.logger_service.logger()
         try:
