@@ -145,7 +145,7 @@ class FixturesParser(base.Parser):
             "match_report_url": match_report_url,
             "match_result": match_result,
         }
-        
+
     def _get_matchday(self, stats: list[bs4.Tag]):
         return stats[0].text.strip()
 

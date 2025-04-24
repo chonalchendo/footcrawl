@@ -36,7 +36,6 @@ class Loader(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid"):
         return self.path.format(season=season)
 
 
-
 class JsonLoader(Loader):
     KIND: T.Literal["JsonLoader"] = "JsonLoader"
 
@@ -68,6 +67,7 @@ class JsonDataFrameLoader(Loader):
             raise FileNotFoundError(f"File not found: {formatted_path}")
 
         return pl.read_ndjson(formatted_path)
+
 
 LoaderKind = JsonLoader | JsonDataFrameLoader
 

@@ -4,9 +4,8 @@ import typing as T
 import aiohttp
 import pydantic as pdt
 
-from footcrawl import client
+from footcrawl import client, parsers, tasks
 from footcrawl import metrics as metrics_
-from footcrawl import parsers, tasks
 from footcrawl.io import datasets, files, services
 
 type Locals = dict[str, T.Any]

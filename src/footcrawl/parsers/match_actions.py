@@ -13,10 +13,10 @@ if T.TYPE_CHECKING:
 
 
 class Actions(pdt.BaseModel):
-    GOALS: str = pdt.Field(default='Goals')
-    SUBS: str = pdt.Field(default='Substitutions')
-    CARDS: str = pdt.Field(default='Cards')
-    
+    GOALS: str = pdt.Field(default="Goals")
+    SUBS: str = pdt.Field(default="Substitutions")
+    CARDS: str = pdt.Field(default="Cards")
+
 
 Actions = Actions()
 
@@ -33,14 +33,13 @@ class MatchActionsParser(base.Parser):
 
         data = defaultdict(list)
         for i, box in enumerate(boxes):
-            
             if i == 0:
                 metadata = self._get_metadata(box)
                 data.update(metadata)
                 continue
 
-            title = box.find('h2', class_='content-box-headline').text.strip()
-            
+            title = box.find("h2", class_="content-box-headline").text.strip()
+
             if title == Actions.GOALS:
                 goal_actions = self._get_actions(box)
                 for action in goal_actions:
@@ -59,14 +58,14 @@ class MatchActionsParser(base.Parser):
                     card_handler = CardAction(action)
                     data["cards"].append(card_handler.get_card_action)
 
-        if 'goals' not in data:
-            data['goals'] = []
-            
-        if 'substitutions' not in data:
-            data['substitutions'] = []
-            
-        if 'cards' not in data:
-            data['cards'] = []
+        if "goals" not in data:
+            data["goals"] = []
+
+        if "substitutions" not in data:
+            data["substitutions"] = []
+
+        if "cards" not in data:
+            data["cards"] = []
 
         valid_data = self._validate(
             data=dict(data), validator=schemas.MatchActionsSchema
