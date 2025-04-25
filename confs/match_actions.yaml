@@ -8,7 +8,7 @@ crawler:
     path: data/transfermarkt/{season}/fixtures.json  # need match ID to run scraper
   output:
     KIND: ndjson
-    base_path: data/transfermarkt/{season}/match_actions.json
+    base_path: data/transfermarkt/{season}/match_actions/matchday_{matchday}.json
     overwrite: true
   http_client:
     timeout: 300
