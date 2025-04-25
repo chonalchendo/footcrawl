@@ -28,7 +28,7 @@ class AsyncMatchLineupsCrawler(base.Crawler):
         self.file_handler.set_original_path(path=self.output.base_path)
 
         if self.output.overwrite:
-            self.file_handler.check_filepaths(seasons=self.seasons)
+            self.file_handler.check_filepaths(seasons=self.seasons, matchday=self.matchday)
 
         async with self.http_client as client:
             session = client.get_session
@@ -44,6 +44,7 @@ class AsyncMatchLineupsCrawler(base.Crawler):
                         self._write_out(
                             session=session,
                             season=season,
+                            matchday=self.matchday,
                             url=self._format_url(
                                 home_team=fixture["home_club_tm"],
                                 away_team=fixture["away_club_tm"],

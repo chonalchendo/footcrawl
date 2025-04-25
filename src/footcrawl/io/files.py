@@ -21,14 +21,24 @@ class FileHandler(pdt.BaseModel, strict=True, frozen=False, extra="forbid"):
             raise FileNotFoundError(f"File not found: {path}")
         Path(path).unlink()
 
-    def check_filepaths(self, seasons: int) -> None:
+    def check_filepaths(self, seasons: list[int], matchday: str | None = None) -> None:
         for season in seasons:
-            output_path_ = self._orig_path.format(season=season)
+            # output_path_ = self._orig_path.format(season=season)
+            format_params = {"season": season}
+
+            if matchday:
+                format_params['matchday'] = matchday
+                
+            output_path_ = self._orig_path.format(**format_params)
+
             if self.exists(path=output_path_):
                 self.remove(path=output_path_)
 
-    def format_original_path(self, season: int) -> str:
-        return self._orig_path.format(season=season)
+    def format_original_path(self, season: int, matchday: str | None = None) -> str:
+        format_params = {"season": season}
+        if matchday:
+            format_params["matchday"] = matchday
+        return self._orig_path.format(**format_params)
 
     def set_original_path(self, path: str) -> None:
         """Set the original path for the file handler."""
