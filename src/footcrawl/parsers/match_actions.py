@@ -1,6 +1,6 @@
-from enum import Enum
 import typing as T
 from collections import defaultdict
+from enum import Enum
 
 import bs4
 
@@ -245,7 +245,7 @@ class SubAction:
         return {"club_id": club_id, "club_tm_name": club_tm_name, "club_name": club}
 
     def _get_sub_reason(self, box: bs4.Tag) -> dict[str, str]:
-        reason = box.find('span', class_='hide-for-small').text.strip()
+        reason = box.find("span", class_="hide-for-small").text.strip()
         return {"reason": reason}
 
     def _get_player_on_content(self, box: bs4.Tag) -> bs4.Tag:

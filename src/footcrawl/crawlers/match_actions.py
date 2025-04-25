@@ -28,7 +28,9 @@ class AsyncMatchActionsCrawler(base.Crawler):
         self.file_handler.set_original_path(path=self.output.base_path)
 
         if self.output.overwrite:
-            self.file_handler.check_filepaths(seasons=self.seasons, matchday=self.matchday)
+            self.file_handler.check_filepaths(
+                seasons=self.seasons, matchday=self.matchday
+            )
 
         async with self.http_client as client:
             session = client.get_session

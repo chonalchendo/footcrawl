@@ -56,7 +56,7 @@ class Crawler(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid")
         session: aiohttp.ClientSession,
         url: str,
         season: int,
-        matchday: str | None = None
+        matchday: str | None = None,
     ) -> None:
         logger = self.logger_service.logger()
 
@@ -64,7 +64,7 @@ class Crawler(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid")
             format_params = {"season": season}
             if matchday:
                 format_params["matchday"] = matchday
-                
+
             formatted_path = self.file_handler.format_original_path(**format_params)
 
             logger.info("Writing to path: {}", formatted_path)

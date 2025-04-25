@@ -27,8 +27,8 @@ class FileHandler(pdt.BaseModel, strict=True, frozen=False, extra="forbid"):
             format_params = {"season": season}
 
             if matchday:
-                format_params['matchday'] = matchday
-                
+                format_params["matchday"] = matchday
+
             output_path_ = self._orig_path.format(**format_params)
 
             if self.exists(path=output_path_):
