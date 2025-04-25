@@ -13,6 +13,7 @@ default:
 
 import "tasks/check.just"
 import "tasks/clean.just"
+import "tasks/crawler.just"
 import "tasks/docker.just"
 import "tasks/format.just"
 import "tasks/package.just"
