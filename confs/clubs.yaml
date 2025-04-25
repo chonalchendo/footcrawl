@@ -1,7 +1,7 @@
 crawler:
   KIND: clubs
   url: "https://transfermarkt.co.uk/{league}/startseite/wettbewerb/{league_id}/plus/?saison_id={season}"
-  seasons: [2023, 2024]
+  seasons: [2024]
   leagues: 
     - name: "premier-league"
       id: "GB1"
@@ -18,6 +18,7 @@ crawler:
     base_path: data/transfermarkt/{season}/clubs.json
     overwrite: true
   http_client:
+    timeout: 300
     headers: {
       "User-Agent": "",
       "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",

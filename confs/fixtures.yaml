@@ -1,7 +1,7 @@
 crawler:
   KIND: fixtures
   url: "https://www.transfermarkt.co.uk/{club}/spielplan/verein/{club_id}/saison_id/{season}/plus/1#{league_id}"
-  seasons: [2023]
+  seasons: [2024]
   input:
     KIND: JsonLoader
     path: data/transfermarkt/{season}/clubs.json
@@ -10,6 +10,7 @@ crawler:
     base_path: data/transfermarkt/{season}/fixtures.json
     overwrite: true
   http_client:
+    timeout: 300
     headers: {
       "User-Agent": "",
       "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
