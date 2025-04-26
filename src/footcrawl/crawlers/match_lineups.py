@@ -9,7 +9,7 @@ from footcrawl.io import datasets
 
 
 class AsyncMatchLineupsCrawler(base.Crawler):
-    KIND: T.Literal["match_lineups"]
+    KIND: T.Literal["match_lineups"] = "match_lineups"
 
     seasons: list[int]
     matchday: str
