@@ -28,7 +28,7 @@ class ClubsParser(base.Parser):
         comp_name = split_comp_url[1]
         comp_id = split_comp_url[4]
 
-        metadata = {"comp_tm_name": comp_id, "comp_id": comp_name}
+        metadata = {"comp_tm_name": comp_name, "comp_id": comp_id}
 
         for row in rows:
             data = self._parsers(row)
