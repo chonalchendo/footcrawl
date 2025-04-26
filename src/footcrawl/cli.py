@@ -18,7 +18,9 @@ parser = argparse.ArgumentParser(
     description="Run a crawler job from YAML/JSON configuration files."
 )
 parser.add_argument("files", nargs="*", help="Config files for the job")
-parser.add_argument('--seasons', nargs="*", type=int, help="Pass seasons to crawl from CLI")
+parser.add_argument(
+    "--seasons", nargs="*", type=int, help="Pass seasons to crawl from CLI"
+)
 parser.add_argument(
     "-s", "--schema", action="store_true", help="Print settings schema and exit."
 )
@@ -52,13 +54,13 @@ def execute(argv: list[str] | None = None) -> int:
     # parse user agent
     user_agent = os.getenv("USER_AGENT")
     object_["crawler"]["http_client"]["headers"]["User-Agent"] = user_agent
-    
+
     # update seasons with cli args
     if args.seasons:
-        object_['crawler']['seasons'] = args.seasons
+        object_["crawler"]["seasons"] = args.seasons
 
     setting = settings.MainSettings.model_validate(object_)
-    
+
     # start the crawler
     asyncio.run(setting.crawler.crawl())
     return 0

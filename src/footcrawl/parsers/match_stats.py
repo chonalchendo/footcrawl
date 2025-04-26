@@ -41,7 +41,7 @@ class MatchStatsParser(base.Parser):
 
             if i == Index.STATS.value:
                 stats_exist = self._check_if_stats_exist(box)
-                
+
                 if not stats_exist:
                     null_stats = self._return_null_stats()
                     data.update(null_stats)
@@ -112,13 +112,12 @@ class MatchStatsParser(base.Parser):
 
     def _check_if_stats_exist(self, box: bs4.Tag) -> bool:
         stats_title: str = box.find("h2", class_="content-box-headline").text.strip()
-        if stats_title.lower() != 'statistics':
+        if stats_title.lower() != "statistics":
             return False
         return True
 
     @staticmethod
     def _return_null_stats() -> dict[str, dict[str, None]]:
-
         stats = {
             "club_id": None,
             "club_tm_name": None,
