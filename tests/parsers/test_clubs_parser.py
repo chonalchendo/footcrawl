@@ -47,17 +47,17 @@ async def test_clubs_parser():
     # Verify all schema fields are present
     expected_keys = {
         "club",
+        "club_id",
+        "club_link",
+        "club_tm_name",
+        "comp_id",
+        "comp_tm_name",
         "squad_size",
         "average_age",
         "foreign_players",
         "season",
         "average_player_value",
         "total_player_value",
-        "team_link",
-        "tm_name",
-        "tm_id",
-        "league",
-        "league_id",
     }
     assert set(result.keys()) == expected_keys, (
         f"Missing keys: {expected_keys - set(result.keys())}"
@@ -65,17 +65,17 @@ async def test_clubs_parser():
 
     # Specific assertions
     assert result["club"] == "Arsenal FC"
-    assert result["squad_size"] == "40"
-    assert result["average_age"] == "24.6"
-    assert result["foreign_players"] == "23"
-    assert result["tm_name"] == "arsenal-fc"
-    assert result["tm_id"] == "11"
-    assert result["season"] == "2023"
+    assert result["squad_size"] == 40
+    assert result["average_age"] == 24.6
+    assert result["foreign_players"] == 23
+    assert result["club_tm_name"] == "arsenal-fc"
+    assert result["club_id"] == 11
+    assert result["season"] == 2023
     assert result["average_player_value"] == "€30.08m"
     assert result["total_player_value"] == "€1.20bn"
-    assert result["team_link"] == "/arsenal-fc/kader/verein/11/saison_id/2023"
-    assert result["league"] == "premier-league"
-    assert result["league_id"] == "GB1"
+    assert result["club_link"] == "/arsenal-fc/kader/verein/11/saison_id/2023"
+    assert result["comp_tm_name"] == "premier-league"
+    assert result["comp_id"] == "GB1"
 
     # Verify metrics
     metrics = parser.get_metrics
