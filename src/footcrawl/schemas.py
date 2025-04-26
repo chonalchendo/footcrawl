@@ -151,15 +151,15 @@ class MatchStatsSchema(pdt.BaseModel):
 
 
 class _StatsSchema(pdt.BaseModel):
-    club_id: int
-    club_tm_name: str
-    total_shots: int
-    shots_off_target: int
-    shots_saved: int
-    corners: int
-    free_kicks: int
-    fouls: int
-    offsides: int
+    club_id: int | None
+    club_tm_name: str | None
+    total_shots: int | None
+    shots_off_target: int | None
+    shots_saved: int | None
+    corners: int | None
+    free_kicks: int | None
+    fouls: int | None
+    offsides: int | None
 
 
 SchemaKind = (
