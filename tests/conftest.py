@@ -67,7 +67,7 @@ def headers(user_agent: str) -> dict[str, str]:
 @pytest.fixture(scope="function")
 def async_client(headers: dict[str, str]) -> client.AsyncClient:
     """Return an async client."""
-    return client.AsyncClient(headers=headers)
+    return client.AsyncClient(headers=headers, timeout=100)
 
 
 # %% - Configs
