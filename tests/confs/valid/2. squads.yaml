@@ -4,7 +4,7 @@ crawler:
   seasons: [2024]
   input:
     KIND: JsonLoader
-    path: ${tests_path:}/transfermarkt/{season}/clubs.json   # take clubs data as an input
+    path: ${tests_path:}/data/transfermarkt/{season}/clubs_sample.json   # take clubs data as an input
   output:
     KIND: ndjson
     base_path: ${tmp_path:}/transfermarkt/{season}/squads.json
