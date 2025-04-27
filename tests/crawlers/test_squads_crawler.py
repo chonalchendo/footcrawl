@@ -1,7 +1,7 @@
 # %% IMPORTS
-import pytest
 from unittest.mock import Mock
 
+import pytest
 
 from footcrawl import client, crawlers, metrics, parsers
 from footcrawl.io import datasets, services
@@ -49,14 +49,14 @@ async def test_squads_crawler(
     }
 
     # check number of items parsed,
-    assert (
-        results["metrics_output"]["parser_metrics"]["items_parsed"] == 28
-    ), "Did not parse the expected number items"
+    assert results["metrics_output"]["parser_metrics"]["items_parsed"] == 28, (
+        "Did not parse the expected number items"
+    )
     # check season
     assert results["season"] == 2024, "Expected the most recent season in season list"
     # check club info
     assert len(results["clubs"]) == 1, "Expected two keys: league name and ID"
-    assert (
-        results["name"] == "manchester-city"
-    ), "Expected manchester-city as the club name"
+    assert results["name"] == "manchester-city", (
+        "Expected manchester-city as the club name"
+    )
     assert results["id"] == 281, "Expected manchester-city id 281"

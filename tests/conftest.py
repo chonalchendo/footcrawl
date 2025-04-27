@@ -2,11 +2,11 @@
 
 import os
 import typing as T
+from unittest.mock import Mock
 
 import _pytest.logging as pl
 import omegaconf
 import pytest
-from unittest.mock import Mock
 from dotenv import load_dotenv
 
 from footcrawl import client, metrics, parsers

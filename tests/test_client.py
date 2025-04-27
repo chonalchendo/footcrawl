@@ -13,7 +13,9 @@ async def test_async_client(
     headers: dict[str, str], logger_service: services.LoggerService
 ) -> None:
     # given
-    http_client = client_.AsyncClient(headers=headers, logger_service=logger_service, timeout=100)
+    http_client = client_.AsyncClient(
+        headers=headers, logger_service=logger_service, timeout=100
+    )
     # when
     async with http_client as client:
         session = client.get_session
