@@ -6,6 +6,7 @@ import typing as T
 import _pytest.logging as pl
 import omegaconf
 import pytest
+from unittest.mock import Mock
 from dotenv import load_dotenv
 
 from footcrawl import client, metrics, parsers
@@ -80,7 +81,6 @@ def extra_config(user_agent: str) -> str:
     config = f"""
     {{
         "crawler": {{
-            "url": "https://transfermarkt.co.uk/{{league}}/startseite/wettbewerb/{{league_id}}/plus/?saison_id={{season}}",
             "logger_service": {{
                 "level": "INFO",
             }},
@@ -104,6 +104,20 @@ def tmp_outputs_writer(tmp_outputs_path: str) -> datasets.AsyncNdJsonWriter:
     return datasets.AsyncNdJsonWriter(base_path=tmp_outputs_path)
 
 
+@pytest.fixture(scope="function")
+def mock_json_loader(tmp_club_info: list[dict[str, T.Any]]) -> Mock:
+    # Create a mock of the JsonLoader class
+    mock_loader = Mock(spec=datasets.JsonLoader)
+
+    # Configure the load method to return your fixture data
+    mock_loader.load.return_value = tmp_club_info
+
+    # If the crawler uses JsonLoader.KIND anywhere
+    mock_loader.KIND = "JsonLoader"
+
+    return mock_loader
+
+
 # %% - Parsers
 
 
@@ -111,6 +125,12 @@ def tmp_outputs_writer(tmp_outputs_path: str) -> datasets.AsyncNdJsonWriter:
 def clubs_parser() -> parsers.ClubsParser:
     """Return a clubs parser."""
     return parsers.ClubsParser()
+
+
+@pytest.fixture(scope="function")
+def squads_parser() -> parsers.SquadsParser:
+    """Return a clubs parser."""
+    return parsers.SquadsParser()
 
 
 # %% - Crawlers
@@ -123,9 +143,28 @@ def clubs_url() -> str:
 
 
 @pytest.fixture(scope="function")
+def squads_url() -> str:
+    """Return a squads url."""
+    return (
+        "https://transfermarkt.co.uk/{club}/kader/verein/{id}/saison_id/{season}/plus/1"
+    )
+
+
+@pytest.fixture(scope="function")
 def tmp_seasons() -> list[int]:
     """Return a list of seasons."""
     return [2023, 2024]
+
+
+@pytest.fixture(scope="function")
+def tmp_squad_seasons() -> list[int]:
+    """Return a list of seasons."""
+    return [2024]
+
+
+@pytest.fixture(scope="function")
+def tmp_club_info() -> list[dict[str, T.Any]]:
+    return [{"club_tm_name": "manchester-city", "club_id": 281}]
 
 
 @pytest.fixture(scope="function")
