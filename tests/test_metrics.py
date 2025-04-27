@@ -37,7 +37,7 @@ def test_crawler_metrics() -> None:
     }
 
 
-@pytest.mark.asyncio(loop_scope="session")
+@pytest.mark.asyncio
 async def test_crawler_metrics_record_request() -> None:
     # given
     mock = aiohttp.ClientSession

@@ -8,7 +8,7 @@ from footcrawl.io import services
 # %% - CLIENTS
 
 
-@pytest.mark.asyncio(loop_scope="session")
+@pytest.mark.asyncio
 async def test_async_client(
     headers: dict[str, str], logger_service: services.LoggerService
 ) -> None:
@@ -29,7 +29,7 @@ async def test_async_client(
     assert hasattr(http_client, "headers"), "HTTP client should have headers!"
 
 
-@pytest.mark.asyncio(loop_scope="session")
+@pytest.mark.asyncio
 async def test_session_runtime_error(async_client: client_.AsyncClient) -> None:
     # given
     with pytest.raises(RuntimeError) as error:
