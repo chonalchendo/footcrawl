@@ -158,6 +158,7 @@ def squads_url() -> str:
 
 @pytest.fixture(scope="function")
 def fixtures_url() -> str:
+    "Return a fixtures url."
     return "https://www.transfermarkt.co.uk/{club}/spielplan/verein/{club_id}/saison_id/{season}/plus/1#{league_id}"
 
 
