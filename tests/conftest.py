@@ -133,6 +133,12 @@ def squads_parser() -> parsers.SquadsParser:
     return parsers.SquadsParser()
 
 
+@pytest.fixture(scope="function")
+def fixtures_parser() -> parsers.FixturesParser:
+    """Return a clubs parser."""
+    return parsers.FixturesParser()
+
+
 # %% - Crawlers
 
 
@@ -151,6 +157,11 @@ def squads_url() -> str:
 
 
 @pytest.fixture(scope="function")
+def fixtures_url() -> str:
+    return "https://www.transfermarkt.co.uk/{club}/spielplan/verein/{club_id}/saison_id/{season}/plus/1#{league_id}"
+
+
+@pytest.fixture(scope="function")
 def tmp_seasons() -> list[int]:
     """Return a list of seasons."""
     return [2023, 2024]
@@ -163,8 +174,14 @@ def tmp_squad_seasons() -> list[int]:
 
 
 @pytest.fixture(scope="function")
+def tmp_fixtures_seasons() -> list[int]:
+    """Return a list of seasons."""
+    return [2024]
+
+
+@pytest.fixture(scope="function")
 def tmp_club_info() -> list[dict[str, T.Any]]:
-    return [{"club_tm_name": "manchester-city", "club_id": 281}]
+    return [{"club_tm_name": "manchester-city", "club_id": 281, "comp_id": "GB1"}]
 
 
 @pytest.fixture(scope="function")
