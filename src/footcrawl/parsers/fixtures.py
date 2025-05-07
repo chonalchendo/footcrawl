@@ -41,6 +41,7 @@ class FixturesParser(base.Parser):
                 "comp_name": comp_name,
                 "club_tm_name": club_tm_name,
                 "club_id": club_id,
+                "season": season,
             }
 
             table = self._get_table(box)
