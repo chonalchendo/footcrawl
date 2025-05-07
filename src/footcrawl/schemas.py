@@ -53,6 +53,7 @@ class FixturesSchema(pdt.BaseModel):
     comp_tm_name: str
     comp_name: str
     club_id: int
+    season: int
     club_tm_name: str
     home_club_tm: str
     home_club: str
