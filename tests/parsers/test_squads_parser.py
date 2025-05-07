@@ -80,9 +80,9 @@ async def test_squads_parser():
         "signed_from",
         "contract_expiry",
     }
-    assert (
-        set(result.keys()) == expected_keys
-    ), f"Missing keys: {expected_keys - set(result.keys())}"
+    assert set(result.keys()) == expected_keys, (
+        f"Missing keys: {expected_keys - set(result.keys())}"
+    )
 
     # Specific assertions
     assert result["player_id"] == 234509

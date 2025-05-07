@@ -136,9 +136,9 @@ async def test_fixtures_parser():
         "attendance",
         "manager",
     }
-    assert (
-        set(result.keys()) == expected_keys
-    ), f"Missing keys: {expected_keys - set(result.keys())}"
+    assert set(result.keys()) == expected_keys, (
+        f"Missing keys: {expected_keys - set(result.keys())}"
+    )
 
     # Specific assertions
     assert result["match_id"] == 4361261
