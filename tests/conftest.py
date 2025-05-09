@@ -4,9 +4,10 @@ import os
 import typing as T
 from unittest.mock import Mock
 
-import _pytest.logging as pl
+import _pytest.logging as pyl
 import omegaconf
 import pytest
+import polars as pl
 from dotenv import load_dotenv
 
 from footcrawl import client, metrics, parsers
@@ -118,6 +119,20 @@ def mock_json_loader(tmp_club_info: list[dict[str, T.Any]]) -> Mock:
     return mock_loader
 
 
+@pytest.fixture(scope="function")
+def matchday_mock_json_loader(tmp_matchday_info: pl.DataFrame) -> Mock:
+    # Create a mock of the JsonLoader class
+    mock_loader = Mock(spec=datasets.JsonDataFrameLoader)
+
+    # Configure the load method to return your fixture data
+    mock_loader.load.return_value = tmp_matchday_info
+
+    # If the crawler uses JsonLoader.KIND anywhere
+    mock_loader.KIND = "JsonDataFrameLoader"
+
+    return mock_loader
+
+
 # %% - Parsers
 
 
@@ -137,6 +152,11 @@ def squads_parser() -> parsers.SquadsParser:
 def fixtures_parser() -> parsers.FixturesParser:
     """Return a clubs parser."""
     return parsers.FixturesParser()
+
+
+@pytest.fixture(scope="function")
+def match_lineups_parser() -> parsers.MatchLineupsParser:
+    return parsers.MatchLineupsParser()
 
 
 # %% - Crawlers
@@ -163,6 +183,12 @@ def fixtures_url() -> str:
 
 
 @pytest.fixture(scope="function")
+def match_lineups_url() -> str:
+    "Return a match lineups url"
+    return "https://www.transfermarkt.co.uk/{home_team}_{away_team}/aufstellung/spielbericht/{match_id}"
+
+
+@pytest.fixture(scope="function")
 def tmp_seasons() -> list[int]:
     """Return a list of seasons."""
     return [2023, 2024]
@@ -181,8 +207,32 @@ def tmp_fixtures_seasons() -> list[int]:
 
 
 @pytest.fixture(scope="function")
+def tmp_match_lineups_seasons() -> list[int]:
+    return [2024]
+
+
+@pytest.fixture(scope="function")
 def tmp_club_info() -> list[dict[str, T.Any]]:
     return [{"club_tm_name": "manchester-city", "club_id": 281, "comp_id": "GB1"}]
+
+
+@pytest.fixture(scope="function")
+def tmp_matchday_info() -> pl.DataFrame:
+
+    matchday_data = [
+        {
+            "match_id": "4361261",
+            "matchday": "1",
+            "home_club_tm": "manchester-united",
+            "away_club_tm": "fulham-fc",
+        }
+    ]
+    return pl.DataFrame(matchday_data)
+
+
+@pytest.fixture(scope="function")
+def tmp_matchday() -> int:
+    return "1"
 
 
 @pytest.fixture(scope="function")
@@ -209,8 +259,8 @@ def logger_service() -> T.Generator[services.LoggerService, None, None]:
 
 @pytest.fixture
 def logger_caplog(
-    caplog: pl.LogCaptureFixture, logger_service: services.LoggerService
-) -> T.Generator[pl.LogCaptureFixture, None, None]:
+    caplog: pyl.LogCaptureFixture, logger_service: services.LoggerService
+) -> T.Generator[pyl.LogCaptureFixture, None, None]:
     """Extend pytest caplog fixture with the logger service (loguru)."""
     # https://loguru.readthedocs.io/en/stable/resources/migration.html#replacing-caplog-fixture-from-pytest-library
     logger = logger_service.logger()
