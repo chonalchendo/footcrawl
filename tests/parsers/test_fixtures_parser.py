@@ -11,95 +11,11 @@ from footcrawl import parsers
 
 
 @pytest.mark.asyncio
-async def test_fixtures_parser():
+async def test_fixtures_parser(fixtures_html_sample: str, fixtures_parser_url: str):
     # Given: A mock HTML content representing a clubs table
-    mock_html = """
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Premier League Information</title>
-    <meta charset="UTF-8">
-</head>
-<body>
-    <div class="box"></div>
-    <div class="box"></div>
-    <div class="box"></div>
-    <div class="box">
-        <h2 class="content-box-headline content-box-headline--inverted content-box-headline--logo 
-        content-box-headline--bottom-bordered content-box-headline--extra-space">
-            <a href="/premier-league/startseite/wettbewerb/GB1/saison_id/2024" name="GB1">
-                <img alt="Premier League" class="" src="https://tmssl.akamaized.net//images/logo/medium/gb1.png?lm=1521104656" 
-                title="Premier League"/>Premier League
-            </a>
-        </h2>
-        <div class="tm-tabs">
-            <a class="tm-tab" href="/manchester-united/spielplan/verein/985/saison_id/2024#GB1">
-                <div class=""><span>Compact</span></div>
-            </a>
-            <a class="tm-tab tm-tab__active--parent" href="/manchester-united/spielplan/verein/985/saison_id/2024/plus/1#GB1">
-                <div class="tm-tab__active"><span>Detailed</span></div>
-            </a>
-        </div>
-        <div class="responsive-table">
-            <table>
-                <thead>
-                    <tr>
-                        <th class="zentriert">Matchday</th>
-                        <th class="zentriert">Date</th>
-                        <th class="zentriert">Time</th>
-                        <th colspan="2">Home team</th>
-                        <th colspan="2">Away team</th>
-                        <th class="zentriert">System of play</th>
-                        <th>Coach</th>
-                        <th class="rechts">Attendance</th>
-                        <th class="zentriert">Result</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                    <td class="zentriert">
-                    <a href="/test/spieltag/wettbewerb/GB1/saison_id/2024/spieltag/1">1</a> </td>
-                    <td class="zentriert">
-                                                            Fri Aug 16, 2024                                    </td>
-                    <td class="zentriert">
-                                                            8:00 PM                                    </td>
-                    <td class="zentriert no-border-rechts">
-                    <a href="/manchester-united/startseite/verein/985"><img alt="Manchester United" class="lazy" 
-                    data-src="https://tmssl.akamaized.net//images/wappen/profil/985.png?lm=1457975903" 
-                    src="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" style="max-width: 15px;" 
-                    title="Manchester United"/></a> </td>
-                    <td class="no-border-links hauptlink">
-                    <a href="/manchester-united/startseite/verein/985/saison_id/2024" title="Manchester United">Man Utd</a> <span 
-                    class="tabellenplatz">(15.)</span> </td>
-                    <td class="zentriert no-border-rechts">
-                    <a href="/fulham-fc/startseite/verein/931"><img alt="Fulham FC" class="lazy" 
-                    data-src="https://tmssl.akamaized.net//images/wappen/profil/931.png?lm=1556831687" 
-                    src="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" style="max-width: 15px;" 
-                    title="Fulham FC"/></a> </td>
-                    <td class="no-border-links 1">
-                    <a href="/fc-fulham/startseite/verein/931/saison_id/2024" title="Fulham FC">Fulham</a> <span 
-                    class="tabellenplatz">(11.)</span> </td>
-                    <td class="zentriert">
-                                                                4-2-3-1                                        </td>
-                    <td><a href="/erik-ten-hag/profil/trainer/3816" id="0" title="Erik ten Hag">Erik ten Hag</a></td>
-                    <td class="rechts">
-                                                                73.297                                        </td>
-                    <td class="zentriert"><a class="ergebnis-link" href="/spielbericht/index/spielbericht/4361261" id="4361261" 
-                    title="Match report"><span class="greentext">1:0 </span></a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</body>
-</html>
-    """
-    mock_url = "https://www.transfermarkt.co.uk/manchester-united/spielplan/verein/985/saison_id/2024/plus/1#GB1"
-
-    # Mock response object
     mock_response = AsyncMock(spec=aiohttp.ClientResponse)
-    mock_response.text.return_value = mock_html
-    mock_response.url = mock_url
+    mock_response.text.return_value = fixtures_html_sample
+    mock_response.url = fixtures_parser_url
 
     # When: Parsing the mock response
     parser = parsers.FixturesParser()

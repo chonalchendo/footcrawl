@@ -11,41 +11,11 @@ from footcrawl import parsers
 
 
 @pytest.mark.asyncio
-async def test_squads_parser():
+async def test_squads_parser(squads_html_sample: str, squads_parser_url: str):
     # Given: A mock HTML content representing a squads table
-    mock_html = """
-    <html>
-        <table class="items">
-        <thead>
-        <tr>
-        <th class="zentriert" id="yw1_c0"><a class="sort-link asc" href="/manchester-united/kader/verein/985/saison_id/2024/plus/1/sort/trikotNumber.desc">#</a></th><th id="yw1_c1"><a class="sort-link" href="/manchester-united/kader/verein/985/saison_id/2024/plus/1/sort/name">Player</a></th><th class="zentriert" id="yw1_c2"><a class="sort-link" href="/manchester-united/kader/verein/985/saison_id/2024/plus/1/sort/dateOfBirthTimestamp">Date of birth/Age</a></th><th class="zentriert" id="yw1_c3">Nat.</th><th class="zentriert" id="yw1_c4"><a class="sort-link" href="/manchester-united/kader/verein/985/saison_id/2024/plus/1/sort/size.desc">Height</a></th><th class="zentriert" id="yw1_c5"><a class="sort-link" href="/manchester-united/kader/verein/985/saison_id/2024/plus/1/sort/foot.desc">Foot</a></th><th class="zentriert" id="yw1_c6"><a class="sort-link" href="/manchester-united/kader/verein/985/saison_id/2024/plus/1/sort/teamMemberSinceTimestamp">Joined</a></th><th class="zentriert" id="yw1_c7">Signed from</th><th class="zentriert" id="yw1_c8"><a class="sort-link" href="/manchester-united/kader/verein/985/saison_id/2024/plus/1/sort/contractEndTimestamp">Contract</a></th><th class="rechts" id="yw1_c9"><a class="sort-link desc" href="/manchester-united/kader/verein/985/saison_id/2024/plus/1/sort/marketValueRaw">Market value</a></th></tr>
-        </thead>
-        <tbody>
-        <tr class="odd">
-        <td class="zentriert rueckennummer bg_Torwart" title="Goalkeeper"><div class="rn_nummer">24</div></td><td class="posrela">
-        <table class="inline-table">
-        <tr>
-        <td rowspan="2">
-        <img alt="André Onana" class="bilderrahmen-fixed lazy lazy" data-src="https://img.a.transfermarkt.technology/portrait/medium/234509-1686929812.jpg?lm=1" src="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" title="André Onana"> </img></td>
-        <td class="hauptlink">
-        <a href="/andre-onana/profil/spieler/234509">
-                        André Onana            </a>
-        </td>
-        </tr>
-        <tr>
-        <td>
-                    Goalkeeper        </td>
-        </tr>
-        </table>
-        </td><td class="zentriert">Apr 2, 1996 (29)</td><td class="zentriert"><img alt="Cameroon" class="flaggenrahmen" src="https://tmssl.akamaized.net//images/flagge/verysmall/31.png?lm=1520611569" title="Cameroon"/></td><td class="zentriert">1,90m</td><td class="zentriert">right</td><td class="zentriert">Jul 20, 2023</td><td class="zentriert"><a href="/inter-mailand/startseite/verein/46/saison_id/2023" title="Inter Milan: Ablöse €50.20m"><img alt="Inter Milan" class="" src="https://tmssl.akamaized.net//images/wappen/verysmall/46.png?lm=1618900989" title="Inter Milan"/></a></td><td class="zentriert">Jun 30, 2028</td><td class="rechts hauptlink"><a href="/andre-onana/marktwertverlauf/spieler/234509">€32.00m</a></td></tr>
-    </html>
-    """
-    mock_url = "https://transfermarkt.co.uk/manchester-united/kader/verein/985/saison_id/2024/plus/1"
-
-    # Mock response object
     mock_response = AsyncMock(spec=aiohttp.ClientResponse)
-    mock_response.text.return_value = mock_html
-    mock_response.url = mock_url
+    mock_response.text.return_value = squads_html_sample
+    mock_response.url = squads_parser_url
 
     # When: Parsing the mock response
     parser = parsers.SquadsParser()

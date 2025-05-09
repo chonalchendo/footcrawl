@@ -11,29 +11,11 @@ from footcrawl import parsers
 
 
 @pytest.mark.asyncio
-async def test_clubs_parser():
+async def test_clubs_parser(clubs_parser_url: str, clubs_html_sample: str):
     # Given: A mock HTML content representing a clubs table
-    mock_html = """
-    <html>
-        <table class="items">
-            <tr class="even">
-                <td class="zentriert no-border-rechts"><a href="/fc-arsenal/startseite/verein/11/saison_id/2023" title="Arsenal FC"><img alt="Arsenal FC" class="tiny_wappen" src="https://tmssl.akamaized.net//images/wappen/tiny/11.png?lm=1489787850" title="Arsenal FC"/></a></td>
-                <td class="hauptlink no-border-links"><a href="/fc-arsenal/startseite/verein/11/saison_id/2023" title="Arsenal FC">Arsenal FC</a> </td>
-                <td class="zentriert"><a href="/arsenal-fc/kader/verein/11/saison_id/2023" title="Arsenal FC">40</a></td>
-                <td class="zentriert">24.6</td>
-                <td class="zentriert">23</td>
-                <td class="rechts">€30.08m</td>
-                <td class="rechts"><a href="/arsenal-fc/kader/verein/11/saison_id/2023" title="Arsenal FC">€1.20bn</a></td>
-            </tr>
-        </table>
-    </html>
-    """
-    mock_url = "https://transfermarkt.co.uk/premier-league/startseite/wettbewerb/GB1/plus/?saison_id=2023"
-
-    # Mock response object
     mock_response = AsyncMock(spec=aiohttp.ClientResponse)
-    mock_response.text.return_value = mock_html
-    mock_response.url = mock_url
+    mock_response.text.return_value = clubs_html_sample
+    mock_response.url = clubs_parser_url
 
     # When: Parsing the mock response
     parser = parsers.ClubsParser()
