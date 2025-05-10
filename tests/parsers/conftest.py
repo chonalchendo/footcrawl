@@ -19,6 +19,11 @@ def fixtures_parser_url() -> str:
     return "https://www.transfermarkt.co.uk/manchester-united/spielplan/verein/985/saison_id/2024/plus/1#GB1"
 
 
+@pytest.fixture(scope="function")
+def match_lineups_parser_url() -> str:
+    return "https://www.transfermarkt.co.uk/manchester-united_liverpool-fc/aufstellung/spielbericht/4361296"
+
+
 # %% Html
 @pytest.fixture(scope="function")
 def clubs_html_sample() -> str:
@@ -153,3 +158,56 @@ def fixtures_html_sample() -> str:
 </body>
 </html>
     """
+    
+    
+@pytest.fixture(scope='function')
+def match_lineups_html_sample() -> str:
+    return """
+<div class="box sb-spielbericht-head">
+<div class="direct-headline">
+<div class="direct-headline__header-box">
+<div class="icons-profil">
+<div class="wappen">
+<img alt="Premier League" class="" src="https://tmssl.akamaized.net//images/logo/mediumsmall/gb1.png?lm=1521104656"
+title="Premier League"> </img></div>
+<span class="oddsServe" data-competition="GB1" data-gameday="3" data-match="4361296"></span> <div 
+</div>
+<div class="box">
+<h2 class="content-box-headline content-box-headline--inverted content-box-headline--logo 
+content-box-headline--extra-space">
+<a href="/manchester-united/startseite/verein/985/saison_id/2024" title="Manchester United"><img alt="Manchester 
+United" class="" src="https://tmssl.akamaized.net//images/wappen/medium/985.png?lm=1457975903" title="Manchester 
+United"/></a>Starting Line-up                    </h2>
+<div class="responsive-table">
+<table class="items">
+<tr>
+<td class="zentriert rueckennummer bg_Torwart" title="Goalkeeper">
+<div class="rn_nummer">
+                  24
+                </div>
+</td>
+<td class="" title="">
+<table class="inline-table">
+<tr>
+<td rowspan="2">
+<a href="/andre-onana/profil/spieler/234509">
+<img alt="André Onana" class="bilderrahmen-fixed" 
+src="https://img.a.transfermarkt.technology/portrait/small/234509-1686929812.jpg?lm=1" title="André Onana"/>
+</a>
+</td>
+<td><a class="wichtig" href="/andre-onana/leistungsdatendetails/spieler/234509/saison/2024/wettbewerb/GB1" 
+title="André Onana">André Onana</a> (28 years old)
+                                                    </td>
+</tr>
+<tr>
+<td>Goalkeeper, €35.00m</td>
+</tr>
+</table>
+</td>
+<td class="zentriert">
+<img alt="Cameroon" class="flaggenrahmen" 
+src="https://tmssl.akamaized.net//images/flagge/small/31.png?lm=1520611569" title="Cameroon"/>
+</td>
+</tr>
+</div>
+"""
