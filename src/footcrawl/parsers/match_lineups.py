@@ -23,6 +23,8 @@ class MatchLineupsParser(base.Parser):
         for i, box in enumerate(boxes):
             if i == 0:
                 metadata = self._get_match_metadata(box)
+                if not metadata:
+                    raise ValueError("Metadata not found in the response.")
                 continue
 
             club_info = self._get_club_info(box)
@@ -31,16 +33,16 @@ class MatchLineupsParser(base.Parser):
             items = box.find("table", class_="items")
             content = items.find_all("tr")[::3]
 
-            if not metadata:
-                raise ValueError("Metadata not found in the response.")
-
             for player in content:
                 data = {
                     **metadata,
                     **club_info,
                     **self._parsers(player),
-                    "is_starter": True if i in [1, 2] else False,
+                    **self._get_is_starter(i),
                 }
+                
+                self.__total_items = 1
+                
                 valid_data = self._validate(
                     data=data, validator=schemas.MatchLineupsSchema
                 )
@@ -120,8 +122,9 @@ class MatchLineupsParser(base.Parser):
             return {"position": info[0], "current_value": None}
         return {"position": info[0], "current_value": info[1]}
 
-    def _get_is_starter(self, index: int) -> bool:
-        return True if index in [1, 2] else False
+    def _get_is_starter(self, index: int) -> dict[str, bool]:
+        is_starter = True if index in [1, 2] else False
+        return {"is_starter": is_starter}
 
     @T.override
     @property
