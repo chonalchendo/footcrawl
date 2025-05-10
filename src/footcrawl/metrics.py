@@ -81,6 +81,9 @@ class CrawlerMetrics(Metrics):
         """Calculate the request success rate."""
         if self.successful_requests > 0 and self.failed_requests == 0:
             return 100.0
+        
+        if self.total_requests == 0:
+            return 0.0
 
         try:
             return round(self.successful_requests / self.total_requests, 2) * 100
