@@ -1,0 +1,20 @@
+crawler:
+  KIND: match_actions
+  url: "https://www.transfermarkt.co.uk/spielbericht/index/spielbericht/{match_id}" 
+  seasons: [2024]
+  matchday: "1" # change to whatever the current matchday is
+  input:
+    KIND: JsonDataFrameLoader 
+    path: ${tests_path:}/data/transfermarkt/{season}/fixtures_sample.json  # need match ID to run scraper
+  output:
+    KIND: ndjson
+    base_path: ${tmp_path:}/transfermarkt/{season}/match_actions/matchday_{matchday}.json
+    overwrite: true
+  http_client:
+    timeout: 300
+    headers: {
+      "User-Agent": "",
+      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+      "Accept-Language": "en-US,en;q=0.9",
+      "Accept-Encoding": "gzip, deflate, br" 
+      }
