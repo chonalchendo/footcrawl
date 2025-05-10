@@ -159,6 +159,16 @@ def match_lineups_parser() -> parsers.MatchLineupsParser:
     return parsers.MatchLineupsParser()
 
 
+@pytest.fixture(scope='function')
+def match_stats_parser() -> parsers.MatchStatsParser:
+    return parsers.MatchStatsParser()
+
+
+@pytest.fixture(scope='function')
+def match_actions_parser() -> parsers.MatchActionsParser:
+    return parsers.MatchActionsParser()
+
+
 # %% - Crawlers
 
 
@@ -188,6 +198,16 @@ def match_lineups_url() -> str:
     return "https://www.transfermarkt.co.uk/{home_team}_{away_team}/aufstellung/spielbericht/{match_id}"
 
 
+@pytest.fixture(scope='function')
+def match_stats_url() -> str:
+    return "https://www.transfermarkt.co.uk/{home_team}_{away_team}/statistik/spielbericht/{match_id}"
+
+
+@pytest.fixture(scope='function')
+def match_actions_url() -> str:
+    return "https://www.transfermarkt.co.uk/spielbericht/index/spielbericht/{match_id}" 
+
+
 @pytest.fixture(scope="function")
 def tmp_seasons() -> list[int]:
     """Return a list of seasons."""
@@ -207,7 +227,7 @@ def tmp_fixtures_seasons() -> list[int]:
 
 
 @pytest.fixture(scope="function")
-def tmp_match_lineups_seasons() -> list[int]:
+def tmp_matchday_seasons() -> list[int]:
     return [2024]
 
 
