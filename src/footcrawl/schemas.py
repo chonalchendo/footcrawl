@@ -124,7 +124,7 @@ class _SubAction(pdt.BaseModel):
     player_off_id: int
     player_off_tm_name: str
     player_off_name: str
-    player_on_id: str
+    player_on_id: int
     player_on_tm_name: str
     player_on_name: str
 
