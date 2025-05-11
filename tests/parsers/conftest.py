@@ -24,6 +24,11 @@ def match_lineups_parser_url() -> str:
     return "https://www.transfermarkt.co.uk/manchester-united_liverpool-fc/aufstellung/spielbericht/4361296"
 
 
+@pytest.fixture(scope="function")
+def match_stats_parser_url() -> str:
+    return "https://www.transfermarkt.co.uk/manchester-united_liverpool-fc/statistik/spielbericht/4361296"
+
+
 # %% Html
 @pytest.fixture(scope="function")
 def clubs_html_sample() -> str:
@@ -158,9 +163,9 @@ def fixtures_html_sample() -> str:
 </body>
 </html>
     """
-    
-    
-@pytest.fixture(scope='function')
+
+
+@pytest.fixture(scope="function")
 def match_lineups_html_sample() -> str:
     return """
 <div class="box sb-spielbericht-head">
@@ -209,5 +214,217 @@ title="André Onana">André Onana</a> (28 years old)
 src="https://tmssl.akamaized.net//images/flagge/small/31.png?lm=1520611569" title="Cameroon"/>
 </td>
 </tr>
+</div>
+"""
+
+
+@pytest.fixture(scope='function')
+def match_stats_html_sample() -> str:
+    return """
+<div class="box sb-spielbericht-head">
+<div class="direct-headline">
+<div class="direct-headline__header-box">
+<div class="icons-profil">
+<div class="wappen">
+<img alt="Premier League" class="" src="https://tmssl.akamaized.net//images/logo/mediumsmall/gb1.png?lm=1521104656"
+title="Premier League"> </img></div>
+</div>
+<div class="spielername-profil">
+<h2 class="direct-headline__header">
+<span>
+<a class="direct-headline__link" href="/premier-league/startseite/wettbewerb/GB1/saison_id/2024" title="Premier 
+League">Premier League</a> </span>
+</h2>
+</div>
+</div>
+<span class="oddsServe" data-competition="GB1" data-gameday="3" data-match="4361296"></span> <div 
+class="arrow-bottom"></div>
+<div class="box">
+<h2 class="content-box-headline">
+        Statistics    </h2>
+<div class="unterueberschrift">
+        Possession    </div>
+<div class="sb-st-ballbesitz">
+<a class="sb-st-wappen-heim hide-for-small" href="/manchester-united/startseite/verein/985/saison_id/2024" 
+title="Manchester United"><img alt="Manchester United" class="" 
+src="https://tmssl.akamaized.net//images/wappen/normquad/985.png?lm=1457975903" title="Manchester United"/></a> <a 
+class="sb-st-wappen-gast hide-for-small" href="/fc-liverpool/startseite/verein/31/saison_id/2024" title="Liverpool 
+FC"><img alt="Liverpool FC" class="" src="https://tmssl.akamaized.net//images/wappen/normquad/31.png?lm=1727873452"
+title="Liverpool FC"/></a> <div id="yw1"></div> </div>
+<div class="unterueberschrift">
+        Total shots    </div>
+<div class="sb-statistik">
+<ul>
+<li class="sb-statistik-heim">
+<div class="sb-statistik-wert" style="width: 72.727272727273%;background-color: #D9020D;">
+<div class="sb-statistik-mitte"></div>
+<div class="sb-statistik-zahl" style="color: #fff;">8</div>
+<div class="sb-statistik-wappen">
+<a href="/manchester-united/startseite/verein/985/saison_id/2024" title="Manchester United"><img alt="Manchester 
+United" class="" src="https://tmssl.akamaized.net//images/wappen/smallquad/985.png?lm=1457975903" title="Manchester
+United"/></a> </div>
+</div>
+</li>
+<li class="sb-statistik-gast">
+<div class="sb-statistik-wert-lang" style="width: 100%;background-color: #39403B;">
+<div class="sb-statistik-mitte"><span class="sb-sprite sb-stat-schuss"> </span></div>
+<div class="sb-statistik-zahl" style="color:#fff;">11</div>
+<div class="sb-statistik-wappen">
+<a href="/fc-liverpool/startseite/verein/31/saison_id/2024" title="Liverpool FC"><img alt="Liverpool FC" class="" 
+src="https://tmssl.akamaized.net//images/wappen/smallquad/31.png?lm=1727873452" title="Liverpool FC"/></a> </div>
+</div>
+</li>
+</ul>
+</div>
+<div class="unterueberschrift">
+        Shots off target    </div>
+<div class="sb-statistik">
+<ul>
+<li class="sb-statistik-heim">
+<div class="sb-statistik-wert" style="width: 45.454545454545%;background-color: #D9020D;">
+<div class="sb-statistik-mitte"></div>
+<div class="sb-statistik-zahl" style="color: #fff;">5</div>
+<div class="sb-statistik-wappen">
+<a href="/manchester-united/startseite/verein/985/saison_id/2024" title="Manchester United"><img alt="Manchester 
+United" class="" src="https://tmssl.akamaized.net//images/wappen/smallquad/985.png?lm=1457975903" title="Manchester
+United"/></a> </div>
+</div>
+</li>
+<li class="sb-statistik-gast">
+<div class="sb-statistik-wert" style="width: 63.636363636364%;background-color: #39403B;">
+<div class="sb-statistik-mitte"><span class="sb-sprite sb-stat-nebenschuss"> </span></div>
+<div class="sb-statistik-zahl" style="color:#fff;">7</div>
+<div class="sb-statistik-wappen">
+<a href="/fc-liverpool/startseite/verein/31/saison_id/2024" title="Liverpool FC"><img alt="Liverpool FC" class="" 
+src="https://tmssl.akamaized.net//images/wappen/smallquad/31.png?lm=1727873452" title="Liverpool FC"/></a> </div>
+</div>
+</li>
+</ul>
+</div>
+<div class="unterueberschrift">
+        Shots saved    </div>
+<div class="sb-statistik">
+<ul>
+<li class="sb-statistik-heim">
+<div class="sb-statistik-wert" style="width: 0%;background-color: #D9020D;">
+<div class="sb-statistik-mitte"></div>
+<div class="sb-statistik-zahl" style="color: #fff;">0</div>
+<div class="sb-statistik-wappen">
+<a href="/manchester-united/startseite/verein/985/saison_id/2024" title="Manchester United"><img alt="Manchester 
+United" class="" src="https://tmssl.akamaized.net//images/wappen/smallquad/985.png?lm=1457975903" title="Manchester
+United"/></a> </div>
+</div>
+</li>
+<li class="sb-statistik-gast">
+<div class="sb-statistik-wert" style="width: 27.272727272727%;background-color: #39403B;">
+<div class="sb-statistik-mitte"><span class="sb-sprite sb-stat-gehalten"> </span></div>
+<div class="sb-statistik-zahl" style="color:#fff;">3</div>
+<div class="sb-statistik-wappen">
+<a href="/fc-liverpool/startseite/verein/31/saison_id/2024" title="Liverpool FC"><img alt="Liverpool FC" class="" 
+src="https://tmssl.akamaized.net//images/wappen/smallquad/31.png?lm=1727873452" title="Liverpool FC"/></a> </div>
+</div>
+</li>
+</ul>
+</div>
+<div class="unterueberschrift">
+        Corners    </div>
+<div class="sb-statistik">
+<ul>
+<li class="sb-statistik-heim">
+<div class="sb-statistik-wert" style="width: 45.454545454545%;background-color: #D9020D;">
+<div class="sb-statistik-mitte"></div>
+<div class="sb-statistik-zahl" style="color: #fff;">5</div>
+<div class="sb-statistik-wappen">
+<a href="/manchester-united/startseite/verein/985/saison_id/2024" title="Manchester United"><img alt="Manchester 
+United" class="" src="https://tmssl.akamaized.net//images/wappen/smallquad/985.png?lm=1457975903" title="Manchester
+United"/></a> </div>
+</div>
+</li>
+<li class="sb-statistik-gast">
+<div class="sb-statistik-wert" style="width: 18.181818181818%;background-color: #39403B;">
+<div class="sb-statistik-mitte"><span class="sb-sprite sb-stat-ecke"> </span></div>
+<div class="sb-statistik-zahl" style="color:#fff;">2</div>
+<div class="sb-statistik-wappen">
+<a href="/fc-liverpool/startseite/verein/31/saison_id/2024" title="Liverpool FC"><img alt="Liverpool FC" class="" 
+src="https://tmssl.akamaized.net//images/wappen/smallquad/31.png?lm=1727873452" title="Liverpool FC"/></a> </div>
+</div>
+</li>
+</ul>
+</div>
+<div class="unterueberschrift">
+        Free kicks    </div>
+<div class="sb-statistik">
+<ul>
+<li class="sb-statistik-heim">
+<div class="sb-statistik-wert" style="width: 63.636363636364%;background-color: #D9020D;">
+<div class="sb-statistik-mitte"></div>
+<div class="sb-statistik-zahl" style="color: #fff;">7</div>
+<div class="sb-statistik-wappen">
+<a href="/manchester-united/startseite/verein/985/saison_id/2024" title="Manchester United"><img alt="Manchester 
+United" class="" src="https://tmssl.akamaized.net//images/wappen/smallquad/985.png?lm=1457975903" title="Manchester
+United"/></a> </div>
+</div>
+</li>
+<li class="sb-statistik-gast">
+<div class="sb-statistik-wert" style="width: 63.636363636364%;background-color: #39403B;">
+<div class="sb-statistik-mitte"><span class="sb-sprite sb-stat-freistoss"> </span></div>
+<div class="sb-statistik-zahl" style="color:#fff;">7</div>
+<div class="sb-statistik-wappen">
+<a href="/fc-liverpool/startseite/verein/31/saison_id/2024" title="Liverpool FC"><img alt="Liverpool FC" class="" 
+src="https://tmssl.akamaized.net//images/wappen/smallquad/31.png?lm=1727873452" title="Liverpool FC"/></a> </div>
+</div>
+</li>
+</ul>
+</div>
+<div class="unterueberschrift">
+        Fouls    </div>
+<div class="sb-statistik">
+<ul>
+<li class="sb-statistik-heim">
+<div class="sb-statistik-wert" style="width: 63.636363636364%;background-color: #D9020D;">
+<div class="sb-statistik-mitte"></div>
+<div class="sb-statistik-zahl" style="color: #fff;">7</div>
+<div class="sb-statistik-wappen">
+<a href="/manchester-united/startseite/verein/985/saison_id/2024" title="Manchester United"><img alt="Manchester 
+United" class="" src="https://tmssl.akamaized.net//images/wappen/smallquad/985.png?lm=1457975903" title="Manchester
+United"/></a> </div>
+</div>
+</li>
+<li class="sb-statistik-gast">
+<div class="sb-statistik-wert" style="width: 63.636363636364%;background-color: #39403B;">
+<div class="sb-statistik-mitte"><span class="sb-sprite sb-stat-foul"> </span></div>
+<div class="sb-statistik-zahl" style="color:#fff;">7</div>
+<div class="sb-statistik-wappen">
+<a href="/fc-liverpool/startseite/verein/31/saison_id/2024" title="Liverpool FC"><img alt="Liverpool FC" class="" 
+src="https://tmssl.akamaized.net//images/wappen/smallquad/31.png?lm=1727873452" title="Liverpool FC"/></a> </div>
+</div>
+</li>
+</ul>
+</div>
+<div class="unterueberschrift">
+        Offsides    </div>
+<div class="sb-statistik">
+<ul>
+<li class="sb-statistik-heim">
+<div class="sb-statistik-wert" style="width: 0%;background-color: #D9020D;">
+<div class="sb-statistik-mitte"></div>
+<div class="sb-statistik-zahl" style="color: #fff;">0</div>
+<div class="sb-statistik-wappen">
+<a href="/manchester-united/startseite/verein/985/saison_id/2024" title="Manchester United"><img alt="Manchester 
+United" class="" src="https://tmssl.akamaized.net//images/wappen/smallquad/985.png?lm=1457975903" title="Manchester
+United"/></a> </div>
+</div>
+</li>
+<li class="sb-statistik-gast">
+<div class="sb-statistik-wert" style="width: 18.181818181818%;background-color: #39403B;">
+<div class="sb-statistik-mitte"><span class="sb-sprite sb-stat-abseits"> </span></div>
+<div class="sb-statistik-zahl" style="color:#fff;">2</div>
+<div class="sb-statistik-wappen">
+<a href="/fc-liverpool/startseite/verein/31/saison_id/2024" title="Liverpool FC"><img alt="Liverpool FC" class="" 
+src="https://tmssl.akamaized.net//images/wappen/smallquad/31.png?lm=1727873452" title="Liverpool FC"/></a> </div>
+</div>
+</li>
+</ul>
+</div>
 </div>
 """
