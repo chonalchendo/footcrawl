@@ -11,6 +11,8 @@ from footcrawl.parsers import base
 if T.TYPE_CHECKING:
     import aiohttp
 
+METADATA = 0
+
 
 class Actions(Enum):
     GOALS = "Goals"
@@ -30,7 +32,7 @@ class MatchActionsParser(base.Parser):
 
         data = defaultdict(list)
         for i, box in enumerate(boxes):
-            if i == 0:
+            if i == METADATA:
                 metadata = self._get_metadata(box)
                 data.update(metadata)
                 continue
@@ -293,12 +295,13 @@ class CardAction:
         card_info = content.text.strip()
         card_info = " ".join(card_info.split())
         card_info = card_info.split(" ")
+        
+        # initialise card count 
+        card_of_season = None
 
         for item in card_info:
             if item.replace(".", "").isdigit():
                 card_of_season = item.replace(".", "")
-            else:
-                card_of_season = None
 
             if item.lower() in ["yellow", "red"]:
                 card_type = item
