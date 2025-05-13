@@ -38,28 +38,28 @@ async def test_match_stats_parser(
         "comp_tm_name",
         "season",
         "home_team_stats",
-        "away_team_stats"
+        "away_team_stats",
     }
-    assert (
-        set(result.keys()) == expected_keys
-    ), f"Missing keys: {expected_keys - set(result.keys())}"
+    assert set(result.keys()) == expected_keys, (
+        f"Missing keys: {expected_keys - set(result.keys())}"
+    )
 
     # Specific assertions
     assert result["match_id"] == 4361296
     assert result["matchday"] == 3
     assert result["comp_id"] == "GB1"
     assert result["comp_tm_name"] == "premier-league"
-    assert result['season'] == 2024
-    assert isinstance(result['home_team_stats'], dict)
-    assert isinstance(result['away_team_stats'], dict)
-    
+    assert result["season"] == 2024
+    assert isinstance(result["home_team_stats"], dict)
+    assert isinstance(result["away_team_stats"], dict)
+
     # validate team stats
-    home_stats = result['home_team_stats']
-    away_stats = result['away_team_stats']
-    
+    home_stats = result["home_team_stats"]
+    away_stats = result["away_team_stats"]
+
     # home stats
     assert home_stats["club_id"] == 985
-    assert home_stats["club_tm_name"] == 'manchester-united'
+    assert home_stats["club_tm_name"] == "manchester-united"
     assert home_stats["total_shots"] == 8
     assert home_stats["shots_off_target"] == 5
     assert home_stats["shots_saved"] == 0
@@ -67,10 +67,10 @@ async def test_match_stats_parser(
     assert home_stats["free_kicks"] == 7
     assert home_stats["fouls"] == 7
     assert home_stats["offsides"] == 0
-    
+
     # away stats
     assert away_stats["club_id"] == 31
-    assert away_stats["club_tm_name"] == 'fc-liverpool'
+    assert away_stats["club_tm_name"] == "fc-liverpool"
     assert away_stats["total_shots"] == 11
     assert away_stats["shots_off_target"] == 7
     assert away_stats["shots_saved"] == 3
