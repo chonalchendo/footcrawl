@@ -39,7 +39,6 @@ class SquadsParser(base.Parser):
             valid_data = self._validate(data=data, validator=schemas.SquadsSchema)
             yield valid_data
 
-    @T.override
     def _parsers(self, row: bs4.Tag, season: int) -> base.Item:
         return {
             **self._get_player_profile_link(row),

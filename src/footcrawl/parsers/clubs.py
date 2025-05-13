@@ -37,7 +37,6 @@ class ClubsParser(base.Parser):
             valid_data = self._validate(data, validator=schemas.ClubsSchema)
             yield valid_data
 
-    @T.override
     def _parsers(self, row: bs4.Tag) -> base.Item:
         return {
             **self._get_club_name(row),
