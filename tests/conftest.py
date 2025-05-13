@@ -6,8 +6,8 @@ from unittest.mock import Mock
 
 import _pytest.logging as pyl
 import omegaconf
-import pytest
 import polars as pl
+import pytest
 from dotenv import load_dotenv
 
 from footcrawl import client, metrics, parsers
@@ -159,12 +159,12 @@ def match_lineups_parser() -> parsers.MatchLineupsParser:
     return parsers.MatchLineupsParser()
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def match_stats_parser() -> parsers.MatchStatsParser:
     return parsers.MatchStatsParser()
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def match_actions_parser() -> parsers.MatchActionsParser:
     return parsers.MatchActionsParser()
 
@@ -198,14 +198,14 @@ def match_lineups_url() -> str:
     return "https://www.transfermarkt.co.uk/{home_team}_{away_team}/aufstellung/spielbericht/{match_id}"
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def match_stats_url() -> str:
     return "https://www.transfermarkt.co.uk/{home_team}_{away_team}/statistik/spielbericht/{match_id}"
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def match_actions_url() -> str:
-    return "https://www.transfermarkt.co.uk/spielbericht/index/spielbericht/{match_id}" 
+    return "https://www.transfermarkt.co.uk/spielbericht/index/spielbericht/{match_id}"
 
 
 @pytest.fixture(scope="function")
@@ -238,7 +238,6 @@ def tmp_club_info() -> list[dict[str, T.Any]]:
 
 @pytest.fixture(scope="function")
 def tmp_matchday_info() -> pl.DataFrame:
-
     matchday_data = [
         {
             "match_id": "4361261",

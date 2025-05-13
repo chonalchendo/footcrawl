@@ -40,9 +40,9 @@ class MatchLineupsParser(base.Parser):
                     **self._parsers(player),
                     **self._get_is_starter(i),
                 }
-                
+
                 self.__total_items = 1
-                
+
                 valid_data = self._validate(
                     data=data, validator=schemas.MatchLineupsSchema
                 )

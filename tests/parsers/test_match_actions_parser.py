@@ -42,9 +42,9 @@ async def test_match_action_parser(
         "substitutions",
         "cards",
     }
-    assert (
-        set(result.keys()) == expected_keys
-    ), f"Missing keys: {expected_keys - set(result.keys())}"
+    assert set(result.keys()) == expected_keys, (
+        f"Missing keys: {expected_keys - set(result.keys())}"
+    )
 
     # Specific assertions
     assert result["match_id"] == 4361296

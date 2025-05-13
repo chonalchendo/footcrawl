@@ -1,7 +1,7 @@
+import re
 import typing as T
 from collections import defaultdict
 from enum import Enum
-import re
 
 import bs4
 
@@ -135,7 +135,7 @@ class GoalAction:
             **self._get_goal_info(box),
             **self._get_assist_info(box),
             **self._get_score_at_time_of_goal(box),
-            **get_action_minute(box)
+            **get_action_minute(box),
         }
 
     def _get_club_info(self, box: bs4.Tag):
@@ -230,7 +230,7 @@ class SubAction:
             **self._get_player_off_info(box),
             **self._get_player_on_info(box),
             **self._get_sub_reason(box),
-            **get_action_minute(box)
+            **get_action_minute(box),
         }
 
     def _get_player_on_info(self, box: bs4.Tag) -> dict[str, str]:
@@ -293,7 +293,7 @@ class CardAction:
             **self._get_club_info(box),
             **self._get_player_info(box),
             **self._get_card_info(box),
-            **get_action_minute(box)
+            **get_action_minute(box),
         }
 
     def _get_player_info(self, box: bs4.Tag) -> dict[str, str]:

@@ -1,12 +1,12 @@
 def convert_px_to_minute(px_x: int, px_y: int) -> int:
-    """Convert background-position arguments from the "sb-sprite-uhr-klein" 
+    """Convert background-position arguments from the "sb-sprite-uhr-klein"
     CSS class to the game minute.
-    
-    This CSS class uses some smartness that moves the this image around so as 
+
+    This CSS class uses some smartness that moves the this image around so as
     to choose the game minutes
     https://tmssl.akamaized.net/images/spielbericht/sb-sprite-uhr-k.png
 
-    This function has been taken from the `transfermarkt-scraper` repository. 
+    This function has been taken from the `transfermarkt-scraper` repository.
     You can find the repo here -> https://github.com/dcaribou/transfermarkt-scraper/tree/main
 
     Args:

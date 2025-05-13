@@ -56,12 +56,14 @@ async def test_match_actions_crawler(
     assert results["season"] == 2024, "Expected season 2024"
     # check club info
     assert len(results["fixtures"]) == 1, "Expected 1 fixture"
-    
+
     # check fixture dataframe info
-    fixture_data = results['fixtures'].to_dicts()[0]
-    
-    assert fixture_data['home_club_tm'] == "manchester-united", (
+    fixture_data = results["fixtures"].to_dicts()[0]
+
+    assert fixture_data["home_club_tm"] == "manchester-united", (
         "Expected home club to be manchester-united"
     )
-    assert fixture_data['away_club_tm'] == 'fulham-fc', 'Expected away club to be fulham-fc'
-    assert fixture_data["match_id"] == '4361261', "Expected match ID 4361261"
+    assert fixture_data["away_club_tm"] == "fulham-fc", (
+        "Expected away club to be fulham-fc"
+    )
+    assert fixture_data["match_id"] == "4361261", "Expected match ID 4361261"
