@@ -30,7 +30,7 @@ class AsyncCompetitionsCrawler(base.Crawler):
         async with self.http_client as client:
             session = client.get_session
 
-            for page in range(1, self.pages+1):
+            for page in range(1, self.pages + 1):
                 self.task_handler.create_task(
                     self._write_out(
                         session=session,
@@ -38,7 +38,7 @@ class AsyncCompetitionsCrawler(base.Crawler):
                         url=self._format_url(page=page),
                     )
                 )
-                
+
             await self.task_handler.gather_tasks()
 
             metrics_output = self.metrics.summary()
