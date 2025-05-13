@@ -114,6 +114,7 @@ class _GoalAction(pdt.BaseModel):
     assister_id: int | None
     assist_type: str | None
     assister_assist_season_total: int | None
+    time: int | None
 
 
 class _SubAction(pdt.BaseModel):
@@ -127,6 +128,7 @@ class _SubAction(pdt.BaseModel):
     player_on_id: int
     player_on_tm_name: str
     player_on_name: str
+    time: int | None
 
 
 class _CardAction(pdt.BaseModel):
@@ -139,6 +141,7 @@ class _CardAction(pdt.BaseModel):
     card_type: str
     reason: str
     player_card_type_season_total: int | None
+    time: int | None
 
 
 class MatchStatsSchema(pdt.BaseModel):
