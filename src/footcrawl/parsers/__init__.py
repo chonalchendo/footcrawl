@@ -1,5 +1,6 @@
 from .base import Item
 from .clubs import ClubsParser
+from .competitions import CompetitionsParser
 from .fixtures import FixturesParser
 from .match_actions import MatchActionsParser
 from .match_lineups import MatchLineupsParser
@@ -8,6 +9,7 @@ from .squads import SquadsParser
 
 ParserKind = (
     ClubsParser
+    | CompetitionsParser
     | SquadsParser
     | FixturesParser
     | MatchLineupsParser
@@ -17,6 +19,7 @@ ParserKind = (
 
 __all__ = [
     "ClubsParser",
+    "CompetitionsParser",
     "SquadsParser",
     "FixturesParser",
     "MatchLineupsParser",
