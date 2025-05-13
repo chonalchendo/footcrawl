@@ -1,12 +1,14 @@
 import typing as T
 from collections import defaultdict
 from enum import Enum
+import re
 
 import bs4
 
 from footcrawl import metrics as metrics_
 from footcrawl import schemas
 from footcrawl.parsers import base
+from footcrawl.parsers.utils import convert_px_to_minute
 
 if T.TYPE_CHECKING:
     import aiohttp
@@ -18,6 +20,21 @@ class Actions(Enum):
     GOALS = "Goals"
     SUBS = "Substitutions"
     CARDS = "Cards"
+
+
+def get_action_minute(action: bs4.Tag) -> dict[str, int | None]:
+    style = action.find("span", class_="sb-sprite-uhr-klein").get("style")
+    pattern = r"background-position:\s*(-?\d+)px\s+(-?\d+)px"
+    match = re.search(pattern, style)
+
+    if not match:
+        print("No background position found")
+        return {"time": None}
+
+    x_pos = int(match.group(1))
+    y_pos = int(match.group(2))
+    time = convert_px_to_minute(x_pos, y_pos)
+    return {"time": time}
 
 
 class MatchActionsParser(base.Parser):
@@ -118,6 +135,7 @@ class GoalAction:
             **self._get_goal_info(box),
             **self._get_assist_info(box),
             **self._get_score_at_time_of_goal(box),
+            **get_action_minute(box)
         }
 
     def _get_club_info(self, box: bs4.Tag):
@@ -212,6 +230,7 @@ class SubAction:
             **self._get_player_off_info(box),
             **self._get_player_on_info(box),
             **self._get_sub_reason(box),
+            **get_action_minute(box)
         }
 
     def _get_player_on_info(self, box: bs4.Tag) -> dict[str, str]:
@@ -274,6 +293,7 @@ class CardAction:
             **self._get_club_info(box),
             **self._get_player_info(box),
             **self._get_card_info(box),
+            **get_action_minute(box)
         }
 
     def _get_player_info(self, box: bs4.Tag) -> dict[str, str]:
@@ -295,8 +315,8 @@ class CardAction:
         card_info = content.text.strip()
         card_info = " ".join(card_info.split())
         card_info = card_info.split(" ")
-        
-        # initialise card count 
+
+        # initialise card count
         card_of_season = None
 
         for item in card_info:
