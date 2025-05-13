@@ -3,6 +3,21 @@ from __future__ import annotations
 import pydantic as pdt
 
 
+class CompetitionsSchema(pdt.BaseModel):
+    comp_name: str
+    comp_tm_name: str
+    comp_id: str
+    link: str
+    country: str
+    tier: str
+    clubs: int
+    players: str
+    avg_age: float
+    foreigners: str
+    game_ratio_of_foreigners: str
+    goals_per_match: str
+
+
 class ClubsSchema(pdt.BaseModel):
     """A Pydantic class to validate parsed clubs data."""
 
