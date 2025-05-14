@@ -28,6 +28,8 @@ class CompetitionsParser(base.Parser):
             data = self._parsers(row)
             data.update({"tier": tier})
 
+            self.__total_items = 1
+
             valid_data = self._validate(data, validator=schemas.CompetitionsSchema)
             yield valid_data
 
