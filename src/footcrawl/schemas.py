@@ -16,6 +16,8 @@ class CompetitionsSchema(pdt.BaseModel):
     foreigners: str
     game_ratio_of_foreigners: str
     goals_per_match: str
+    avg_market_value: str
+    total_market_value: str
 
 
 class ClubsSchema(pdt.BaseModel):
