@@ -169,6 +169,11 @@ def match_actions_parser() -> parsers.MatchActionsParser:
     return parsers.MatchActionsParser()
 
 
+@pytest.fixture(scope="function")
+def competitions_parser() -> parsers.CompetitionsParser:
+    return parsers.CompetitionsParser()
+
+
 # %% - Crawlers
 
 
@@ -206,6 +211,16 @@ def match_stats_url() -> str:
 @pytest.fixture(scope="function")
 def match_actions_url() -> str:
     return "https://www.transfermarkt.co.uk/spielbericht/index/spielbericht/{match_id}"
+
+
+@pytest.fixture(scope="function")
+def competitions_url() -> str:
+    return "https://www.transfermarkt.co.uk/wettbewerbe/europa/wettbewerbe?ajax=yw1&plus=2&page={page}"
+
+
+@pytest.fixture(scope="function")
+def tmp_comp_pages() -> int:
+    return 1
 
 
 @pytest.fixture(scope="function")
