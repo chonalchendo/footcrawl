@@ -33,7 +33,63 @@ def match_actions_parser_url() -> str:
     return "https://www.transfermarkt.co.uk/spielbericht/index/spielbericht/4361296"
 
 
+@pytest.fixture(scope="function")
+def competitions_parser_url() -> str:
+    return "https://www.transfermarkt.co.uk/wettbewerbe/europa/wettbewerbe?ajax=yw1&plus=2&page=1"
+
+
 # %% Html
+
+
+@pytest.fixture(scope="function")
+def competitions_html_sample() -> str:
+    return """
+<table class="items">
+<tbody>
+<tr><td class="extrarow bg_blau_20 hauptlink" colspan="11">First Tier</td></tr>
+<tr class="odd"><td class="hauptlink"><table class="inline-table">
+<tr>
+<td>
+<a href="/premier-league/startseite/wettbewerb/GB1">
+<img alt="Premier League" class="continental-league-emblem" 
+src="https://tmssl.akamaized.net//images/logo/tiny/gb1.png?lm=1521104656" title="Premier League" />
+</td>
+<td>
+<a href="/premier-league/startseite/wettbewerb/GB1" title="Premier League">Premier League</a>
+</td>
+</tr>
+</table>
+</td><td class="zentriert"><img alt="England" class="flaggenrahmen" 
+src="https://tmssl.akamaized.net//images/flagge/tiny/189.png?lm=1520611569" title="England"/></td><td 
+class="zentriert">20</td><td class="zentriert">542</td><td class="zentriert">26.7</td><td class="zentriert"><a 
+href="/premier-league/gastarbeiter/wettbewerb/GB1">67.5 %</a></td><td class="zentriert"><a 
+href="/premier-league/legionaereeinsaetze/wettbewerb/GB1">71.0 %</a></td><td class="zentriert"><a 
+href="/premier-league/gesamtspielplan/wettbewerb/GB1">2.94</a></td><td class="zentriert"></td><td 
+class="rechts">€592.95m</td><td class="rechts hauptlink">€11.86bn</td></tr>
+<tr class="even"><td class="hauptlink"><table class="inline-table">
+<tr>
+<td>
+<a href="/laliga/startseite/wettbewerb/ES1">
+<img alt="LaLiga" class="continental-league-emblem" 
+src="https://tmssl.akamaized.net//images/logo/tiny/es1.png?lm=1725974302" title="LaLiga" />
+</td>
+<td>
+<a href="/laliga/startseite/wettbewerb/ES1" title="LaLiga">LaLiga</a>
+</td>
+</tr>
+</table>
+</td><td class="zentriert"><img alt="Spain" class="flaggenrahmen" 
+src="https://tmssl.akamaized.net//images/flagge/tiny/157.png?lm=1520611569" title="Spain"/></td><td 
+class="zentriert">20</td><td class="zentriert">499</td><td class="zentriert">27.3</td><td class="zentriert"><a 
+href="/laliga/gastarbeiter/wettbewerb/ES1">41.1 %</a></td><td class="zentriert"><a 
+href="/laliga/legionaereeinsaetze/wettbewerb/ES1">42.6 %</a></td><td class="zentriert"><a 
+href="/laliga/gesamtspielplan/wettbewerb/ES1">2.61</a></td><td class="zentriert"></td><td 
+class="rechts">€266.23m</td><td class="rechts hauptlink">€5.32bn</td></tr>
+</tbody>
+</table>
+"""
+
+
 @pytest.fixture(scope="function")
 def clubs_html_sample() -> str:
     return """
