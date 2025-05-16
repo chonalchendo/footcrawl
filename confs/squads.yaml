@@ -3,7 +3,7 @@ crawler:
   url: https://transfermarkt.co.uk/{club}/kader/verein/{id}/saison_id/{season}/plus/1
   seasons: [2024]
   input:
-    KIND: JsonLoader
+    KIND: json
     path: data/transfermarkt/{season}/clubs.json   # take clubs data as an input
   output:
     KIND: ndjson

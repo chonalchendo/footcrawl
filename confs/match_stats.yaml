@@ -4,7 +4,7 @@ crawler:
   seasons: [2024]
   matchday: "1" # change to whatever the current matchday is
   input:
-    KIND: JsonDataFrameLoader
+    KIND: json
     path: data/transfermarkt/{season}/fixtures.json  # need fixture data to run scraper
   output:
     KIND: ndjson

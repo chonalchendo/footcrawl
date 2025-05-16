@@ -1,17 +1,17 @@
 crawler:
   KIND: match_actions
   url: "https://www.transfermarkt.co.uk/spielbericht/index/spielbericht/{match_id}" 
-  seasons: [2024]
+  seasons: [2023]
   matchday: "1" # change to whatever the current matchday is
   input:
-    KIND: JsonDataFrameLoader 
+    KIND: json 
     path: data/transfermarkt/{season}/fixtures.json  # need match ID to run scraper
   output:
     KIND: ndjson
     base_path: data/transfermarkt/{season}/match_actions/matchday_{matchday}.json
     overwrite: true
   http_client:
-    timeout: 300
+    timeout: 100
     headers: {
       "User-Agent": "",
       "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",

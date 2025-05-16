@@ -2,9 +2,9 @@ crawler:
   KIND: match_lineups
   url: "https://www.transfermarkt.co.uk/{home_team}_{away_team}/aufstellung/spielbericht/{match_id}"
   seasons: [2024]
-  matchday: "3" # change to whatever the current matchday is or use "all" to parse lineups for all matchdays for a given season
+  matchday: "1" # change to whatever the current matchday is or use "all" to parse lineups for all matchdays for a given season
   input:
-    KIND: JsonDataFrameLoader
+    KIND: json
     path: data/transfermarkt/{season}/fixtures.json  # need fixture data to run scraper
   output:
     KIND: ndjson

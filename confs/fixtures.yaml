@@ -1,9 +1,9 @@
 crawler:
   KIND: fixtures
   url: "https://www.transfermarkt.co.uk/{club}/spielplan/verein/{club_id}/saison_id/{season}/plus/1#{league_id}"
-  seasons: [2024]
+  seasons: [2022]
   input:
-    KIND: JsonLoader
+    KIND: json
     path: data/transfermarkt/{season}/clubs.json
   output:
     KIND: ndjson
