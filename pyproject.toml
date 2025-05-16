@@ -21,7 +21,7 @@ dependencies = [
     "python-dotenv>=1.0.1",
     "rich>=13.9.4",
     "setuptools>=78.0.2",
-    "tenacity>=9.0.0",
+    "uvloop>=0.21.0",
 ]
 
 [project.scripts]
