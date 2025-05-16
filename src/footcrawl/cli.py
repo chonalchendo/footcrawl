@@ -1,8 +1,8 @@
 import argparse
-import asyncio
 import json
 import os
 import sys
+import uvloop
 
 import omegaconf as oc
 from dotenv import load_dotenv
@@ -62,5 +62,5 @@ def execute(argv: list[str] | None = None) -> int:
     setting = settings.MainSettings.model_validate(object_)
 
     # start the crawler
-    asyncio.run(setting.crawler.crawl())
+    uvloop.run(setting.crawler.crawl())
     return 0
