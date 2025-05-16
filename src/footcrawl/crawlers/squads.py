@@ -35,7 +35,7 @@ class AsyncSquadsCrawler(base.Crawler):
             for season in self.seasons:
                 clubs = self.input.load(season=season)
 
-                for club in clubs:
+                for club in clubs.iter_rows(named=True):
                     name, id = club["club_tm_name"], club["club_id"]
                     self.task_handler.create_task(
                         self._write_out(

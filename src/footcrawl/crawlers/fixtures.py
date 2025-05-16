@@ -35,7 +35,7 @@ class AsyncFixturesCrawler(base.Crawler):
             for season in self.seasons:
                 clubs = self.input.load(season=season)
 
-                for club in clubs:
+                for club in clubs.iter_rows(named=True):
                     name, club_id, league_id = (
                         club["club_tm_name"],
                         club["club_id"],
