@@ -37,24 +37,7 @@ class Loader(abc.ABC, pdt.BaseModel, strict=True, frozen=False, extra="forbid"):
 
 
 class JsonLoader(Loader):
-    KIND: T.Literal["JsonLoader"] = "JsonLoader"
-
-    @T.override
-    def load(self, season: int) -> LoadedInput:
-        if season < 2010 and season > 2024:
-            raise ValueError("Season must be between 2010 and 2024.")
-
-        formatted_path = self.format_path(season)
-
-        if not Path(formatted_path).exists():
-            raise FileNotFoundError(f"File not found: {formatted_path}")
-
-        with open(formatted_path, "r") as file:
-            return [json.loads(line) for line in file]
-
-
-class JsonDataFrameLoader(Loader):
-    KIND: T.Literal["JsonDataFrameLoader"] = "JsonDataFrameLoader"
+    KIND: T.Literal["json"] = "json"
 
     @T.override
     def load(self, season: int) -> LoadedInput:
@@ -69,7 +52,7 @@ class JsonDataFrameLoader(Loader):
         return pl.read_ndjson(formatted_path)
 
 
-LoaderKind = JsonLoader | JsonDataFrameLoader
+LoaderKind = JsonLoader
 
 # %% - WRITERS
 
