@@ -19,6 +19,7 @@ Although amazing for scraping projects, `scrapy` is not used here as I wanted to
 - [Usage](#usage)
   - [User-Agent](#user-agent)
   - [Configuration](#configuration)
+  - [Data Lineage](#-data-lineage)
   - [Execution](#execution)
 - [Tools](#tools)
 - [Future Work](#future-work)
@@ -42,6 +43,12 @@ pip install uv
 ```bash
 cd footcrawl/
 uv sync
+```
+
+You can also install `footcrawl` directly into your own project using the below command (this assumes you're using uv to manage your dependencies). 
+
+```bash
+uv pip install "git+https://github.com/chonalchendo/footcrawl"
 ```
 
 # 🕹️ Usage
@@ -88,6 +95,9 @@ crawler:
       "Accept-Language": "en-US,en;q=0.9",
       "Accept-Encoding": "gzip, deflate, br" 
       }
+  task_handler:
+    max_concurrency: 3   # max is 100
+    time_between_batches: 2  
 ```
 
 The above is the `confs/clubs.yaml` file which specifies the following:
@@ -97,6 +107,17 @@ The above is the `confs/clubs.yaml` file which specifies the following:
 - The leagues to crawl
 - The output format type and location
 - Client information e.g. request headers
+- Asynchronous task handler e.g. set concurrency limit and time between crawling batches
+
+## 💽 Data Lineage
+
+Most crawlers are dependent on other crawlers running first so that the data is available for downstream crawlers to be configured with. For example, squads crawler is dependent on the clubs crawler as club name and club ID are needed to confgiure the squads URL. 
+
+![Data Lineage](/images/data_lineage.jpg)
+
+Most crawlers are dependent on the clubs crawler running first. The competitions crawler does not have any dependenices however you can use the competitions crawler to configure the clubs crawler to crawl data from numerous European leagues not just the top 5. 
+
+
 
 ## 🚀 Execution
 
@@ -108,6 +129,16 @@ All information related to each crawler is contained in each configuration file 
 uv run footcrawl confs/clubs.yaml
 ```
 The above command will run the `Transfermarkt` `clubs` crawler. 
+
+```bash
+just crawler-run clubs 2024
+```
+You can also use the the above command to select a data source e.g. clubs, fixtures, squads; and you can specify which season to scrape for rather than changing the config file every time e.g. 2021, 2022, 2023.
+
+```bash
+just crawler-many "clubs squads" "2024"
+```
+As a way to orchestrate crawlers together, you can use the above command to run crawlers sequentially for a given season. This can be useful if, for example, you want to scrape squads data but you don't yet have the clubs data needed for the squads crawler. 
 
 2. **Output**
 
