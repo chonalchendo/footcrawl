@@ -2,7 +2,7 @@
 
 import pytest
 
-from footcrawl import client, crawlers, metrics, parsers
+from footcrawl import client, crawlers, metrics, parsers, tasks
 from footcrawl.io import datasets, services
 
 # %% CRAWLER
@@ -18,6 +18,7 @@ async def test_competitions_crawler(
     competitions_parser: parsers.CompetitionsParser,
     tmp_outputs_writer: datasets.AsyncNdJsonWriter,
     async_client: client.AsyncClient,
+    task_handler: tasks.TaskHandler
 ) -> None:
     # given
     # when
@@ -30,6 +31,8 @@ async def test_competitions_crawler(
         parser=competitions_parser,
         output=tmp_outputs_writer,
         http_client=async_client,
+        task_handler=task_handler
+        
     )
     results = await crawler.crawl()
 

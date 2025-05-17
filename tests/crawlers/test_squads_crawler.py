@@ -3,7 +3,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from footcrawl import client, crawlers, metrics, parsers
+from footcrawl import client, crawlers, metrics, parsers, tasks
 from footcrawl.io import datasets, services
 
 # %% CRAWLER
@@ -19,6 +19,7 @@ async def test_squads_crawler(
     tmp_outputs_writer: datasets.AsyncNdJsonWriter,
     mock_json_loader: Mock,
     async_client: client.AsyncClient,
+    task_handler: tasks.TaskHandler
 ) -> None:
     # when
     crawler = crawlers.AsyncSquadsCrawler(
@@ -30,6 +31,7 @@ async def test_squads_crawler(
         output=tmp_outputs_writer,
         input=mock_json_loader,
         http_client=async_client,
+        task_handler=task_handler
     )
 
     results = await crawler.crawl()

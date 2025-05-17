@@ -2,7 +2,7 @@
 
 import pytest
 
-from footcrawl import metrics, parsers
+from footcrawl import metrics, parsers, tasks
 from footcrawl.crawlers import base
 from footcrawl.io import datasets, services
 
@@ -15,6 +15,7 @@ async def test_crawler(
     crawler_metrics: metrics.CrawlerMetrics,
     clubs_parser: parsers.ClubsParser,
     tmp_outputs_writer: datasets.AsyncNdJsonWriter,
+    task_handler: tasks.TaskHandler
 ) -> None:
     # given
     url = "https://transfermarkt.co.uk/{league}/startseite/wettbewerb/{league_id}/plus/?saison_id={season}"
@@ -32,6 +33,7 @@ async def test_crawler(
         metrics=crawler_metrics,
         parser=clubs_parser,
         output=tmp_outputs_writer,
+        task_handler=task_handler
     )
 
     # when
