@@ -10,7 +10,7 @@ import polars as pl
 import pytest
 from dotenv import load_dotenv
 
-from footcrawl import client, metrics, parsers
+from footcrawl import client, metrics, parsers, tasks
 from footcrawl.io import datasets, services
 
 load_dotenv()
@@ -106,7 +106,7 @@ def tmp_outputs_writer(tmp_outputs_path: str) -> datasets.AsyncNdJsonWriter:
 
 
 @pytest.fixture(scope="function")
-def mock_json_loader(tmp_club_info: list[dict[str, T.Any]]) -> Mock:
+def mock_json_loader(tmp_club_info: pl.DataFrame) -> Mock:
     # Create a mock of the JsonLoader class
     mock_loader = Mock(spec=datasets.JsonLoader)
 
@@ -114,7 +114,7 @@ def mock_json_loader(tmp_club_info: list[dict[str, T.Any]]) -> Mock:
     mock_loader.load.return_value = tmp_club_info
 
     # If the crawler uses JsonLoader.KIND anywhere
-    mock_loader.KIND = "JsonLoader"
+    mock_loader.KIND = "json"
 
     return mock_loader
 
@@ -122,13 +122,13 @@ def mock_json_loader(tmp_club_info: list[dict[str, T.Any]]) -> Mock:
 @pytest.fixture(scope="function")
 def matchday_mock_json_loader(tmp_matchday_info: pl.DataFrame) -> Mock:
     # Create a mock of the JsonLoader class
-    mock_loader = Mock(spec=datasets.JsonDataFrameLoader)
+    mock_loader = Mock(spec=datasets.JsonLoader)
 
     # Configure the load method to return your fixture data
     mock_loader.load.return_value = tmp_matchday_info
 
     # If the crawler uses JsonLoader.KIND anywhere
-    mock_loader.KIND = "JsonDataFrameLoader"
+    mock_loader.KIND = "json"
 
     return mock_loader
 
@@ -247,9 +247,9 @@ def tmp_matchday_seasons() -> list[int]:
 
 
 @pytest.fixture(scope="function")
-def tmp_club_info() -> list[dict[str, T.Any]]:
-    return [{"club_tm_name": "manchester-city", "club_id": 281, "comp_id": "GB1"}]
-
+def tmp_club_info() -> pl.DataFrame:
+    club_info = [{"club_tm_name": "manchester-city", "club_id": 281, "comp_id": "GB1"}]
+    return pl.DataFrame(club_info)
 
 @pytest.fixture(scope="function")
 def tmp_matchday_info() -> pl.DataFrame:
@@ -316,6 +316,16 @@ def logger_caplog(
 def crawler_metrics() -> metrics.CrawlerMetrics:
     """Return a metrics object."""
     return metrics.CrawlerMetrics()
+
+
+# %% - Tasks
+
+@pytest.fixture(scope='function')
+def task_handler() -> tasks.TaskHandler:
+    return tasks.TaskHandler(
+        max_concurrency=10,
+        time_between_batches=1
+    )
 
 
 # %% - Resolvers
